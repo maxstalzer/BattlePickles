@@ -14,16 +14,16 @@ public class Board {
     public Tile getTile(Coordinates a) {
         return BoardArr[a.getCoordinates()[0]][a.getCoordinates()[1]];
     }
-    public void putGurken(String a,Coordinates[] b) {
+    public void putGurken(String a,Coordinates[] b, Gurkin x) {
         for (int i = 0; i < b.length; i++) {
-            getTile(b[i]).setGurkin(a);
+            getTile(b[i]).setGurkin(x);
         }
     }
     public String attack(Coordinates a) {
         if (!getTile(a).isHit()) {
             getTile(a).hitTile();
             if (getTile(a).hasGurkin()) {
-                getTile(a).getGurkin().decrementLives()
+                getTile(a).getGurkin().decrementLives();
                return "hit";
             } else {
                 return "miss";

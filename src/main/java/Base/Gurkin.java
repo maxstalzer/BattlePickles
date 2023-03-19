@@ -1,12 +1,12 @@
 package Base;
 
 public class Gurkin {
-    lives int;
+    int lives;
     String GurkinID = "None";
     Coordinates[] coordinates;
 
     public void decrementLives() {
-        this.lives = this.lives - 1
+        this.lives --;
     }
 
 }
