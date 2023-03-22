@@ -9,9 +9,11 @@ public class Coordinates {
         this.X = x;
         this.Y = y;
     }
-
-    public int[] getCoordinates() {
-        return new int[] {this.X, this.Y};
+    public int getX() {
+        return X;
     }
 
+    public int getY() {
+        return Y;
+    }
 }

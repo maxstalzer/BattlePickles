@@ -12,13 +12,13 @@ public class Tile {
         this.gurkin = true;
         this.gurkinID = x;
     }
-    public void hitTile() {
-        this.isHit = true;
-    }
+    public void hitTile() {this.isHit = true;}
     public Gurkin getGurkin() {
         return gurkinID;
     }
     public boolean isHit() {
         return this.isHit;
     }
+
+
 }

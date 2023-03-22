@@ -1,7 +1,7 @@
 package Base;
 
 public class Board {
-    private Tile[][] BoardArr;
+    private Tile[][] BoardArr = new Tile[10][10];
 
     // Initialize board
     public Board() {
@@ -12,13 +12,10 @@ public class Board {
         }
     }
     public Tile getTile(Coordinates a) {
-        return BoardArr[a.getCoordinates()[0]][a.getCoordinates()[1]];
+        return BoardArr[a.getX()][a.getY()];
     }
-    public void putGurken(String a,Coordinates[] b, Gurkin x) {
-        for (int i = 0; i < b.length; i++) {
-            getTile(b[i]).setGurkin(x);
-        }
-    }
+
+
     public String attack(Coordinates a) {
         if (!getTile(a).isHit()) {
             getTile(a).hitTile();
