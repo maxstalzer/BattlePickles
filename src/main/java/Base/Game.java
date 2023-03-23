@@ -1,5 +1,6 @@
 package Base;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Game {
@@ -25,7 +26,6 @@ public class Game {
         placement of the ships
 
         */
-
         System.out.println(player1.name + " please place one of the following ships: ");
         Placement.gurkPlacer(new String[]{"Gherkin", "Zuchinni","Pickle", "Conichon", "Yardlong" },player1);
         while (!game_over) {

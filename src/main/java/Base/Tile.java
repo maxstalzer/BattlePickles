@@ -20,5 +20,10 @@ public class Tile {
         return this.isHit;
     }
 
-
+    public Character toChar() {
+        if (hasGurkin()) {
+            return gurkinID.toChar();
+        }
+        return ' ';
+    }
 }

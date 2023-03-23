@@ -11,6 +11,7 @@ public class Placement {
     public static void gurkPlacer(String[] gurkIDs, Player p) {
         Scanner sc = new Scanner(System.in);
         for (String gurkid: gurkIDs) {
+            p.getGurkinBoard().displayBoard();
             System.out.println("Choosing placement of " + gurkid);
             System.out.println("Enter x coordinates and direction");
             int x = sc.nextInt();
