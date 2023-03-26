@@ -1,5 +1,7 @@
 package Base;
 
+import java.util.Scanner;
+
 public class Player {
     String name;
     int remaining_gurkins = 5;
@@ -17,8 +19,16 @@ public class Player {
         this.gurkinBoard = new Board();
     }
 
+    private void displayShotBoard() {
+
+    }
+
+    public void attack() {
+
+    }
+
 //  Allows a player to shoot at given coordinates on the opposing player's board
-    public void shoot(Board board, Coordinates coords) {
+    private void shoot(Board board, Coordinates coords) {
         String result = board.attack(coords);
         int x = coords.getX();
         int y = coords.getY();
@@ -38,8 +48,19 @@ public class Player {
             }
         } else if (result.equals("miss")) {
             this.shotResults[x][y] = 'o';
-        } else {
-            // Invoke some kind of error message here
+        } else if (result.equals("noob")) {
+            System.out.println("Already hit here");
+            Boolean validEntry = false;
+            while (!validEntry) {
+                System.out.println("Please enter new x and y coordinates");
+                Scanner sc = new Scanner(System.in);
+                int xPrime = sc.nextInt();
+                int yPrime = sc.nextInt();
+                coords.updateCoords(xPrime, yPrime);
+                validEntry = coords.validCoords();
+            }
+            shoot(board, coords);
+
         }
     }
 }

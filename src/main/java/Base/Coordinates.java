@@ -16,4 +16,16 @@ public class Coordinates {
     public int getY() {
         return Y;
     }
+
+    public boolean validCoords () {
+        if (X > 9 || X < 0 || Y > 9 || Y < 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public void updateCoords(int x, int y) {
+        this.X = x;
+        this.Y = y;
+    }
 }

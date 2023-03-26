@@ -28,9 +28,22 @@ public class Game {
         */
         System.out.println(player1.name + " please place one of the following ships: ");
         Placement.gurkPlacer(new String[]{"Gherkin", "Zuchinni","Pickle", "Conichon", "Yardlong" },player1);
+        System.out.println("Final placement of " + player1.name + "'s ships");
+        player1.getGurkinBoard().displayBoard();
+
+//        Placement of player 2s ships
+        Placement.gurkPlacer(new String[]{"Gherkin", "Zuchinni","Pickle", "Conichon", "Yardlong"}, player2);
+        System.out.println("Final placement of " + player2.name + "'s ships");
+        player2.getGurkinBoard().displayBoard();
         while (!game_over) {
 
             c.changeTurn(c.turn);
+
+            if (c.equals("1")) {
+                System.out.println(player1.name + "Please attack " +player2.name + ": ");
+
+            }
+
         }
 
     }

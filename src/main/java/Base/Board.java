@@ -37,7 +37,7 @@ public class Board {
         for (int i = 0; i < 10; i++) {
             System.out.print("| ");
             for (int j = 0; j < 10; j++) {
-                System.out.print(" " + BoardArr[i][j].toChar());
+                System.out.print( BoardArr[j][i].toChar() + " ");
             }
             System.out.println(" |");
         }

@@ -1,5 +1,6 @@
 package Base;
 
+import java.util.Objects;
 import java.util.Scanner;
 public class Placement {
     static boolean b;
@@ -17,7 +18,7 @@ public class Placement {
             int x = sc.nextInt();
             int y = sc.nextInt();
             String direction_string = sc.next();
-            Direction direction = null;
+            Direction direction;
             if (direction_string.equals("Horizontal")) {
                 direction = Direction.Horizontal;
             }
@@ -32,39 +33,33 @@ public class Placement {
 
     public static Gurkin chooseGurkin(Coordinates start, Direction dir, String gurkinID) {
 
-        if (gurkinID == "Zuchinni"){
-            Gurkin gurk = new Zuchinni(start, dir);
-            return gurk;
+        if (Objects.equals(gurkinID, "Zuchinni")){
+            return new Zuchinni(start, dir);
         }
-        else if (gurkinID == "Gherkin"){
-            Gurkin gurk = new Gherkin(start, dir);
-            return gurk;
+        else if (Objects.equals(gurkinID, "Gherkin")){
+            return new Gherkin(start, dir);
         }
-        else if (gurkinID == "Pickle"){
-           Gurkin gurk = new Pickle(start, dir);
-           return gurk;
+        else if (Objects.equals(gurkinID, "Pickle")){
+            return new Pickle(start, dir);
         }
-        else if (gurkinID == "Conichon"){
-           Gurkin gurk = new Conichon(start, dir);
-           return gurk;
+        else if (Objects.equals(gurkinID, "Conichon")){
+            return new Conichon(start, dir);
         }
-        else if (gurkinID == "Yardlong"){
-           Gurkin gurk = new Yardlong(start, dir);
-           return gurk;
+        else if (Objects.equals(gurkinID, "Yardlong")){
+            return new Yardlong(start, dir);
         }
         return null;
 
     }
 
     public static boolean validate(Board B, Gurkin gurk) {
-        int length = gurk.getSize();
         Coordinates[] coords = gurk.coordinates;
 
         for (Coordinates c : coords) {
             if (c.getX() > 9 || c.getX()<0 || c.getY() > 9 || c.getY()<0) {
                 return false;
             }
-            else if (B.getTile(c).hasGurkin() == true) {
+            else if (B.getTile(c).hasGurkin()) {
                 return false;
             }
         }
@@ -89,7 +84,21 @@ public class Placement {
 
         // While loop that keeps going till valid placement
         while (!b) {
-            //We rerun the program to get new coordinates (need to be added)
+            Scanner sc = new Scanner(System.in);
+
+            System.out.print("Please enter valid coordinates and Direction: ");
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            String direction_string = sc.next();
+            Direction direction;
+            if (direction_string.equals("Horizontal")) {
+                direction = Direction.Horizontal;
+            }
+            else {
+                direction = Direction.Vertical;
+            }
+            Coordinates coors = new Coordinates(x, y);
+            gurk.setCoordinates(coors, direction);
             b = validate(B, gurk);
         }
         // Updating the board matrix with the fresh gurk
