@@ -3,13 +3,13 @@ package Base;
 public class Turn {
 
     String turn;
-    public String changeTurn(String n) {
-        if (n == null)
-            return  turn = "1";
-        else if (n == "1") {
-            return turn ="2";
+    public void changeTurn() {
+        if (turn == null)
+            turn = "1";
+        else if (turn == "1") {
+            turn ="2";
         } else {
-            return turn = "1";
+            turn = "1";
         }
     }
 }

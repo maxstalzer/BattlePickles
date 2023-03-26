@@ -25,7 +25,11 @@ public class Player {
         for (int i = 0; i < 10; i++) {
             System.out.print("| ");
             for (int j = 0; j < 10; j++) {
-                System.out.print( shotResults[j][i] + " ");
+                if (shotResults[j][i] == null) {
+                    System.out.print("  ");
+                } else {
+                    System.out.print( shotResults[j][i] + " ");
+                }
             }
             System.out.println(" |");
         }
@@ -34,7 +38,7 @@ public class Player {
 
     }
 
-    public void attack(Board board) {
+    public void attack_round(Board board) {
         displayShotBoard();
         Scanner sc = new Scanner(System.in);
         int x = sc.nextInt();
@@ -65,19 +69,24 @@ public class Player {
 //      updated with k
         if (result.equals("hit")) {
             this.shotResults[x][y] = 'x';
+            System.out.println("Hit!");
             Gurkin gurk = board.getTile(coords).getGurkin();
             if (gurk.deadGurk()) {
                 for (int i = 0; i < gurk.getSize(); i++) {
                    int xCor = gurk.getGurkinCoors()[i].getX();
                    int yCor = gurk.getGurkinCoors()[i].getY();
                    this.shotResults[xCor][yCor] = 'k';
+
                 }
+                System.out.println("You killed a gurkin");
             }
         } else if (result.equals("miss")) {
             this.shotResults[x][y] = 'o';
+            System.out.println("Miss lol");
         } else if (result.equals("noob")) {
             System.out.println("Already hit here");
-            Boolean validEntry = false;
+            Boolean validEntry = coords.validCoords();
+
             while (!validEntry) {
                 System.out.println("Please enter new x and y coordinates");
                 Scanner sc = new Scanner(System.in);
@@ -87,7 +96,6 @@ public class Player {
                 validEntry = coords.validCoords();
             }
             shoot(board, coords);
-
         }
     }
 }

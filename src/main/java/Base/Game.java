@@ -36,13 +36,14 @@ public class Game {
         player2.getGurkinBoard().displayBoard();
         while (!game_over) {
 
-            c.changeTurn(c.turn);
+            c.changeTurn();
 
             if (c.turn.equals("1")) {
-                System.out.println(player1.name + "Please attack " +player2.name + ": ");
-                player1.attack(player2.getGurkinBoard());
+                System.out.println(player1.name + " please attack " +player2.name + ": ");
+                player1.attack_round(player2.getGurkinBoard());
             } else if (c.turn.equals("2")) {
-                player2.attack(player1.getGurkinBoard());
+                System.out.println(player2.name + " please attack " +player1.name + ": ");
+                player2.attack_round(player1.getGurkinBoard());
             }
 
             game_over = (player1.remaining_gurkins == 0 || player2.remaining_gurkins == 0);
