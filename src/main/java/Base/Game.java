@@ -1,6 +1,5 @@
 package Base;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Game {
@@ -39,10 +38,14 @@ public class Game {
 
             c.changeTurn(c.turn);
 
-            if (c.equals("1")) {
+            if (c.turn.equals("1")) {
                 System.out.println(player1.name + "Please attack " +player2.name + ": ");
-
+                player1.attack(player2.getGurkinBoard());
+            } else if (c.turn.equals("2")) {
+                player2.attack(player1.getGurkinBoard());
             }
+
+            game_over = (player1.remaining_gurkins == 0 || player2.remaining_gurkins == 0);
 
         }
 

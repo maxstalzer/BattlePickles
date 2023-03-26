@@ -34,7 +34,23 @@ public class Player {
 
     }
 
-    public void attack() {
+    public void attack(Board board) {
+        displayShotBoard();
+        Scanner sc = new Scanner(System.in);
+        int x = sc.nextInt();
+        int y = sc.nextInt();
+
+        Coordinates coords = new Coordinates(x, y);
+        boolean validEntry = coords.validCoords();
+        while (!validEntry) {
+            System.out.println("Please enter new x and y coordinates");
+            int xPrime = sc.nextInt();
+            int yPrime = sc.nextInt();
+            coords.updateCoords(xPrime, yPrime);
+            validEntry = coords.validCoords();
+        }
+
+        shoot(board, coords);
 
     }
 
