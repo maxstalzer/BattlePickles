@@ -14,7 +14,7 @@ public class Placement {
         for (String gurkid: gurkIDs) {
             p.getGurkinBoard().displayBoard();
             System.out.println("Choosing placement of " + gurkid);
-            System.out.println("Enter x coordinates and direction");
+            System.out.println("Enter coordinates and directionn separated by a space");
             int x = sc.nextInt();
             int y = sc.nextInt();
             String direction_string = sc.next();
