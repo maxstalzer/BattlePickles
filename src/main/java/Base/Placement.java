@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Scanner;
 public class Placement {
     static boolean b;
-    enum Direction {
+    public enum Direction {
         Horizontal,
         Vertical
     }
