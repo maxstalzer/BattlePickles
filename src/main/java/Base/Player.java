@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Player {
     String name;
-    int remaining_gurkins = 5;
+    int remaining_gurkins;
 
     Board gurkinBoard;
 
@@ -17,6 +17,7 @@ public class Player {
     public Player(String name) {
         this.name = name;
         this.gurkinBoard = new Board();
+        this.remaining_gurkins = 5;
     }
 
     private void displayShotBoard() {
@@ -79,6 +80,7 @@ public class Player {
 
                 }
                 System.out.println("You killed a gurkin");
+                this.remaining_gurkins --;
             }
         } else if (result.equals("miss")) {
             this.shotResults[x][y] = 'o';
@@ -97,6 +99,13 @@ public class Player {
             }
             shoot(board, coords);
         }
+    }
+    public boolean checkWin() {
+        if (this.remaining_gurkins == 0) {
+            System.out.println(this.name + " wins the game!");
+            return true;
+        }
+        return false;
     }
 }
 
