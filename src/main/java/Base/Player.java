@@ -9,26 +9,28 @@ public class Player {
 
     Board gurkinBoard;
 
-    Character[][] shotResults = new Character[10][10];
+    public Character[][] shotResults = new Character[10][10];
 
     public Board getGurkinBoard() {
         return gurkinBoard;
     }
 
-    public Player() {
+    public Player(String name) {
 
 //      Ask for the players name
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please enter player name: ");
-        this.name = sc.next();
+
+        this.name = name;
 
 //      Setup the gurkin board
         this.gurkinBoard = new Board();
         this.remaining_gurkins = 5;
 
-//      Place gurkins on the players board
-        gurkinSetup(new String[]{"Gherkin", "Zuchinni","Pickle", "Conichon", "Yardlong" });
 
+
+    }
+    public void setupBoard() {
+        //      Place gurkins on the players board
+        gurkinSetup(new String[]{"Gherkin", "Zuchinni","Pickle", "Conichon", "Yardlong" });
     }
 
     private void displayShotBoard() {
@@ -71,7 +73,7 @@ public class Player {
     }
 
 //  Allows a player to shoot at given coordinates on the opposing player's board
-    private void shoot(Board board, Coordinates coords) {
+    public void shoot(Board board, Coordinates coords) {
         String result = board.attack(coords);
         int x = coords.getX();
         int y = coords.getY();

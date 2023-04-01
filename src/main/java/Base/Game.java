@@ -9,9 +9,13 @@ public class Game {
 
         Scanner sc = new Scanner(System.in);
         // Initialisation of players
+        System.out.print("Name of player 1: ");
+        String player1Name = sc.next();
+        System.out.print("Name of player 2: ");
+        String player2Name = sc.next();
 
-        Player player1 = new Player();
-        Player player2 = new Player();
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
 
         Turn c = new Turn();
         /*
