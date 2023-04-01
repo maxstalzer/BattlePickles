@@ -1,5 +1,6 @@
 package Base;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Player {
@@ -14,10 +15,20 @@ public class Player {
         return gurkinBoard;
     }
 
-    public Player(String name) {
-        this.name = name;
+    public Player() {
+
+//      Ask for the players name
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please enter player name: ");
+        this.name = sc.next();
+
+//      Setup the gurkin board
         this.gurkinBoard = new Board();
         this.remaining_gurkins = 5;
+
+//      Place gurkins on the players board
+        gurkinSetup(new String[]{"Gherkin", "Zuchinni","Pickle", "Conichon", "Yardlong" });
+
     }
 
     private void displayShotBoard() {
@@ -74,9 +85,16 @@ public class Player {
             Gurkin gurk = board.getTile(coords).getGurkin();
             if (gurk.deadGurk()) {
                 for (int i = 0; i < gurk.getSize(); i++) {
-                   int xCor = gurk.getGurkinCoors()[i].getX();
-                   int yCor = gurk.getGurkinCoors()[i].getY();
-                   this.shotResults[xCor][yCor] = 'k';
+                    if (board.getTile(new Coordinates(coords.getX() + i, coords.getY())).getGurkin().equals(gurk)) {
+                        this.shotResults[coords.getX()+i][coords.getY()] = 'k';
+                    } else if (board.getTile(new Coordinates(coords.getX() , coords.getY() + 1)).getGurkin().equals(gurk)) {
+                        this.shotResults[coords.getX()][coords.getY() + i] = 'k';
+                    } else if (board.getTile(new Coordinates(coords.getX() - i, coords.getY())).getGurkin().equals(gurk)) {
+                        this.shotResults[coords.getX() - i][coords.getY()] = 'k';
+
+                    } else if (board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).getGurkin().equals(gurk)) {
+                        this.shotResults[coords.getX()][coords.getY() - i] = 'k';
+                    }
 
                 }
                 System.out.println("You killed a gurkin");
@@ -107,5 +125,71 @@ public class Player {
         }
         return false;
     }
+    private Gurkin chooseGurkin (String gurkinID) {
+        if (Objects.equals(gurkinID, "Zuchinni")){
+            return new Zuchinni();
+        }
+        else if (Objects.equals(gurkinID, "Gherkin")){
+            return new Gherkin();
+        }
+        else if (Objects.equals(gurkinID, "Pickle")){
+            return new Pickle();
+        }
+        else if (Objects.equals(gurkinID, "Conichon")){
+            return new Conichon();
+        }
+        else if (Objects.equals(gurkinID, "Yardlong")){
+            return new Yardlong();
+        }
+        return null;
+    }
+
+    private void gurkinSetup(String [] gurkIDs) {
+        Scanner sc = new Scanner(System.in);
+        for (String gurkID: gurkIDs) {
+            gurkinBoard.displayBoard();
+
+            // First we create the gurkin object
+            Gurkin gurk = chooseGurkin(gurkID);
+
+
+            System.out.println("Choosing placement of " + gurkID);
+            System.out.println("Enter Coordinates and direction separated by a space:");
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            String direction_string = sc.next();
+            Direction.direction direction;
+            if (direction_string.equals("Horizontal")) {
+                direction = Direction.direction.Horizontal;
+            } else {
+                direction = Direction.direction.Vertical;
+            }
+            Coordinates startCors = new Coordinates(x, y);
+
+//          Validate player entered Coordinates
+            Boolean valid = startCors.validCoords(direction, gurk, gurkinBoard);
+
+            while (!valid) {
+                System.out.println("Please enter valid coordinates and direction:");
+                x = sc.nextInt();
+                y = sc.nextInt();
+                direction_string = sc.next();
+                if (direction_string.equals("Horizontal")) {
+                    direction = Direction.direction.Horizontal;
+                } else {
+                    direction = Direction.direction.Vertical;
+                }
+                startCors.updateCoords(x, y);
+                valid = startCors.validCoords(direction, gurk, gurkinBoard);
+            }
+
+            // update the board with the validated gurkin coordinates
+            gurkinBoard.setupBoard(gurk, direction, startCors);
+
+        }
+        System.out.println("Placement complete! Final Board layout is:");
+        gurkinBoard.displayBoard();
+    }
+
 }
 

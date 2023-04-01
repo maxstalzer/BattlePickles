@@ -45,5 +45,16 @@ public class Board {
         System.out.println("+---------------------+");
 
     }
+
+    public void setupBoard(Gurkin g, Direction.direction dir, Coordinates startCoor) {
+
+        for (int i = 0; i < g.getSize(); i++) {
+            if (dir.equals(Direction.direction.Horizontal)) {
+                getTile(new Coordinates(startCoor.getX() + i, startCoor.getY())).setGurkin(g);
+            } else {
+                getTile(new Coordinates(startCoor.getX(), startCoor.getY() + i)).setGurkin(g);
+            }
+        }
+    }
 }
 
