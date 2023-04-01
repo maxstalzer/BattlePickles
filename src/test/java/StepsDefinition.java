@@ -16,7 +16,7 @@ public class StepsDefinition {
     @When("set a gurkin on the tile")
     public void set_a_gurkin_on_the_tile() {
         Coordinates start_pos = new Coordinates(0, 0);
-        g = new Yardlong(start_pos, Placement.Direction.Horizontal);
+        g = new Yardlong();
         t.setGurkin(g);
     }
     @Then("the gurkin is on the tile")
