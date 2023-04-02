@@ -1,4 +1,5 @@
 import Base.*;
+import io.cucumber.java.ast.Ya;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,6 +13,9 @@ public class StepsDefinition {
     Player p1;
     Board p2b;
     Player p2;
+
+    Direction.direction dir;
+    Coordinates startCor;
 
     @Given("a tile")
     public void a_tile() {
@@ -47,6 +51,44 @@ public class StepsDefinition {
         assertEquals("hit", p2b.attack(new Coordinates(0, 0)));
     }
 
+    @When("I shoot a tile with no gurkin on")
+    public void i_shoot_a_tile_with_no_gurkin_on() {
+       t =  p2b.getTile(new Coordinates(0, 1));
+    }
+    @Then("I get the string miss")
+    public void i_get_the_string_miss() {
+        assertEquals("miss", p2b.attack(new Coordinates(0, 1)));
+    }
+
+    @Given("a starting Coordinate")
+    public void a_starting_coordinate() {
+      startCor = new Coordinates(0, 0);
+    }
+    @Given("a gurkin")
+    public void a_gurkin() {
+        g = new Yardlong();
+    }
+    @Given("the direction is horizontal")
+    public void the_direction_is_horizontal() {
+        dir = Direction.direction.Horizontal;
+    }
+    @When("I place the gurkin")
+    public void i_place_the_gurkin() {
+        p2b.setupBoard(g, dir, startCor);
+    }
+    @Then("the gurkin is placed horizontally")
+    public void the_gurkin_is_placed_horizontally() {
+        assertEquals(g, p2b.getTile(new Coordinates(1, 0)).getGurkin());
+    }
+
+    @Given("the direction is Vertical")
+    public void the_direction_is_vertical() {
+        dir = Direction.direction.Vertical;
+    }
+    @Then("the gurkin is placed Vertically")
+    public void the_gurkin_is_placed_vertically() {
+        assertEquals(g, p2b.getTile(new Coordinates(0,1)).getGurkin());
+    }
 
 
 }
