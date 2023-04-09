@@ -3,7 +3,7 @@ package Base;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Player {
+public class  Player {
     String name;
     int remaining_gurkins;
 
@@ -86,15 +86,16 @@ public class Player {
             System.out.println("Hit!");
             Gurkin gurk = board.getTile(coords).getGurkin();
             if (gurk.deadGurk()) {
+                this.shotResults[coords.getX()][coords.getY()] = 'k';
                 for (int i = 0; i < gurk.getSize(); i++) {
-                    if (board.getTile(new Coordinates(coords.getX() + i, coords.getY())).getGurkin().equals(gurk)) {
+                    if (board.getTile(new Coordinates(coords.getX() + i, coords.getY())).check(gurk)) {
                         this.shotResults[coords.getX()+i][coords.getY()] = 'k';
-                    } else if (board.getTile(new Coordinates(coords.getX() , coords.getY() + 1)).getGurkin().equals(gurk)) {
+                    } else if (board.getTile(new Coordinates(coords.getX() , coords.getY() + i)).check(gurk)) {
                         this.shotResults[coords.getX()][coords.getY() + i] = 'k';
-                    } else if (board.getTile(new Coordinates(coords.getX() - i, coords.getY())).getGurkin().equals(gurk)) {
+                    } else if (board.getTile(new Coordinates(coords.getX() - i, coords.getY())).check(gurk)) {
                         this.shotResults[coords.getX() - i][coords.getY()] = 'k';
 
-                    } else if (board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).getGurkin().equals(gurk)) {
+                    } else if (board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).check(gurk)) {
                         this.shotResults[coords.getX()][coords.getY() - i] = 'k';
                     }
 

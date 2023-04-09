@@ -26,4 +26,9 @@ public class Tile {
         }
         return ' ';
     }
+
+    public Boolean check(Gurkin gurk) {
+        if (!hasGurkin()) return false;
+        return gurkinID.equals(gurk);
+    }
 }
