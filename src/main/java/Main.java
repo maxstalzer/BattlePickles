@@ -1,10 +1,10 @@
-import Base.Game;
+import Base.ConsoleUI;
 
 public class Main
 {
     public static void main( String[] args ) {
         System.out.println("Starting new game");
-        new Game();
+        new ConsoleUI();
 
     }
 }
