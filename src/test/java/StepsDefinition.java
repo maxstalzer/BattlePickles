@@ -3,7 +3,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class StepsDefinition {
     Tile t;
@@ -17,6 +17,8 @@ public class StepsDefinition {
     Coordinates cords;
 
     Boolean valid;
+
+    Game game;
 
     @Given("a tile")
     public void a_tile() {
@@ -35,7 +37,7 @@ public class StepsDefinition {
 
     @Given("a player")
     public void a_player() {
-        p1 = new Player("Akira");
+        p1 = new Player();
     }
     @Given("a board")
     public void a_board() {
@@ -177,12 +179,36 @@ public class StepsDefinition {
         p2b.setupBoard(g, Direction.direction.Vertical, cords);
         p1.shoot(p2b, cords);
         p1.shoot(p2b, nextCor);
-
     }
+
     @Then("all of the gurkins coordinates on the shot result board should be k")
     public void all_of_the_gurkins_coordinates_on_the_shot_result_board_should_be_k() {
         assertEquals('k', p1.shotResults[4][4].charValue());
         assertEquals('k', p1.shotResults[4][5].charValue());
+    }
+
+
+
+    @When("I create a singleplayer game")
+    public void i_create_a_singleplayer_game() {
+       game = new Game(false);
+    }
+    @Then("I should create a new Player and AI")
+    public void i_should_create_a_new_player_and_ai() {
+        assertTrue(game.getPlayer1() instanceof Player);
+        assertFalse(game.getMultiplayer());
+        assertTrue(game.getPlayer2() instanceof AI);
+    }
+
+    @When("I create a multiplayer game")
+    public void i_create_a_multiplayer_game() {
+        game = new Game(true);
+    }
+    @Then("I should create two new players")
+    public void i_should_create_two_new_players() {
+        assertTrue(game.getPlayer1() instanceof Player);
+        assertTrue(game.getPlayer2() instanceof Player);
+        assertTrue(game.getMultiplayer());
     }
 
 

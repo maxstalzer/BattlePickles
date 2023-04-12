@@ -1,46 +1,28 @@
 package Base;
 
-import java.util.Scanner;
-
 public class Game {
+    Boolean multiplayer;
+    Player player1;
+    Player player2;
 
-    public static void main(String[] args) {
-        boolean game_over = false;
-
-        Scanner sc = new Scanner(System.in);
-        // Initialisation of players
-        System.out.print("Name of player 1: ");
-        String player1Name = sc.next();
-        System.out.print("Name of player 2: ");
-        String player2Name = sc.next();
-
-        Player player1 = new Player(player1Name);
-        Player player2 = new Player(player2Name);
-
-        Turn c = new Turn();
-        /*
-        placement of the ships
-
-        */
-        while (!game_over) {
-
-            c.changeTurn();
-
-            if (c.turn.equals("1")) {
-                System.out.println(player1.name + " please attack " +player2.name + ": ");
-                player1.attack_round(player2.getGurkinBoard());
-                game_over = player1.checkWin();
-
-            } else if (c.turn.equals("2")) {
-                System.out.println(player2.name + " please attack " +player1.name + ": ");
-                player2.attack_round(player1.getGurkinBoard());
-                game_over = player2.checkWin();
-            }
-
-
-
+    public Game(Boolean multiplayer) {
+        this.multiplayer = multiplayer;
+        if (multiplayer) {
+            player1 = new Player();
+            player2 = new Player();
+        } else {
+            player1 = new Player();
+            player2 = new AI();
         }
-
     }
 
+    public Player getPlayer1() {
+        return player1;
+    }
+    public Player getPlayer2() {
+        return player2;
+    }
+    public Boolean getMultiplayer() {
+        return multiplayer;
+    }
 }

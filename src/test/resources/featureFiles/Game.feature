@@ -84,3 +84,11 @@ Feature: Game
     And a board
     When i hit all points of a gurkin
     Then all of the gurkins coordinates on the shot result board should be k
+
+  Scenario: Creating a new Singleplayer game
+    When I create a singleplayer game
+    Then I should create a new Player and AI
+
+  Scenario: Creating a new Multiplayer game
+    When I create a multiplayer game
+    Then I should create two new players

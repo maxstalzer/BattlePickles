@@ -15,18 +15,19 @@ public class  Player {
         return gurkinBoard;
     }
 
-    public Player(String name) {
-
-//      Ask for the players name
-
-        this.name = name;
+    public Player() {
 
 //      Setup the gurkin board
         this.gurkinBoard = new Board();
         this.remaining_gurkins = 5;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
-
+    public String getName() {
+        return name;
     }
     public void setupBoard() {
         //      Place gurkins on the players board
