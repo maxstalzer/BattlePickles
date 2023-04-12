@@ -47,11 +47,15 @@ public class  Player {
 
 
 //    TODO: controller
-    public void attack_round(Board board, Coordinates coords) {
+    public void attack_round(Board board) {
+        Scanner sc = new Scanner(System.in);
+        Coordinates coords = new Coordinates(sc.nextInt(), sc.nextInt() );
         boolean validEntry = coords.validCoords();
         while (!validEntry) {
-            Coordinates cPrime = getAttackInfo(this);
-            coords.updateCoords(cPrime.getX(), cPrime.getY());
+            System.out.println("Please enter an x and y coordinate to attack");
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            coords.updateCoords(x, y);
             validEntry = coords.validCoords();
         }
 
