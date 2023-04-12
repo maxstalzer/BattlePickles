@@ -1,5 +1,9 @@
 package Base;
 
+
+import Base.Gurkins.*;
+import TempView.ConsoleUI;
+
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -9,7 +13,7 @@ public class  Player {
 
     Board gurkinBoard;
 
-    public Character[][] shotResults = new Character[10][10];
+    private Character[][] shotResults = new Character[10][10];
 
     public Board getGurkinBoard() {
         return gurkinBoard;
@@ -22,6 +26,11 @@ public class  Player {
         this.remaining_gurkins = 5;
     }
 
+
+    public Character[][] getShotResults() {
+        return shotResults;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -29,43 +38,20 @@ public class  Player {
     public String getName() {
         return name;
     }
+
+//    TODO: controller
     public void setupBoard() {
         //      Place gurkins on the players board
         gurkinSetup(new String[]{"Gherkin", "Zuchinni","Pickle", "Conichon", "Yardlong" });
     }
 
-    private void displayShotBoard() {
-        System.out.println("+---------------------+");
-        System.out.println("  0 1 2 3 4 5 6 7 8 9 ");
-        for (int i = 0; i < 10; i++) {
-            System.out.print("| ");
-            for (int j = 0; j < 10; j++) {
-                if (shotResults[j][i] == null) {
-                    System.out.print("  ");
-                } else {
-                    System.out.print( shotResults[j][i] + " ");
-                }
-            }
-            System.out.println(" |");
-        }
-        System.out.println("  0 1 2 3 4 5 6 7 8 9 ");
-        System.out.println("+---------------------+");
 
-    }
-
-    public void attack_round(Board board) {
-        displayShotBoard();
-        Scanner sc = new Scanner(System.in);
-        int x = sc.nextInt();
-        int y = sc.nextInt();
-
-        Coordinates coords = new Coordinates(x, y);
+//    TODO: controller
+    public void attack_round(Board board, Coordinates coords) {
         boolean validEntry = coords.validCoords();
         while (!validEntry) {
-            System.out.println("Please enter new x and y coordinates");
-            int xPrime = sc.nextInt();
-            int yPrime = sc.nextInt();
-            coords.updateCoords(xPrime, yPrime);
+            Coordinates cPrime = getAttackInfo(this);
+            coords.updateCoords(cPrime.getX(), cPrime.getY());
             validEntry = coords.validCoords();
         }
 
@@ -74,6 +60,8 @@ public class  Player {
     }
 
 //  Allows a player to shoot at given coordinates on the opposing player's board
+
+//    TODO: make sure that this method returns a string with the result of the shot
     public void shoot(Board board, Coordinates coords) {
         String result = board.attack(coords);
         int x = coords.getX();
@@ -84,7 +72,7 @@ public class  Player {
 //      updated with k
         if (result.equals("hit")) {
             this.shotResults[x][y] = 'x';
-            System.out.println("Hit!");
+//            System.out.println("Hit!");
             Gurkin gurk = board.getTile(coords).getGurkin();
             if (gurk.deadGurk()) {
                 this.shotResults[coords.getX()][coords.getY()] = 'k';
@@ -101,14 +89,14 @@ public class  Player {
                     }
 
                 }
-                System.out.println("You killed a gurkin");
+//                System.out.println("You killed a gurkin");
                 this.remaining_gurkins --;
             }
         } else if (result.equals("miss")) {
             this.shotResults[x][y] = 'o';
-            System.out.println("Miss lol");
+//            System.out.println("Miss lol");
         } else if (result.equals("noob")) {
-            System.out.println("Already hit here");
+//            System.out.println("Already hit here");
             Boolean validEntry = coords.validCoords();
 
             while (!validEntry) {
@@ -148,6 +136,8 @@ public class  Player {
         return null;
     }
 
+
+//    TODO: To be moved to controller?
     private void gurkinSetup(String [] gurkIDs) {
         Scanner sc = new Scanner(System.in);
         for (String gurkID: gurkIDs) {
@@ -188,7 +178,7 @@ public class  Player {
             }
 
             // update the board with the validated gurkin coordinates
-            gurkinBoard.setupBoard(gurk, direction, startCors);
+            gurkinBoard.placeGurkin(gurk, direction, startCors);
 
         }
         System.out.println("Placement complete! Final Board layout is:");

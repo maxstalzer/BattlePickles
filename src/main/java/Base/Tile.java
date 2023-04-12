@@ -1,5 +1,7 @@
 package Base;
 
+import Base.Gurkins.Gurkin;
+
 public class Tile {
     private boolean gurkin;
     private Gurkin gurkinID;

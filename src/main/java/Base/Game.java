@@ -4,6 +4,7 @@ public class Game {
     Boolean multiplayer;
     Player player1;
     Player player2;
+    Boolean game_Over;
 
     public Game(Boolean multiplayer) {
         this.multiplayer = multiplayer;
@@ -14,6 +15,7 @@ public class Game {
             player1 = new Player();
             player2 = new AI();
         }
+        this.game_Over = false;
     }
 
     public Player getPlayer1() {
@@ -25,4 +27,6 @@ public class Game {
     public Boolean getMultiplayer() {
         return multiplayer;
     }
+
+
 }

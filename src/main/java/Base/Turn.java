@@ -2,7 +2,7 @@ package Base;
 
 public class Turn {
 
-    String turn;
+    private String turn;
     public void changeTurn() {
         if (turn == null)
             turn = "1";
@@ -11,6 +11,9 @@ public class Turn {
         } else {
             turn = "1";
         }
+    }
+    public String getTurn() {
+        return turn;
     }
 
 }

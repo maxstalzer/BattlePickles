@@ -1,4 +1,4 @@
-package Base;
+package Base.Gurkins;
 
 public class Yardlong extends Gurkin {
     public Yardlong() {

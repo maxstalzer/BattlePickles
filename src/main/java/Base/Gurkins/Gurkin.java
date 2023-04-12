@@ -1,4 +1,4 @@
-package Base;
+package Base.Gurkins;
 
 public abstract class Gurkin {
     private final int size;
@@ -24,6 +24,6 @@ public abstract class Gurkin {
     }
 
 //  Method to return the string representation of each gurkin
-     abstract Character toChar();
+     public abstract Character toChar();
 
 }

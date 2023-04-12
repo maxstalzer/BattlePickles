@@ -1,5 +1,7 @@
 package Base;
 
+import Base.Gurkins.Gurkin;
+
 public class Coordinates {
 
     private int X;
