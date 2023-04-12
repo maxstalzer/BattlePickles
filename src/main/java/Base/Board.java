@@ -1,5 +1,7 @@
 package Base;
 
+import Base.Gurkins.Gurkin;
+
 public class Board {
     private Tile[][] BoardArr = new Tile[10][10];
 
@@ -31,6 +33,7 @@ public class Board {
 
     }
 
+//  TODO: Move to ConsoleUI as this is only used for console UI Purposes
     public void displayBoard() {
         System.out.println("+---------------------+");
         System.out.println("  0 1 2 3 4 5 6 7 8 9 ");
@@ -46,7 +49,7 @@ public class Board {
 
     }
 
-    public void setupBoard(Gurkin g, Direction.direction dir, Coordinates startCoor) {
+    public void placeGurkin(Gurkin g, Direction.direction dir, Coordinates startCoor) {
 
         for (int i = 0; i < g.getSize(); i++) {
             if (dir.equals(Direction.direction.Horizontal)) {

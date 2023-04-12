@@ -1,4 +1,4 @@
-package Base;
+package Base.Gurkins;
 
 public class Zuchinni extends Gurkin {
     public Zuchinni() {

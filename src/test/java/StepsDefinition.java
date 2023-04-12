@@ -1,4 +1,6 @@
 import Base.*;
+import Base.Gurkins.*;
+import io.cucumber.java.ast.Ya;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -9,6 +11,7 @@ public class StepsDefinition {
     Tile t;
     Gurkin g;
     Gurkin g2;
+    Character gChar;
 
     Player p1;
     Board p2b;
@@ -154,7 +157,7 @@ public class StepsDefinition {
     public void my_shot_results_board_has_the_character_o() {
         int x = cords.getX();
         int y = cords.getY();
-        assertEquals('o', p1.shotResults[x][y].charValue());
+        assertEquals('o', p1.getShotResults()[x][y].charValue());
     }
     @When("I hit a gurkin")
     public void i_hit_a_gurkin() {
@@ -168,7 +171,7 @@ public class StepsDefinition {
     public void my_shot_results_board_has_the_character_x() {
         int x = cords.getX();
         int y = cords.getY();
-        assertEquals('x', p1.shotResults[x][y].charValue());
+        assertEquals('x', p1.getShotResults()[x][y].charValue());
     }
 
     @When("i hit all points of a gurkin")
@@ -176,15 +179,15 @@ public class StepsDefinition {
         cords = new Coordinates(4,4);
         Coordinates nextCor = new Coordinates(4,5);
         g = new Conichon();
-        p2b.setupBoard(g, Direction.direction.Vertical, cords);
+        p2b.placeGurkin(g, Direction.direction.Vertical, cords);
         p1.shoot(p2b, cords);
         p1.shoot(p2b, nextCor);
     }
 
     @Then("all of the gurkins coordinates on the shot result board should be k")
     public void all_of_the_gurkins_coordinates_on_the_shot_result_board_should_be_k() {
-        assertEquals('k', p1.shotResults[4][4].charValue());
-        assertEquals('k', p1.shotResults[4][5].charValue());
+        assertEquals('k', p1.getShotResults()[4][4].charValue());
+        assertEquals('k', p1.getShotResults()[4][5].charValue());
     }
 
 
@@ -210,6 +213,114 @@ public class StepsDefinition {
         assertTrue(game.getPlayer2() instanceof Player);
         assertTrue(game.getMultiplayer());
     }
+
+    @When("I create a new Player")
+    public void i_create_a_new_player() {
+        p1 = new Player();
+    }
+    @Then("the player should have a board and a shot results board")
+    public void the_player_should_have_a_board_and_a_shot_results_board() {
+        assertNotNull(p1.getShotResults());
+        assertNotNull(p1.getGurkinBoard());
+    }
+
+
+    @Given("a Conichon")
+    public void a_conichon() {
+        g = new Conichon();
+    }
+    @When("use the conichon to string method")
+    public void use_the_conichon_to_string_method() {
+        gChar = g.toChar();
+    }
+    @Then("the character c should be returned")
+    public void the_character_c_should_be_returned() {
+        assertEquals('c', gChar.charValue());
+    }
+
+    @Given("a Gherkin")
+    public void a_gherkin() {
+        g = new Gherkin();
+    }
+    @When("use the Gherkin to string method")
+    public void use_the_gherkin_to_string_method() {
+        gChar = g.toChar();
+    }
+    @Then("the character g should be returned")
+    public void the_character_g_should_be_returned() {
+        assertEquals('g', gChar.charValue());
+    }
+
+
+    @Given("a Pickle")
+    public void a_pickle() {
+        g = new Pickle();
+    }
+    @When("use the Pickle to string method")
+    public void use_the_pickle_to_string_method() {
+        gChar = g.toChar();
+    }
+    @Then("the character p should be returned")
+    public void the_character_p_should_be_returned() {
+        assertEquals('p', gChar.charValue());
+    }
+
+
+    @Given("a Terrain")
+    public void a_terrain() {
+        g = new Terrain();
+    }
+    @When("use the terrain to string method")
+    public void use_the_terrain_to_string_method() {
+        gChar = g.toChar();
+    }
+    @Then("the character t should be returned")
+    public void the_character_t_should_be_returned() {
+        assertEquals('t', gChar.charValue());
+    }
+
+    @Given("a yardlong")
+    public void a_yardlong() {
+        g = new Yardlong();
+    }
+    @When("use the yardlong to string method")
+    public void use_the_yardlong_to_string_method() {
+        gChar = g.toChar();
+    }
+    @Then("the character y should be returned")
+    public void the_character_y_should_be_returned() {
+        assertEquals('y', gChar.charValue());
+    }
+
+
+    @Given("a Zuchinni")
+    public void a_zuchinni() {
+        g = new Zuchinni();
+    }
+    @When("use the zuzhinni to string method")
+    public void use_the_zuzhinni_to_string_method() {
+        gChar = g.toChar();
+    }
+    @Then("the character z should be returned")
+    public void the_character_z_should_be_returned() {
+        assertEquals('z', g.toChar().charValue());
+    }
+
+    @Given("an invalid coordinate")
+    public void an_invalid_coordinate() {
+        cords = new Coordinates(9,9);
+    }
+    @When("I try to place a yardlong incorrectly")
+    public void i_try_to_place_a_yardlong_incorrectly() {
+        g = new Yardlong();
+        p2b = new Board();
+        valid = cords.validCoords(Direction.direction.Vertical, g, p2b);
+    }
+    @Then("I should be told it is invalid")
+    public void i_should_be_told_it_is_invalid() {
+        assertFalse(valid);
+    }
+
 
 
 }
