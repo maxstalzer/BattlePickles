@@ -13,6 +13,7 @@ public class StepsDefinition {
     Gurkin g2;
     Character gChar;
 
+    Turn turn;
     Player p1;
     Board p2b;
     Player p2;
@@ -319,6 +320,35 @@ public class StepsDefinition {
     @Then("I should be told it is invalid")
     public void i_should_be_told_it_is_invalid() {
         assertFalse(valid);
+    }
+
+    @When("I update the players name")
+    public void i_update_the_players_name() {
+        p1.setName("Akira");
+    }
+    @Then("the player name should be the name")
+    public void the_player_name_should_be_the_name() {
+        assertEquals("Akira", p1.getName());
+    }
+
+
+    @Given("its player1s turn")
+    public void its_player1s_turn() {
+        turn = new Turn();
+    }
+//    @When("the player has placed all their gurkins")
+//    public void the_player_has_placed_all_their_gurkins() {
+//
+//
+//    }
+//    @Then("the turn changes to player2")
+//    public void the_turn_changes_to_player2() {
+//        assertEquals("2", turn.getTurn());
+//    }
+
+    @Then("The turn changes")
+    public void the_turn_changes() {
+        assertEquals("2", turn.getTurn());
     }
 
 

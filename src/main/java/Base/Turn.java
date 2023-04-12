@@ -1,12 +1,16 @@
 package Base;
 
+import java.util.Objects;
+
 public class Turn {
 
-    private String turn;
-    public void changeTurn() {
-        if (turn == null)
-            turn = "1";
-        else if (turn == "1") {
+    private static String turn;
+
+    public Turn() {
+        turn = "1";
+    }
+    public static void changeTurn() {
+        if (Objects.equals(turn, "1")) {
             turn ="2";
         } else {
             turn = "1";

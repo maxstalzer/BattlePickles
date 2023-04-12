@@ -6,8 +6,11 @@ public class Game {
     Player player2;
     Boolean game_Over;
 
+    Turn turn;
+
     public Game(Boolean multiplayer) {
         this.multiplayer = multiplayer;
+        this.turn = new Turn();
         if (multiplayer) {
             player1 = new Player();
             player2 = new Player();
@@ -26,6 +29,10 @@ public class Game {
     }
     public Boolean getMultiplayer() {
         return multiplayer;
+    }
+
+    public boolean changePlacement(Player player) {
+        return (player.getRemaining_gurkins() == 5);
     }
 
 

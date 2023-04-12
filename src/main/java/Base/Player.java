@@ -23,7 +23,7 @@ public class  Player {
 
 //      Setup the gurkin board
         this.gurkinBoard = new Board();
-        this.remaining_gurkins = 5;
+        this.remaining_gurkins = 0;
     }
 
 
@@ -39,14 +39,14 @@ public class  Player {
         return name;
     }
 
-//    TODO: controller
+    public int getRemaining_gurkins() {return remaining_gurkins; }
+
+
     public void setupBoard() {
         //      Place gurkins on the players board
-        gurkinSetup(new String[]{"Gherkin", "Zuchinni","Pickle", "Conichon", "Yardlong" });
+        gurkinSetup(new String[]{"Gherkin", "Zuchinni", "Pickle", "Conichon", "Yardlong" });
     }
 
-
-//    TODO: controller
     public void attack_round(Board board) {
         Scanner sc = new Scanner(System.in);
         Coordinates coords = new Coordinates(sc.nextInt(), sc.nextInt() );
@@ -65,7 +65,6 @@ public class  Player {
 
 //  Allows a player to shoot at given coordinates on the opposing player's board
 
-//    TODO: make sure that this method returns a string with the result of the shot
     public void shoot(Board board, Coordinates coords) {
         String result = board.attack(coords);
         int x = coords.getX();
@@ -74,8 +73,11 @@ public class  Player {
 //      if the player successfully hits an opponents pickle the player's shots
 //      board is updated with x for hit, o for miss and the whole pickle is
 //      updated with k
+
+
         if (result.equals("hit")) {
             this.shotResults[x][y] = 'x';
+            Turn.changeTurn();
 //            System.out.println("Hit!");
             Gurkin gurk = board.getTile(coords).getGurkin();
             if (gurk.deadGurk()) {
@@ -99,6 +101,7 @@ public class  Player {
         } else if (result.equals("miss")) {
             this.shotResults[x][y] = 'o';
 //            System.out.println("Miss lol");
+            Turn.changeTurn();
         } else if (result.equals("noob")) {
 //            System.out.println("Already hit here");
             Boolean validEntry = coords.validCoords();
@@ -183,11 +186,20 @@ public class  Player {
 
             // update the board with the validated gurkin coordinates
             gurkinBoard.placeGurkin(gurk, direction, startCors);
+            this.remaining_gurkins ++;
 
         }
         System.out.println("Placement complete! Final Board layout is:");
         gurkinBoard.displayBoard();
     }
+    public Boolean validGurkinSetup(Gurkin gurk, Direction.direction direction, Coordinates cords) {
+        boolean valid = cords.validCoords(direction, gurk, gurkinBoard);
+        if (valid) {
+            gurkinBoard.placeGurkin(gurk, direction, cords);
+            this.remaining_gurkins ++;
 
+        }
+        return valid;
+    }
 }
 

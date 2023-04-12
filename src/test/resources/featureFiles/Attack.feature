@@ -19,7 +19,6 @@ Feature: Attack
     When I shoot a tile I've shot before
     Then I get the string noob
 
-
   @tag1
   Scenario: Missing a shot
     Given a player
@@ -32,7 +31,6 @@ Feature: Attack
     And a board
     When I hit a gurkin
     Then My shotResults board has the character x
-
   @tag1
   Scenario: Killing a gurkin
     Given a player
