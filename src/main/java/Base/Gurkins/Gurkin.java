@@ -15,6 +15,11 @@ public abstract class Gurkin {
     public int getSize() {
         return this.size;
     }
+
+    public int getLives() {
+        return lives;
+    }
+
     public void decrementLives() {
         this.lives --;
     }

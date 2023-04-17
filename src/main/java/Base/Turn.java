@@ -6,17 +6,17 @@ public class Turn {
 
     private static String turn;
 
-    public Turn() {
+    public static void init_turn() {
         turn = "1";
     }
     public static void changeTurn() {
-        if (Objects.equals(turn, "1")) {
-            turn ="2";
+        if (turn.equals("1")) {
+            turn = "2";
         } else {
             turn = "1";
         }
     }
-    public String getTurn() {
+    public static String getTurn() {
         return turn;
     }
 

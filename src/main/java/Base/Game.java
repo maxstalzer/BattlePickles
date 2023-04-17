@@ -6,11 +6,9 @@ public class Game {
     Player player2;
     Boolean game_Over;
 
-    Turn turn;
-
     public Game(Boolean multiplayer) {
         this.multiplayer = multiplayer;
-        this.turn = new Turn();
+        Turn.init_turn();
         if (multiplayer) {
             player1 = new Player();
             player2 = new Player();

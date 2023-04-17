@@ -4,6 +4,7 @@ import io.cucumber.java.ast.Ya;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 
 import static org.junit.Assert.*;
 
@@ -331,25 +332,112 @@ public class StepsDefinition {
         assertEquals("Akira", p1.getName());
     }
 
+    @Given("a game")
+    public void a_game() {
+        game = new Game(true);
+    }
+
+
+    @Given("all {int} gurkins have been placed")
+    public void all_gurkins_have_been_placed(Integer int1) {
+
+        game.getPlayer1().validGurkinSetup(new Gherkin(), Direction.direction.Horizontal, new Coordinates(0, 0));
+        game.getPlayer1().validGurkinSetup(new Conichon(), Direction.direction.Horizontal, new Coordinates(0, 1));
+        game.getPlayer1().validGurkinSetup(new Yardlong(), Direction.direction.Horizontal, new Coordinates(0, 2));
+        game.getPlayer1().validGurkinSetup(new Zuchinni(), Direction.direction.Horizontal, new Coordinates(0, 3));
+        game.getPlayer1().validGurkinSetup(new Pickle(), Direction.direction.Horizontal, new Coordinates(0, 4));
+    }
+    @Then("The turn changes")
+    public void The_turn_changes() {
+        assertEquals("2", Turn.getTurn());
+    }
 
     @Given("its player1s turn")
     public void its_player1s_turn() {
-        turn = new Turn();
     }
-//    @When("the player has placed all their gurkins")
-//    public void the_player_has_placed_all_their_gurkins() {
-//
-//
-//    }
-//    @Then("the turn changes to player2")
-//    public void the_turn_changes_to_player2() {
-//        assertEquals("2", turn.getTurn());
-//    }
+    @When("I shoot a tile that has a gurkin and has not been shot before")
+    public void i_shoot_a_tile_that_has_a_gurkin_and_has_not_been_shot_before() {
+        cords = new Coordinates(0,0);
+        game.getPlayer2().validGurkinSetup(new Conichon(), Direction.direction.Horizontal, cords);
+        game.getPlayer1().shoot(game.getPlayer2().getGurkinBoard(), cords);
+    }
+    @Then("the shot result x is on that coordinate")
+    public void the_shot_result_x_is_on_that_coordinate() {
+        assertEquals('x', game.getPlayer1().getShotResults()[cords.getX()][cords.getY()].charValue());
+    }
+    @Then("the turn is changed")
+    public void the_turn_is_changed() {
+        assertEquals("2", Turn.getTurn());
+    }
+    @Then("the gurkins lives has decreased")
+    public void the_gurkins_lives_has_decreased() {
+        int expected_lives = game.getPlayer2().getGurkinBoard().getTile(cords).getGurkin().getSize()-1;
+        int remaining_lives = game.getPlayer2().getGurkinBoard().getTile(cords).getGurkin().getLives();
+        assertEquals(expected_lives, remaining_lives);
+    }
 
-    @Then("The turn changes")
-    public void the_turn_changes() {
-        assertEquals("2", turn.getTurn());
+    @When("I shoot a tile that doesnt have a gurkin on it and has not been shot before")
+    public void i_shoot_a_tile_that_doesnt_have_a_gurkin_on_it_and_has_not_been_shot_before() {
+        cords = new Coordinates(0,0);
+        game.getPlayer1().shoot(game.getPlayer2().getGurkinBoard(), cords);
     }
+    @Then("the shot result is o on that coordinate")
+    public void the_shot_result_is_o_on_that_coordinate() {
+        assertEquals('o', game.getPlayer1().getShotResults()[cords.getX()][cords.getY()].charValue());
+    }
+    @Then("the turn is not changed")
+    public void the_turn_is_not_changed() {
+        assertEquals("1", Turn.getTurn());
+    }
+    @When("I shoot a tile that i hit again")
+    public void i_shoot_a_tile_that_I_hit_again() {
+        Turn.changeTurn();
+        game.getPlayer1().shoot(game.getPlayer2().getGurkinBoard(), cords);
+    }
+
+    @Then("the gurkins life has only decreased by {int}")
+    public void the_gurkins_life_has_only_decreased_by(Integer int1) {
+        int expected_lives = game.getPlayer2().getGurkinBoard().getTile(cords).getGurkin().getSize()-1;
+        int remaining_lives = game.getPlayer2().getGurkinBoard().getTile(cords).getGurkin().getLives();
+        assertEquals(expected_lives, remaining_lives);
+    }
+
+    @When("I shoot all tiles of that gurkin")
+    public void i_shoot_all_tiles_of_that_gurkin() {
+        cords = new Coordinates(0,0);
+        game.getPlayer2().validGurkinSetup(new Conichon(), Direction.direction.Horizontal, cords);
+        game.getPlayer1().shoot(game.getPlayer2().getGurkinBoard(), cords);
+        Turn.changeTurn();
+        game.getPlayer1().shoot(game.getPlayer2().getGurkinBoard(), new Coordinates(1,0));
+    }
+    @Then("the shot result is k on those coordinates")
+    public void the_shot_result_is_k_on_those_coordinates() {
+        assertEquals('k', game.getPlayer1().getShotResults()[0][0].charValue());
+        assertEquals('k', game.getPlayer1().getShotResults()[1][0].charValue());
+    }
+    @Then("the gurkin has no lives")
+    public void the_gurkin_has_no_lives() {
+       assertEquals(0, game.getPlayer2().getGurkinBoard().getTile(cords).getGurkin().getLives());
+    }
+
+    @Given("player1 has to kill the last gurkin")
+    public void player1_has_to_kill_the_last_gurkin() {
+        game.getPlayer1().setRemaining_gurkins(1);
+    }
+    @Then("then player1 wins")
+    public void then_player1_wins() {
+        Assert.assertTrue(game.getPlayer1().checkWin());
+    }
+
+    @Given("its player2s turn")
+    public void its_player2s_turn() {
+        Turn.changeTurn();
+    }
+    @Then("player1 does not win")
+    public void player1_does_not_win() {
+        Assert.assertFalse(game.getPlayer1().checkWin());
+    }
+
 
 
 

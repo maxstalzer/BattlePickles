@@ -41,6 +41,8 @@ public class  Player {
 
     public int getRemaining_gurkins() {return remaining_gurkins; }
 
+    public void setRemaining_gurkins(int val) {remaining_gurkins = val;}
+
 
     public void setupBoard() {
         //      Place gurkins on the players board
@@ -102,24 +104,24 @@ public class  Player {
             this.shotResults[x][y] = 'o';
 //            System.out.println("Miss lol");
             Turn.changeTurn();
-        } else if (result.equals("noob")) {
-//            System.out.println("Already hit here");
-            Boolean validEntry = coords.validCoords();
-
-            while (!validEntry) {
-                System.out.println("Please enter new x and y coordinates");
-                Scanner sc = new Scanner(System.in);
-                int xPrime = sc.nextInt();
-                int yPrime = sc.nextInt();
-                coords.updateCoords(xPrime, yPrime);
-                validEntry = coords.validCoords();
-            }
-            shoot(board, coords);
+//        } else if (result.equals("noob")) {
+////            System.out.println("Already hit here");
+//            Boolean validEntry = coords.validCoords();
+//
+//            while (!validEntry) {
+//                System.out.println("Please enter new x and y coordinates");
+//                Scanner sc = new Scanner(System.in);
+//                int xPrime = sc.nextInt();
+//                int yPrime = sc.nextInt();
+//                coords.updateCoords(xPrime, yPrime);
+//                validEntry = coords.validCoords();
+//            }
+//            shoot(board, coords);
         }
     }
     public boolean checkWin() {
         if (this.remaining_gurkins == 0) {
-            System.out.println(this.name + " wins the game!");
+
             return true;
         }
         return false;
@@ -198,6 +200,9 @@ public class  Player {
             gurkinBoard.placeGurkin(gurk, direction, cords);
             this.remaining_gurkins ++;
 
+        }
+        if (!(remaining_gurkins < 5)) {
+            Turn.changeTurn();
         }
         return valid;
     }

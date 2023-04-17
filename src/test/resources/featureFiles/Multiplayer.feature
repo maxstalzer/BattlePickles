@@ -56,16 +56,67 @@ Feature: Multiplayer
     When I try to place a yardlong incorrectly
     Then I should be told it is invalid
 
-#  Scenario: player1 finishes placing gurkins
-#    Given a player
-#    And its player1s turn
-#    And a board
-#    When the player has placed all their gurkins
-#    Then the turn changes to player2
-  Scenario: shooting a tile with a gurkin on
-    Given a player
-    And a board
+  Scenario: Player 1 has placed all 5 gurkins
+    Given a game
+    And a player
+    And all 5 gurkins have been placed
+    Then The turn changes
+
+# ---------------------------- Attacking feature ------------------------
+
+  Scenario: Player 1 attacks a tile with a gurkin on it
+    Given a game
     And its player1s turn
-    When I shoot a tile with a gurkin on it
-    Then I get the string hit
-    And The turn changes
+    When I shoot a tile that has a gurkin and has not been shot before
+    Then the shot result x is on that coordinate
+    And the turn is changed
+    And the gurkins lives has decreased
+
+  Scenario: Player 1 attacks a tile without a gurkin on it
+    Given a game
+    And its player1s turn
+    When I shoot a tile that doesnt have a gurkin on it and has not been shot before
+    Then the shot result is o on that coordinate
+    And the turn is changed
+
+  Scenario: Player 1 attacks a tile with a gurkin on they have shot before
+    Given a game
+    And its player1s turn
+    When I shoot a tile that has a gurkin and has not been shot before
+    And I shoot a tile that i hit again
+    Then the shot result x is on that coordinate
+    And the turn is not changed
+    And the gurkins life has only decreased by 1
+  
+  Scenario: Player 1 attacks a tile without a gurkin that they have shot before
+    Given a game 
+    And its player1s turn
+    When I shoot a tile that doesnt have a gurkin on it and has not been shot before
+    And I shoot a tile that i hit again
+    Then the shot result is o on that coordinate
+    And the turn is not changed
+
+  Scenario: Player 1 attacks a tile and kills a gurkin
+    Given a game
+    And its player1s turn
+    When I shoot all tiles of that gurkin
+    Then the shot result is k on those coordinates
+    And the turn is changed
+    And the gurkin has no lives
+# ------------------------------- WINNING THE GAME ----------------------------------
+  Scenario: Player 1 has killed all the gurkins of player 2
+    Given a game
+    And its player1s turn
+    And player1 has to kill the last gurkin
+    When I shoot all tiles of that gurkin
+    Then then player1 wins
+
+  Scenario: Player 1 has not yet killed all the gurkins of player 2
+    Given a game
+    And its player2s turn
+    And player1 has to kill the last gurkin
+    Then player1 does not win
+
+
+
+
