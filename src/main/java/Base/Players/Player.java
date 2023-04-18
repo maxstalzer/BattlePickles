@@ -1,7 +1,11 @@
-package Base;
+package Base.Players;
 
 
+import Base.Board;
+import Base.Coordinates;
+import Base.Direction;
 import Base.Gurkins.*;
+import Base.Turn;
 import TempView.ConsoleUI;
 
 import java.util.Objects;

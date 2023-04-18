@@ -1,5 +1,8 @@
 package Base;
 
+import Base.Players.AI;
+import Base.Players.Player;
+
 public class Game {
     Boolean multiplayer;
     Player player1;

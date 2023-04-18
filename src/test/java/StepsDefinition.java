@@ -1,6 +1,7 @@
 import Base.*;
 import Base.Gurkins.*;
-import io.cucumber.java.ast.Ya;
+import Base.Players.AI;
+import Base.Players.Player;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

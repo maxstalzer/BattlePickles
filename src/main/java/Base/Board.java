@@ -33,22 +33,6 @@ public class Board {
 
     }
 
-////  TODO: Move to ConsoleUI as this is only used for console UI Purposes
-//    public void displayBoard() {
-//        System.out.println("+---------------------+");
-//        System.out.println("  0 1 2 3 4 5 6 7 8 9 ");
-//        for (int i = 0; i < 10; i++) {
-//            System.out.print("| ");
-//            for (int j = 0; j < 10; j++) {
-//                System.out.print( BoardArr[j][i].toChar() + " ");
-//            }
-//            System.out.println(" |");
-//        }
-//        System.out.println("  0 1 2 3 4 5 6 7 8 9 ");
-//        System.out.println("+---------------------+");
-//
-//    }
-
     public void placeGurkin(Gurkin g, Direction.direction dir, Coordinates startCoor) {
 
         for (int i = 0; i < g.getSize(); i++) {

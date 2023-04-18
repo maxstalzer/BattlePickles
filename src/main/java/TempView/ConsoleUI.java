@@ -1,6 +1,7 @@
 package TempView;
 
 import Base.*;
+import Base.Players.Player;
 
 import java.util.Scanner;
 
