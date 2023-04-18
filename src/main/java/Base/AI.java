@@ -41,4 +41,28 @@ public class AI extends Player{
             }
         }
     }
+
+    public Coordinates generateAttack() {
+        switch (difficulty) {
+            case Easy:
+                return generateEasyAttack();
+            case Medium:
+                return generateMediumAttack();
+            case Hard:
+                return generateHardAttack();
+            default:
+                return generateEasyAttack();
+        }
+    }
+    public Coordinates generateEasyAttack() {
+        Random rand = new Random();
+        int rX = rand.nextInt(10);
+        int rY = rand.nextInt(10);
+        return new Coordinates(rX, rY);
+    }
+
+    public Coordinates generateMediumAttack() {
+
+    }
+    
 }
