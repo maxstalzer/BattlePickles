@@ -438,6 +438,23 @@ public class StepsDefinition {
         Assert.assertFalse(game.getPlayer1().checkWin());
     }
 
+    @Given("a singleplayer game")
+    public void a_singleplayer_game() {
+        game = new Game(false);
+    }
+    @When("I set the difficulty of the AI to easy")
+    public void i_set_the_difficulty_of_the_ai_to_easy() {
+        game.getAIPlayer().setDifficulty(Difficulty.Easy);
+    }
+    @Then("the difficulty of the AI should be easy")
+    public void the_difficulty_of_the_ai_should_be_easy() {
+       assertEquals(Difficulty.Easy, game.getAIPlayer().getDifficulty());
+    }
+
+    @Then("the board should be randomly generated")
+    public void the_board_should_be_randomly_generated() {
+        assertEquals(5,game.getPlayer2().getRemaining_gurkins());
+    }
 
 
 

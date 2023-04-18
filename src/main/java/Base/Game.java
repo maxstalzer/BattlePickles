@@ -25,6 +25,11 @@ public class Game {
     public Player getPlayer2() {
         return player2;
     }
+    public AI getAIPlayer() {
+        if (!multiplayer) {
+            return (AI) player2;
+        } else return null;
+    }
     public Boolean getMultiplayer() {
         return multiplayer;
     }
