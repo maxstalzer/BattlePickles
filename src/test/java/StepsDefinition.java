@@ -445,7 +445,7 @@ public class StepsDefinition {
     }
     @When("I set the difficulty of the AI to easy")
     public void i_set_the_difficulty_of_the_ai_to_easy() {
-        game.getAIPlayer().setDifficulty(AI.Difficulty.Easy);
+        game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
     }
     @Then("the difficulty of the AI should be easy")
     public void the_difficulty_of_the_ai_should_be_easy() {
