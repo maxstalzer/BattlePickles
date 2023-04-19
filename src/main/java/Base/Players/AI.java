@@ -1,10 +1,8 @@
 package Base.Players;
 
 import Base.Coordinates;
-import Base.Difficulty;
 import Base.Direction;
 import Base.Gurkins.*;
-import Base.Players.Player;
 
 import java.util.Random;
 
@@ -163,6 +161,10 @@ public class AI extends Player {
     }
 
 
+    public enum Difficulty {
+        Easy,
+        Medium,
+        Hard
 
-
+    }
 }
