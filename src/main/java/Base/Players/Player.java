@@ -61,14 +61,14 @@ public class  Player {
             if (gurk.deadGurk()) {
                 this.shotResults[coords.getX()][coords.getY()] = 'k';
                 for (int i = 0; i < gurk.getSize(); i++) {
-                    if (board.getTile(new Coordinates(coords.getX() + i, coords.getY())).check(gurk)) {
+                    if ((new Coordinates(coords.getX() + i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() + i, coords.getY())).check(gurk)) {
                         this.shotResults[coords.getX()+i][coords.getY()] = 'k';
-                    } else if (board.getTile(new Coordinates(coords.getX() , coords.getY() + i)).check(gurk)) {
+                    } else if ((new Coordinates(coords.getX() , coords.getY() + i).validCoords()) && board.getTile(new Coordinates(coords.getX() , coords.getY() + i)).check(gurk)) {
                         this.shotResults[coords.getX()][coords.getY() + i] = 'k';
-                    } else if (board.getTile(new Coordinates(coords.getX() - i, coords.getY())).check(gurk)) {
+                    } else if ((new Coordinates(coords.getX() - i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() - i, coords.getY())).check(gurk)) {
                         this.shotResults[coords.getX() - i][coords.getY()] = 'k';
 
-                    } else if (board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).check(gurk)) {
+                    } else if ((new Coordinates(coords.getX(), coords.getY() - i).validCoords()) &&board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).check(gurk)) {
                         this.shotResults[coords.getX()][coords.getY() - i] = 'k';
                     }
                 }

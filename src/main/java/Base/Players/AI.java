@@ -66,16 +66,23 @@ public class AI extends Player {
 
     public Coordinates generateAttack() {
         switch (difficulty) {
-            case Medium:
+            case Medium -> {
                 setAttackWeights();
                 return generateMediumAttack();
-            case Hard:
+            }
+            case Hard -> {
                 return generateMediumAttack();
+            }
 //                return generateHardAttack();
-            case Impossible:
-                return generateImpossibleAttack();
-            case Easy:
+            case Impossible -> {
+                if (!knownGurkinLocations.isEmpty()) {
+                    return knownGurkinLocations.remove(0);
+                }
                 return generateEasyAttack();
+            }
+            default -> {
+                return generateEasyAttack();
+            }
         }
     }
     // Generate a random attack that is not a repeat of a preivous attack
@@ -84,7 +91,7 @@ public class AI extends Player {
         int rX = rand.nextInt(10);
         int rY = rand.nextInt(10);
         Coordinates attack = new Coordinates(rX, rY);
-        while (!getShotResults()[rX][rY].equals(' ')) {
+        while (getShotResults()[rX][rY] != null) {
             rX = rand.nextInt(10);
             rY = rand.nextInt(10);
             attack = new Coordinates(rX, rY);
@@ -97,7 +104,7 @@ public class AI extends Player {
         ArrayList<Coordinates> candidates = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                if (getShotResults()[i][j].equals(' ')) {
+                if (getShotResults()[i][j] == null) {
                     candidates.add(new Coordinates(i, j));
                 }
             }
@@ -108,7 +115,7 @@ public class AI extends Player {
 
         // Choose the highest-weighted point that has not yet been attacked
         for (Coordinates candidate : candidates) {
-            if (getShotResults()[candidate.getX()][candidate.getY()].equals(' ')) {
+            if (getShotResults()[candidate.getX()][candidate.getY()] == null) {
                 return candidate;
             }
         }
@@ -129,61 +136,63 @@ public class AI extends Player {
         double minWeight = 0;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                if (getShotResults()[i][j].equals('x')) {
-                    if (i > 0) {
-                        attackWeights[i - 1][j] += 1;
-                        if (attackWeights[i - 1][j] > maxWeight) {
-                            maxWeight = attackWeights[i - 1][j];
+                if (getShotResults()[i][j] != null) {
+                    if (getShotResults()[i][j].equals('x')) {
+                        if (i > 0) {
+                            attackWeights[i - 1][j] += 1;
+                            if (attackWeights[i - 1][j] > maxWeight) {
+                                maxWeight = attackWeights[i - 1][j];
+                            }
+                            if (attackWeights[i - 1][j] < minWeight) {
+                                minWeight = attackWeights[i - 1][j];
+                            }
                         }
-                        if (attackWeights[i - 1][j] < minWeight) {
-                            minWeight = attackWeights[i - 1][j];
+                        if (i < 9) {
+                            attackWeights[i + 1][j] += 1;
+                            if (attackWeights[i + 1][j] > maxWeight) {
+                                maxWeight = attackWeights[i + 1][j];
+                            }
+                            if (attackWeights[i + 1][j] < minWeight) {
+                                minWeight = attackWeights[i + 1][j];
+                            }
                         }
-                    }
-                    if (i < 9) {
-                        attackWeights[i + 1][j] += 1;
-                        if (attackWeights[i + 1][j] > maxWeight) {
-                            maxWeight = attackWeights[i + 1][j];
+                        if (j > 0) {
+                            attackWeights[i][j - 1] += 1;
+                            if (attackWeights[i][j - 1] > maxWeight) {
+                                maxWeight = attackWeights[i][j - 1];
+                            }
+                            if (attackWeights[i][j - 1] < minWeight) {
+                                minWeight = attackWeights[i][j - 1];
+                            }
                         }
-                        if (attackWeights[i + 1][j] < minWeight) {
-                            minWeight = attackWeights[i + 1][j];
+                        if (j < 9) {
+                            attackWeights[i][j + 1] += 1;
+                            if (attackWeights[i][j + 1] > maxWeight) {
+                                maxWeight = attackWeights[i][j + 1];
+                            }
+                            if (attackWeights[i][j + 1] < minWeight) {
+                                minWeight = attackWeights[i][j + 1];
+                            }
                         }
-                    }
-                    if (j > 0) {
-                        attackWeights[i][j - 1] += 1;
-                        if (attackWeights[i][j - 1] > maxWeight) {
-                            maxWeight = attackWeights[i][j - 1];
+                    } else if (getShotResults()[i][j].equals('o')) {
+                        if (i > 0) {
+                            attackWeights[i - 1][j] -= 1;
+                            if (attackWeights[i - 1][j] > maxWeight) {
+                                maxWeight = attackWeights[i - 1][j];
+                            }
+                            if (attackWeights[i - 1][j] < minWeight) {
+                                minWeight = attackWeights[i - 1][j];
+                            }
                         }
-                        if (attackWeights[i][j - 1] < minWeight) {
-                            minWeight = attackWeights[i][j - 1];
-                        }
-                    }
-                    if (j < 9) {
-                        attackWeights[i][j + 1] += 1;
-                        if (attackWeights[i][j + 1] > maxWeight) {
-                            maxWeight = attackWeights[i][j + 1];
-                        }
-                        if (attackWeights[i][j + 1] < minWeight) {
-                            minWeight = attackWeights[i][j + 1];
-                        }
-                    }
-                } else if (getShotResults()[i][j].equals('o')) {
-                    if (i > 0) {
-                        attackWeights[i - 1][j] -= 1;
-                        if (attackWeights[i - 1][j] > maxWeight) {
-                            maxWeight = attackWeights[i - 1][j];
-                        }
-                        if (attackWeights[i - 1][j] < minWeight) {
-                            minWeight = attackWeights[i - 1][j];
-                        }
-                    }
-                } else if (getShotResults()[i][j].equals('k')) {
-                    if (i > 0) {
-                        attackWeights[i - 1][j] -= 0.5;
-                        if (attackWeights[i - 1][j] > maxWeight) {
-                            maxWeight = attackWeights[i - 1][j];
-                        }
-                        if (attackWeights[i - 1][j] < minWeight) {
-                            minWeight = attackWeights[i - 1][j];
+                    } else if (getShotResults()[i][j].equals('k')) {
+                        if (i > 0) {
+                            attackWeights[i - 1][j] -= 0.5;
+                            if (attackWeights[i - 1][j] > maxWeight) {
+                                maxWeight = attackWeights[i - 1][j];
+                            }
+                            if (attackWeights[i - 1][j] < minWeight) {
+                                minWeight = attackWeights[i - 1][j];
+                            }
                         }
                     }
                 }
@@ -202,5 +211,6 @@ public class AI extends Player {
     private Coordinates generateImpossibleAttack() {
         return knownGurkinLocations.remove(0);
     }
+
 
 }

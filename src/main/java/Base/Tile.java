@@ -33,4 +33,12 @@ public class Tile {
         if (!hasGurkin()) return false;
         return gurkinID.equals(gurk);
     }
+
+    public Tile deepClone() {
+        Tile clone = new Tile();
+        clone.gurkin = this.gurkin;
+        clone.gurkinID = this.gurkinID;
+        clone.isHit = this.isHit;
+        return clone;
+    }
 }

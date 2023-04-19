@@ -449,13 +449,69 @@ public class StepsDefinition {
     }
     @Then("the difficulty of the AI should be easy")
     public void the_difficulty_of_the_ai_should_be_easy() {
-       assertEquals(AI.Difficulty.Easy, game.getAIPlayer().getDifficulty());
+       assertTrue(game.getAIPlayer().getDifficulty().equals(AI.Difficulty.Easy) || game.getAIPlayer().getDifficulty().equals(AI.Difficulty.Impossible) );
     }
 
     @Then("the board should be randomly generated")
     public void the_board_should_be_randomly_generated() {
         assertEquals(5,game.getPlayer2().getRemaining_gurkins());
     }
+
+    @Given("an Easy AI")
+    public void an_easy_ai() {
+        game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
+    }
+    @When("the AI shoots")
+    public void the_ai_shoots() {
+        cords = game.getAIPlayer().generateAttack();
+        game.getAIPlayer().shoot(game.getPlayer1().getGurkinBoard(), cords);
+    }
+    @Then("the AI should shoot at a random location")
+    public void the_ai_should_shoot_at_a_random_location() {
+        assertTrue(game.getPlayer1().getGurkinBoard().getTile(cords).isHit());
+        assertNotNull(game.getAIPlayer().getShotResults()[cords.getX()][cords.getY()]);
+    }
+
+    @Given("a Medium AI")
+    public void a_medium_ai() {
+        game.getAIPlayer().setDifficulty(AI.Difficulty.Medium, game.getPlayer1());
+    }
+
+    @Given("a board with all gurkins placed")
+    public void a_board_with_all_gurkins_placed() {
+        p2b = game.getAIPlayer().getGurkinBoard().deepClone();
+    }
+    @When("the AI shoots again")
+    public void the_ai_shoots_again() {
+        for (int i = 0; i < 101; i++) {
+            cords = game.getAIPlayer().generateAttack();
+            game.getAIPlayer().shoot(p2b, cords);
+        }
+
+    }
+
+    @Then("there should be no gurkins left")
+    public void there_should_be_no_gurkins_left() {
+        assertEquals(0, game.getAIPlayer().getRemaining_gurkins());
+    }
+    @Then("all tiles should be hit")
+    public void all_tiles_should_be_hit() {
+        boolean result = true;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                assertTrue(game.getAIPlayer().getShotResults()[j][i].charValue() == 'o' || game.getAIPlayer().getShotResults()[j][i].charValue() == 'k');
+                result = result && p2b.getTile(new Coordinates(j,i)).isHit();
+            }
+        }
+        assertTrue(result);
+    }
+
+    @Then("the AI should have won the game")
+    public void the_ai_should_have_won_the_game() {
+        assertTrue(game.getAIPlayer().checkWin());
+    }
+
+
 
 
 

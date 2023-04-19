@@ -43,5 +43,15 @@ public class Board {
             }
         }
     }
+
+    public Board deepClone() {
+        Board clone = new Board();
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                clone.BoardArr[i][j] = this.BoardArr[i][j].deepClone();
+            }
+        }
+        return clone;
+    }
 }
 
