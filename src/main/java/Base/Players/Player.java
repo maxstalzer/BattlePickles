@@ -6,10 +6,6 @@ import Base.Coordinates;
 import Base.Direction;
 import Base.Gurkins.*;
 import Base.Turn;
-import TempView.ConsoleUI;
-
-import java.util.Objects;
-import java.util.Scanner;
 
 public class  Player {
     String name;

@@ -1,4 +1,4 @@
-package TempView;
+package ConsoleView;
 
 import Base.*;
 import Base.Players.Player;
@@ -52,7 +52,6 @@ public class ConsoleUI {
         System.out.println("Please enter an x and y coordinate to attack");
         int x = sc.nextInt();
         int y = sc.nextInt();
-
         return new Coordinates(x, y);
     }
 
