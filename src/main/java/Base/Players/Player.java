@@ -94,5 +94,14 @@ public class  Player {
         }
         return valid;
     }
+
+    public Player deepClone() {
+        Player copy = new Player();
+        copy.name = name;
+        copy.remaining_gurkins = remaining_gurkins;
+        copy.gurkinBoard = gurkinBoard.deepClone();
+        copy.shotResults = shotResults;
+        return copy;
+    }
 }
 

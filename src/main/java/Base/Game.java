@@ -8,6 +8,7 @@ public class Game {
     Player player1;
     Player player2;
     Boolean game_Over;
+    private String initial_turn;
 
     public Game(Boolean multiplayer) {
         this.multiplayer = multiplayer;
@@ -41,5 +42,12 @@ public class Game {
         return (player.getRemaining_gurkins() == 5);
     }
 
-
+    public Game deepClone() {
+        Game copy = new Game(multiplayer);
+        copy.player1 = player1.deepClone();
+        copy.player2 = player2.deepClone();
+        copy.game_Over = game_Over;
+        copy.initial_turn = Turn.getTurn();
+        return copy;
+    }
 }
