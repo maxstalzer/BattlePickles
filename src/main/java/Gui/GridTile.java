@@ -1,0 +1,59 @@
+package Gui;
+
+import Base.Coordinates;
+import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
+import javafx.scene.paint.Color;
+import javafx.stage.Screen;
+
+public class GridTile extends TilePane { //This class is the tiles in the grid
+    double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; //the size of each grid
+    boolean isHit=false; //not implemented
+    boolean hasGurk =false; //not implemented might not have to be
+
+    public boolean isHit() {//not implemented
+        return isHit;
+    }
+
+    public void setHit(boolean hit) {//not implemented
+        isHit = hit;
+    }
+
+    public void setHasGurk(boolean hasGurk) {//not implemented
+        this.hasGurk = hasGurk;
+    }
+
+
+
+    public boolean isHasGurk() {//not implemented
+        return hasGurk;
+    }
+
+
+    Coordinates coords; // coordinates field
+
+    public GridTile(Coordinates coords) { //Constructor for the gridtile takes the coordinates, these are given by a for loop in the sea class.
+        this.coords=coords;
+        this.setPrefHeight(gridsize); //sets the size of the gridtiles
+        this.setPrefWidth(gridsize);
+        setOnMouseEntered(new EventHandler<Event>() { //sets the opacity/Transparency to half when you mouse hovers over a gridtile
+            @Override
+            public void handle(Event event) {
+                setOpacity(0.5);
+            }
+        });
+        setOnMouseExited(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) { //sets the opacity to 1 /Transparency to 0 when you mouse moves out the gridtile
+                setOpacity(1);
+            }
+        });
+    }
+    }
