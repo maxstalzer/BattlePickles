@@ -14,20 +14,11 @@ public class mainGui extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Container container= new Container();
-        Scene seascene = new Scene(container);
+        Container container= new Container(); //instanceates the Container Object
+        Scene seascene = new Scene(container); // Scene is a javafx object which is the thing that gets displayed on the stage
 
-        primaryStage.setTitle("Battle-board");
+        primaryStage.setTitle("Battle-board"); //primary stage is the stage that gets displayed on the monitor.
         primaryStage.setScene(seascene);
-        /*
-        Canvas temp1 = new GuiGurks(new Coordinates(1,2));
-        Canvas temp3 = new Canvas(200,200);
-        temp3.getGraphicsContext2D().fillRect(0,0,20,20);
-        temp3.getGraphicsContext2D().setFill(Color.BLACK);
-        StackPane temp2 = new StackPane(temp3);
-        Scene temp = new Scene(temp2);
-        primaryStage.setScene(temp);
-         */
         primaryStage.show();
     }
     public static void main(String[] args){ launch(args);
