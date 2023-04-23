@@ -19,8 +19,10 @@ public class mainGui extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Container container= new Container();
-        Scene seascene = new Scene(container);
+        Container container= new Container(); //instanceates the Container Object
+        Scene seascene = new Scene(container); // Scene is a javafx object which is the thing that gets displayed on the stage
+
+
 
         VBox layout = new VBox();
         VBox layout2 = new VBox();
@@ -99,6 +101,7 @@ public class mainGui extends Application {
 
         primaryStage.setTitle("BattlePickles");
         primaryStage.setScene(Start);
+
         primaryStage.show();
 
 
