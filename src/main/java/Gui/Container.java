@@ -1,9 +1,7 @@
 package Gui;
 
 import Base.Direction;
-import Base.Pickle;
-import Base.Yardlong;
-import Base.Zuchinni;
+import Base.Gurkins.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HorizontalDirection;

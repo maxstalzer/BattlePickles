@@ -8,24 +8,20 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class AI extends Player {
-    private double[][] attackWeights;
+    private double[][] attackWeights; // Used to determine the best attack for the AI to make
 
-    private Difficulty difficulty;
+    private Difficulty difficulty; // The difficulty of the AI
 
-    private ArrayList<Coordinates> knownGurkinLocations;
+    private ArrayList<Coordinates> knownGurkinLocations; // Used to store the locations of gurkins that the AI has found for Hard difficulty
 
-    public AI() {
+    public AI() { // Constructor
         this.name = ("AI Player");
         attackWeights = new double[10][10];
         generateBoard();
     }
 
-    public void setDifficulty(Difficulty difficulty, Player opponent) {
-        if (difficulty.equals(Difficulty.Easy)) {
-            Random rand = new Random();
-            double probability = rand.nextDouble();
-            if (probability < 0.05 ) {
-                difficulty = Difficulty.Impossible;
+    public void setDifficulty(Difficulty difficulty, Player opponent) { // Sets the difficulty of the AI
+        if (difficulty.equals(Difficulty.Hard)) {
                 knownGurkinLocations = new ArrayList<>();
                 for (int y = 0; y < 10; y++) {
                     for (int x = 0; x < 10; x++) {
@@ -35,15 +31,14 @@ public class AI extends Player {
                     }
                 }
             }
-        }
         this.difficulty = difficulty;
     }
 
-    public Difficulty getDifficulty() {
+    public Difficulty getDifficulty() { // Returns the difficulty of the AI
         return difficulty;
     }
 
-    public void generateBoard() {
+    public void generateBoard() {// Generates a random board for the AI
         Gurkin[] gurkArr = {new Yardlong(), new Conichon(),  new Pickle(), new Gherkin(), new Zuchinni()};
 
         for (Gurkin gurk : gurkArr) {
@@ -64,21 +59,17 @@ public class AI extends Player {
         }
     }
 
-    public Coordinates generateAttack() {
+    public Coordinates generateAttack() { // Generates an attack based on the difficulty of the AI
         switch (difficulty) {
             case Medium -> {
                 setAttackWeights();
                 return generateMediumAttack();
             }
             case Hard -> {
-                return generateMediumAttack();
-            }
-//                return generateHardAttack();
-            case Impossible -> {
                 if (!knownGurkinLocations.isEmpty()) {
                     return knownGurkinLocations.remove(0);
                 }
-                return generateEasyAttack();
+                return generateMediumAttack();
             }
             default -> {
                 return generateEasyAttack();
@@ -98,7 +89,7 @@ public class AI extends Player {
         }
         return attack;
     }
-    // Generate an attack based on the weights of the attackWeights array
+    // Generates an attack based on the weights of the attackWeights array
     public Coordinates generateMediumAttack() {
         // Create a list of candidate attack coordinates
         ArrayList<Coordinates> candidates = new ArrayList<>();
@@ -200,16 +191,11 @@ public class AI extends Player {
         }
     }
 
-    public enum Difficulty {
+    public enum Difficulty { // Enum for the difficulty of the AI
         Easy,
         Medium,
-        Hard,
-        Impossible
+        Hard
 
-    }
-
-    private Coordinates generateImpossibleAttack() {
-        return knownGurkinLocations.remove(0);
     }
 
 

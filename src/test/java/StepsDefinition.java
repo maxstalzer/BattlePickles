@@ -449,7 +449,7 @@ public class StepsDefinition {
     }
     @Then("the difficulty of the AI should be easy")
     public void the_difficulty_of_the_ai_should_be_easy() {
-       assertTrue(game.getAIPlayer().getDifficulty().equals(AI.Difficulty.Easy) || game.getAIPlayer().getDifficulty().equals(AI.Difficulty.Impossible) );
+       assertTrue(game.getAIPlayer().getDifficulty().equals(AI.Difficulty.Easy) );
     }
 
     @Then("the board should be randomly generated")

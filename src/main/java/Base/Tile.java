@@ -3,26 +3,26 @@ package Base;
 import Base.Gurkins.Gurkin;
 
 public class Tile {
-    private boolean gurkin;
-    private Gurkin gurkinID;
-    private boolean isHit = false;
+    private boolean gurkin; // If there is a gurkin on the tile
+    private Gurkin gurkinID; // The gurkin on the tile
+    private boolean isHit = false; // If the tile has been hit
 
     public boolean hasGurkin() {
         return this.gurkin;
-    }
-    public void setGurkin(Gurkin x) {
+    } // Getters
+    public void setGurkin(Gurkin x) { // Set gurkin on tile
         this.gurkin = true;
         this.gurkinID = x;
     }
-    public void hitTile() {this.isHit = true;}
+    public void hitTile() {this.isHit = true;} // Hit the tile
     public Gurkin getGurkin() {
         return gurkinID;
-    }
+    } // Get the gurkin on the tile
     public boolean isHit() {
         return this.isHit;
-    }
+    } // Check if the tile has been hit
 
-    public Character toChar() {
+    public Character toChar() { // Convert tile to char
         if (hasGurkin()) {
             return gurkinID.toChar();
         }

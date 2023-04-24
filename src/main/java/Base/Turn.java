@@ -4,12 +4,12 @@ import java.util.Objects;
 
 public class Turn {
 
-    private static String turn;
+    private static String turn; // Turn
 
-    public static void init_turn() {
+    public static void init_turn() { // Initialize turn
         turn = "1";
     }
-    public static void changeTurn() {
+    public static void changeTurn() { // Change turn
         if (turn.equals("1")) {
             turn = "2";
         } else {
@@ -18,6 +18,6 @@ public class Turn {
     }
     public static String getTurn() {
         return turn;
-    }
+    } // Getters
 
 }

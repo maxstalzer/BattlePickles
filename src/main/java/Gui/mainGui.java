@@ -13,8 +13,16 @@ import javafx.scene.control.*;
 import javafx.scene.text.Font;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
+import Controller.Controller;
 
 public class mainGui extends Application {
+    Controller controller;
+
+
+    public static void startGUI() {
+        launch();
+    }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,7 +56,8 @@ public class mainGui extends Application {
         Label label5 = new Label("Player name");
 
         Button start = new Button("Start");
-        start.setOnAction(e -> primaryStage.setScene(GameMode));
+            start.setOnAction(e -> primaryStage.setScene(GameMode));
+
 
         Button back = new Button("Back");
         back.setTranslateX(-190);
@@ -106,8 +115,9 @@ public class mainGui extends Application {
 
 
     }
-    public static void main(String[] args){ launch(args);
-    } }
+
+
+}
 
 
 

@@ -1,6 +1,7 @@
 package Gui;
 
 import Base.*;
+import Base.Gurkins.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HorizontalDirection;
