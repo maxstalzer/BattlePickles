@@ -6,14 +6,30 @@ import Base.Coordinates;
 import Base.Direction;
 import Base.Gurkins.*;
 import Base.Turn;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable(tableName = "Player")
 public class  Player {
+    @DatabaseField(canBeNull = false)
     String name; // The name of the player
+    @DatabaseField(canBeNull = false)
     int remaining_gurkins; //   The number of gurkins remaining to be shot
-
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
     Board gurkinBoard; // The board that the player uses to place their gurkins
-
     String turnID; // stores if it's player 1 or 2 (unknown)
+
+    @DatabaseField(canBeNull = false)
+    private Boolean CurrentPlayer;
+
+    @DatabaseField(generatedId = true)
+    private int id;
+
+    public Player(int id, String name, Boolean CurrentPlayer) {
+        this.id = id;
+        this.name = name;
+        this.CurrentPlayer = CurrentPlayer;
+    }
 
     private Character[][] shotResults = new Character[10][10]; // Stores results of shots
 
@@ -29,6 +45,12 @@ public class  Player {
         turnID = Turn.getTurn();
     }
 
+    public void setCurrentPlayer(Boolean CurrentPlayer) {
+        this.CurrentPlayer = CurrentPlayer;
+    }
+    public int getId () {
+        return this.id;
+    }
 
     public Character[][] getShotResults() {
         return shotResults;
