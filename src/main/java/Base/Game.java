@@ -64,4 +64,11 @@ public class Game {
     public Board getGurkinBoard() {
         return player1.getGurkinBoard();
     }
+
+    public Player getCurrentPlayer( ) {
+        if (Turn.getTurn().equals("1")) {
+            return player1;
+        }
+        return player2;
+    }
 }

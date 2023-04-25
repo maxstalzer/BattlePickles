@@ -146,7 +146,9 @@ public class GameView extends Application{
     }
 
     public void showPlacement(Player player) { // Show placement scene
+
         primaryStage.setScene(seaScene);
+
     }
 
 

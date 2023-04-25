@@ -69,6 +69,12 @@ public class GuiGurks extends Canvas {
             setHeight(gridsize*height);
             Image image = new Image("destroyer.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize,gridsize*height);
+        } else if (gurktype instanceof Conichon) {
+            int height = 4;
+            setWidth(gridsize);
+            setHeight(gridsize*height);
+            Image image = new Image("submarine.png");
+            getGraphicsContext2D().drawImage(image,0,0,gridsize,gridsize*height);
         }
     }
 
