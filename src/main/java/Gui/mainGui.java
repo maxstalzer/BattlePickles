@@ -27,7 +27,7 @@ public class mainGui extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Container container= new Container(); //instanceates the Container Object
+        Container container= new Container(controller); //instanceates the Container Object
         Scene seascene = new Scene(container); // Scene is a javafx object which is the thing that gets displayed on the stage
 
 

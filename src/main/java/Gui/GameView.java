@@ -1,5 +1,6 @@
 package Gui;
 
+import Base.Coordinates;
 import Base.Players.Player;
 import Controller.Controller;
 import javafx.application.Application;
@@ -21,6 +22,12 @@ public class GameView extends Application{
 
     private Scene seaScene; // Sea scene
 
+    public Container getContainer() {
+        return container;
+    }
+
+    private Container container;
+
 
 
     public GameView() { // Constructor
@@ -31,7 +38,7 @@ public class GameView extends Application{
         this.controller = new Controller(this);
         this.primaryStage = primaryStage;
 
-        Container container = new Container();
+        this.container = new Container(controller);
         this.seaScene = new Scene(container);
         controller.showMainMenu(); // Show main menu
 
@@ -141,5 +148,7 @@ public class GameView extends Application{
     public void showPlacement(Player player) { // Show placement scene
         primaryStage.setScene(seaScene);
     }
+
+
 
 }

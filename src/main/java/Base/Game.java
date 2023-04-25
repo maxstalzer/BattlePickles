@@ -60,4 +60,8 @@ public class Game {
 //        functionality to come
 
     }
+
+    public Board getGurkinBoard() {
+        return player1.getGurkinBoard();
+    }
 }

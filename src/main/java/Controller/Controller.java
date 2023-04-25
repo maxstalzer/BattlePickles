@@ -1,16 +1,26 @@
 package Controller;
 
+import Base.Coordinates;
+import Base.Direction;
 import Base.Game;
+import Base.Gurkins.Zuchinni;
 import Base.Players.AI;
 import Gui.GameView;
+import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
-public class Controller {
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import static Base.Direction.direction.Horizontal;
+
+public class Controller implements ActionListener {
     private Game game;
     private GameView gameView;
 
     private Stage primaryStage;
-    
+
     public Controller(GameView gameView) {
         this.gameView = gameView;
     }
@@ -48,5 +58,14 @@ public class Controller {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Hard, game.getPlayer1());
         }
         gameView.showPlacement(game.getPlayer1());
+    }
+
+    public void placeGurksSingleplayer() {
+        Coordinates coords = gameView.getContainer().getPosition();
+        game.getGurkinBoard().placeGurkin(new Zuchinni(), Horizontal, coords);
+    }
+    @Override
+    public void actionPerformed(java.awt.event.ActionEvent e) {
+        System.out.println("jaiksia");
     }
 }
