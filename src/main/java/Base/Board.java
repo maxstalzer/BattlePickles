@@ -1,20 +1,51 @@
 package Base;
 
-public class Board {
-    private Tile[][] BoardArr = new Tile[10][10];
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 
-    // Initialize board
-    public Board() {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                BoardArr[i][j] = new Tile();
+import java.util.ArrayList;
+import java.util.Collection;
+
+@DatabaseTable(tableName = "Board")
+public class Board {
+    @DatabaseField(generatedId = true)
+    private int id;
+
+    @ForeignCollectionField(columnName = "tiles", eager = true)
+    private Collection<Tile> tiles = new ArrayList<>();
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "player_id")
+    private Player player;
+
+    public Board(Player p) {
+        this.player = p;
+        for (int x = 0; x < 10; x++) {
+            for (int y = 0; y < 10; y++) {
+                Tile tile = new Tile();
+                tile.setX(x);
+                tile.setY(y);
+                tiles.add(tile);
             }
         }
     }
+
+    public Board() {}
+    // Initialize board
+
+
     public Tile getTile(Coordinates a) {
-        return BoardArr[a.getX()][a.getY()];
+        for (Tile tile : tiles) {
+            if (tile.getX() == a.getX() && tile.getY() == a.getY()) {
+                return tile;
+            }
+        }
+        return null;
     }
 
+    public Collection<Tile> getTiles() {
+        return tiles;
+    }
 
     public String attack(Coordinates a) {
         if (!getTile(a).isHit()) {
@@ -37,7 +68,7 @@ public class Board {
         for (int i = 0; i < 10; i++) {
             System.out.print("| ");
             for (int j = 0; j < 10; j++) {
-                System.out.print( BoardArr[j][i].toChar() + " ");
+                System.out.print( getTile(new Coordinates(i,j)).toChar() + " ");
             }
             System.out.println(" |");
         }
@@ -57,4 +88,6 @@ public class Board {
         }
     }
 }
+
+
 

@@ -3,19 +3,11 @@ package entities;
 import Base.*;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.field.FieldType;
-import com.j256.ormlite.field.SqlType;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.stmt.StatementBuilder;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.support.DatabaseConnection;
 import com.j256.ormlite.table.TableUtils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-public class Servertest {
+public class Servertest_persist {
     public static void main(String[] args) throws Exception {
 
         String databaseUrl = "jdbc:mysql://localhost:3306/jdbcdemo?serverTimezone=UTC";
@@ -53,8 +45,6 @@ public class Servertest {
         boardDao.closeLastIterator();
         playerDao.closeLastIterator();
         connectionSource.close();
-
-        ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, databaseUsername, databasePassword);
 
 
     }

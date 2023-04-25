@@ -21,10 +21,10 @@ public class StepsDefinition {
 
     Game game;
 
-    @Given("a tile")
+    /*@Given("a tile")
     public void a_tile() {
         t = new Tile();
-    }
+    }*/
     @When("set a gurkin on the tile")
     public void set_a_gurkin_on_the_tile() {
         Coordinates start_pos = new Coordinates(0, 0);
@@ -42,7 +42,7 @@ public class StepsDefinition {
     }
     @Given("a board")
     public void a_board() {
-       p2b = new Board();
+       p2b = new Board(new Player());
     }
     @When("I shoot a tile with a gurkin on it")
     public void i_shoot_a_tile_with_a_gurkin_on_it() {
@@ -79,7 +79,7 @@ public class StepsDefinition {
 
     @Given("a tile with a gurkin")
     public void a_tile_with_a_gurkin() {
-        p2b = new Board();
+        p2b = new Board(new Player());
         g = new Gherkin();
         p2b.getTile(new Coordinates(0,4)).setGurkin(g);
     }
@@ -148,7 +148,7 @@ public class StepsDefinition {
     @When("I miss a shot")
     public void i_miss_a_shot() {
         cords = new Coordinates(0,0);
-        p2b = new Board();
+        p2b = new Board(new Player());
         p1.shoot(p2b, cords);
     }
     @Then("My shotResults board has the character o")
@@ -160,7 +160,7 @@ public class StepsDefinition {
     @When("I hit a gurkin")
     public void i_hit_a_gurkin() {
         cords = new Coordinates(0,0);
-        p2b = new Board();
+        p2b = new Board(new Player());
         g = new Gherkin();
         p2b.getTile(cords).setGurkin(g);
         p1.shoot(p2b, cords);

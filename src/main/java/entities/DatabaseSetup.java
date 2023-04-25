@@ -2,39 +2,27 @@ package entities;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
 public class DatabaseSetup {
-        public static void main(String[] args) throws SQLException {
-            String databaseUrl = "jdbc:mysql://localhost:3306";
-            String databaseUsername = "username";
-            String databasePassword = "password";
 
-            Connection connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
+    public String DatabaseSetup(String s) throws  Exception {
 
-            String createDatabaseQuery = "CREATE DATABASE game_db";
-            Statement createDatabaseStatement = connection.createStatement();
-            createDatabaseStatement.executeUpdate(createDatabaseQuery);
+        String databaseUrl = "jdbc:mysql://localhost:3306?serverTimezone=UTC";
+        String databaseUsername = "root";
+        String databasePassword = "12345678";
 
-            String useDatabaseQuery = "USE game_db";
-            Statement useDatabaseStatement = connection.createStatement();
-            useDatabaseStatement.executeUpdate(useDatabaseQuery);
+        Connection connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
 
-            String createGameStateTableQuery = "CREATE TABLE game_state (" +
-                    "id INT(11) PRIMARY KEY AUTO_INCREMENT," +
-                    "current_player_id INT(11)," +
-                    "game_data TEXT)";
-            Statement createGameStateTableStatement = connection.createStatement();
-            createGameStateTableStatement.executeUpdate(createGameStateTableQuery);
+        String createDatabaseQuery = String.format("CREATE DATABASE %s",s);
+        Statement createDatabaseStatement = connection.createStatement();
+        createDatabaseStatement.executeUpdate(createDatabaseQuery);
 
-            String createPlayersTableQuery = "CREATE TABLE players (" +
-                    "id INT(11) PRIMARY KEY AUTO_INCREMENT," +
-                    "name VARCHAR(255)," +
-                    "is_current_player BOOLEAN)";
-            Statement createPlayersTableStatement = connection.createStatement();
-            createPlayersTableStatement.executeUpdate(createPlayersTableQuery);
+        String useDatabaseQuery = String.format("USE %s",s);
+        Statement useDatabaseStatement = connection.createStatement();
+        useDatabaseStatement.executeUpdate(useDatabaseQuery);
 
-            connection.close();
-        }
+        connection.close();
+
+        return String.format("jdbc:mysql://localhost:3306/%s?serverTimezone=UTC",s);
     }
 }

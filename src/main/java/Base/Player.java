@@ -1,13 +1,38 @@
 package Base;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+import io.cucumber.java.it.Data;
+
 import java.util.Objects;
 import java.util.Scanner;
-
+@DatabaseTable(tableName = "Player")
 public class  Player {
+    @DatabaseField(generatedId = true)
+    private int id;
+    @DatabaseField(canBeNull = false)
     String name;
+    @DatabaseField(canBeNull = false)
     int remaining_gurkins;
-
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     Board gurkinBoard;
+
+    private Boolean CurrentPlayer;
+
+    public Player (int id, String name, Boolean CurrentPlayer) {
+        this.id = id;
+        this.name = name;
+        this.CurrentPlayer = CurrentPlayer;
+    }
+
+    public void setCurrentPlayer(Boolean CurrentPlayer) {
+        this.CurrentPlayer = CurrentPlayer;
+    }
+
+    public int getId (){
+        return this.id;
+    }
 
     public Character[][] shotResults = new Character[10][10];
 
@@ -18,7 +43,7 @@ public class  Player {
     public Player() {
 
 //      Setup the gurkin board
-        this.gurkinBoard = new Board();
+        this.gurkinBoard = new Board(this);
         this.remaining_gurkins = 5;
     }
 
@@ -29,6 +54,8 @@ public class  Player {
     public String getName() {
         return name;
     }
+
+
     public void setupBoard() {
         //      Place gurkins on the players board
         gurkinSetup(new String[]{"Gherkin", "Zuchinni","Pickle", "Conichon", "Yardlong" });
