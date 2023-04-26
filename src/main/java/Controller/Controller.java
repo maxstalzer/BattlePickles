@@ -86,18 +86,24 @@ public class Controller {
 
     }
 
-    public void placeGurkin(Coordinates startCors, Direction.direction direction, gurkinID gurkin) {
-        game.getCurrentPlayer().getGurkinBoard().placeGurkin(gurkTranslate(gurkin), Horizontal, startCors);
-
-        GridTile target = (GridTile) event.getTarget(); //save the GridTile Object as "target"
-        GuiGurks gurk = new GuiGurks(target.coords,new Pickle(),Vertical); // create an instance of the type GuiGurk at the target coordinates. Here we need to have a way of specifying the two other arguments; gurktype and direction, respectively
-        gurk.relocate(target.coords.getX()*(gridsize),target.coords.getY()*gridsize); //This places the gurk on the target coordinates
-        getChildren().add(gurk); //this adds the gurk as a child on this object, ie the Container
-        toFront(); //Moves it to the front, so that it displays over the grid color
-        setGurkplace(target.coords);
-
-        System.out.println(game.getCurrentPlayer().getGurkinBoard());
+    public void placeGurkin(Coordinates coords, Direction.direction direction, gurkinID gurkin) {
+        game.getCurrentPlayer().validGurkinSetup(gurkTranslate(gurkin), direction, coords);
     }
+
+
+
+    public void showResultBoard() {
+        gameView.showResultBoard(game.getCurrentPlayer());
+    }
+
+
+
+
+    public void shootTile(Coordinates coords) {
+
+//        game.getCurrentPlayer().shoot()
+    }
+
 
 
 

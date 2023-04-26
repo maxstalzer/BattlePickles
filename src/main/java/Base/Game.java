@@ -43,7 +43,7 @@ public class Game {
         return multiplayer;
     } // Getters
 
-    public boolean changePlacement(Player player) {
+    public boolean checkPlacement(Player player) {
         return (player.getRemaining_gurkins() == 5);
     } // Check if player has finished placing gurkins
 
@@ -70,5 +70,13 @@ public class Game {
             return player1;
         }
         return player2;
+    }
+
+    public void attack(Coordinates coords) {
+        if (Turn.getTurn().equals("1")) {
+            player1.shoot(player2.getGurkinBoard(), coords);
+        } else  {
+            player2.shoot(player1.getGurkinBoard(), coords);
+        }
     }
 }

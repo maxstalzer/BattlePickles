@@ -1,3 +1,4 @@
+/*
 package Online;
 import Base.Players.Player;
 
@@ -15,7 +16,8 @@ public class OnlineLoop {
         scanner = new Scanner(System.in);
     }
 
-    /*
+    */
+/*
     public void start() throws SQLException {
         while (!gameOver) {
             // Get the current player
@@ -58,5 +60,6 @@ public class OnlineLoop {
         System.out.println(otherPlayer.getName() + ", it's your turn now!");
     }
 
-     */
-}
+     *//*
+
+}*/

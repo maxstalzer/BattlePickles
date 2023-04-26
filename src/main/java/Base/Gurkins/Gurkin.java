@@ -1,15 +1,15 @@
 package Base.Gurkins;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+//import com.j256.ormlite.field.DatabaseField;
+//import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "Gurkin")
+//@DatabaseTable(tableName = "Gurkin")
 public abstract class Gurkin {
-    @DatabaseField(generatedId = true)
+//    @DatabaseField(generatedId = true)
     private int id;
-    @DatabaseField
+//    @DatabaseField
     private final int size;
-    @DatabaseField
+//    @DatabaseField
     private int lives;
 
 

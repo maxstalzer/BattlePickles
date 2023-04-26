@@ -1,3 +1,4 @@
+/*
 import Base.Players.Player;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -37,13 +38,16 @@ public class Servertest {
 
         // persist the account object to the database
         userDao.create(p1);}
-        /*
+        */
+/*
         // retrieve the account from the database by its id field (name)
         User user2 = userDao.queryForId("Jim Coakley");
         System.out.println("Account: " + user2.getName());
 
         // close the connection source
         connectionSource.close();
-    }*/
+    }*//*
+
 }
 
+*/

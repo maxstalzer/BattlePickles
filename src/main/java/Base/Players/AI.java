@@ -1,5 +1,6 @@
 package Base.Players;
 
+import Base.Board;
 import Base.Coordinates;
 import Base.Direction;
 import Base.Gurkins.*;
@@ -198,5 +199,8 @@ public class AI extends Player {
 
     }
 
+//    public void shoot(Board board, Coordinates coords) { // Shoots at the given coordinates
+//
+//    }
 
 }

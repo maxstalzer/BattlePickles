@@ -48,12 +48,26 @@ public class Container extends BorderPane { //This is the container that contain
             public void handle(Event event) {
 
                 if (event.getTarget() instanceof GridTile) { // If what you clicked on was a Tile ("GridTile) execute this code
-
-                    controller.placeGurkin(target.coords,Horizontal);
+                    GridTile target = (GridTile) event.getTarget();
+                    // Need a way of specifying Gurkin and changing the direction
+                    controller.placeGurkin(target.coords, Vertical, Controller.gurkinID.Yardlong);
                 }
             }
 
         });
+    }
+
+    public void updateContainer(Coordinates coords, Gurkin gurk, Direction.direction direction) {
+        GuiGurks guiGurk;
+
+        if (gurk instanceof Gherkin)  {
+            guiGurk = new GuiGurks(coords, new Gherkin(), direction);
+            guiGurk.relocate(coords.getX() * (guiGurk.gridsize), coords.getY() * (guiGurk.gridsize));
+            getChildren().add(guiGurk);
+            toFront();
+            setGurkplace(coords);
+    }
+
     }
     public Coordinates getPosition() {
         return this.Gurks;
