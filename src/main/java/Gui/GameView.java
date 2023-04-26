@@ -67,7 +67,7 @@ public class GameView extends Application{
 
         layout.getChildren().addAll(label1, startButton);
         layout.setAlignment(Pos.CENTER);
-        primaryStage.setTitle("BattlePickles");
+        primaryStage.setTitle("You don't know what you're getting yourself into");
         primaryStage.setScene(scene);
         primaryStage.show();
 

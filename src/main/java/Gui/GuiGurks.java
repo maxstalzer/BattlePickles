@@ -99,31 +99,31 @@ public class GuiGurks extends Canvas {
             int size = gurktype.getSize();
             setWidth(gridsize*scale);
             setHeight(gridsize*size*scale);
-            Image image = new Image("battleship.png"); // makes an Image object which is passed to the drawImage function which draws the graphic on the canvas/GuiGurks Object
+            Image image = new Image("pickle.png"); // makes an Image object which is passed to the drawImage function which draws the graphic on the canvas/GuiGurks Object
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Yardlong) {
             int size = gurktype.getSize();
             setWidth(gridsize);
             setHeight(gridsize*size*scale);
-            Image image = new Image("carrier.png");
+            Image image = new Image("Armenian.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Zuchinni) {
             int size = gurktype.getSize();
             setWidth(gridsize);
             setHeight(gridsize*size*scale);
-            Image image = new Image("cruiser.png");
+            Image image = new Image("Zucchini.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Gherkin) {
             int size = gurktype.getSize();
             setWidth(gridsize);
             setHeight(gridsize*size*scale);
-            Image image = new Image("destroyer.png");
+            Image image = new Image("gherkin.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Conichon) {
             int size = gurktype.getSize();
             setWidth(gridsize);
             setHeight(gridsize*size*scale);
-            Image image = new Image("submarine.png");
+            Image image = new Image("Conichon.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         }
     }
