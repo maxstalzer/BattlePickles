@@ -86,24 +86,13 @@ public class Controller {
 
     }
 
-    public void placeGurkin(Coordinates coords, Direction.direction direction, gurkinID gurkin) {
-        game.getCurrentPlayer().validGurkinSetup(gurkTranslate(gurkin), direction, coords);
+    public void placeGurkin(Coordinates startCors, Direction.direction direction, gurkinID gurkin) {
+        game.getCurrentPlayer().getGurkinBoard().placeGurkin(gurkTranslate(gurkin), direction, startCors);
+
+
+        gameView.getContainer().placeGurkin(startCors,direction,gurkin);
+
     }
-
-
-
-    public void showResultBoard() {
-        gameView.showResultBoard(game.getCurrentPlayer());
-    }
-
-
-
-
-    public void shootTile(Coordinates coords) {
-
-//        game.getCurrentPlayer().shoot()
-    }
-
 
 
 

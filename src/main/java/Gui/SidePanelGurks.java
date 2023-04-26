@@ -31,19 +31,29 @@ public class SidePanelGurks extends GuiGurks {
 
         if (gurktype instanceof Pickle) {
             setGurktypeField(new Pickle());
-            relocate(sidePanel.getWidth()/6,sidePanel.getWidth()/2);
+            setImage(new Pickle());
+            relocate(sidePanel.getHeight()/6,sidePanel.getWidth()/2);
+            toFront();
         } else if (gurktype instanceof Yardlong) {
             setGurktypeField(new Yardlong());
-            relocate(2*sidePanel.getWidth()/6,sidePanel.getWidth()/2);
+            setImage(new Yardlong());
+            relocate(2*sidePanel.getHeight()/6,sidePanel.getWidth()/2);
+            toFront();
         } else if (gurktype instanceof Zuchinni) {
             setGurktypeField(new Zuchinni());
-            relocate(3*sidePanel.getWidth()/6,sidePanel.getWidth()/2);
+            setImage(new Zuchinni());
+            relocate(3*sidePanel.getHeight()/6,sidePanel.getWidth()/2);
+            toFront();
         } else if (gurktype instanceof Gherkin) {
             setGurktypeField(new Gherkin());
-            relocate(4*sidePanel.getWidth()/6,sidePanel.getWidth()/2);
+            setImage(new Gherkin());
+            relocate(4*sidePanel.getHeight()/6,sidePanel.getWidth()/2);
+            toFront();
         } else if (gurktype instanceof Conichon) {
             setGurktypeField(new Conichon());
-            relocate(5*sidePanel.getWidth()/6,sidePanel.getWidth()/2);
+            setImage(new Conichon());
+            relocate(5*sidePanel.getHeight()/6,sidePanel.getWidth()/2);
+            toFront();
         }
         setOnMouseClicked(new EventHandler<Event>() { //An event handler which activates when you click on the Container.
             @Override
