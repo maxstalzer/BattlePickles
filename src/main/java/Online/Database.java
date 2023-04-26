@@ -22,30 +22,25 @@ import java.sql.ResultSet;
 
 public class Database {
     private String databaseURL;
-    private String username = "root";
+    private String username = "sigurd";
     private String password = "12345678";
 
-    public Database(String s) throws  Exception {
+    public Database(String databaseName) throws  Exception {
 
-        String databaseUrl = "jdbc:mysql://localhost:3306?serverTimezone=UTC";
+        String databaseUrl = "jdbc:mysql://172.20.10.3:3306";
 
         Connection connection = DriverManager.getConnection(databaseUrl, username, password);
 
-        String createDatabaseQuery = String.format("CREATE DATABASE %s",s);
+        String createDatabaseQuery = String.format("CREATE DATABASE %s",databaseName);
         Statement createDatabaseStatement = connection.createStatement();
         createDatabaseStatement.executeUpdate(createDatabaseQuery);
 
-        String useDatabaseQuery = String.format("USE %s",s);
+        String useDatabaseQuery = String.format("USE %s",databaseName);
         Statement useDatabaseStatement = connection.createStatement();
         useDatabaseStatement.executeUpdate(useDatabaseQuery);
-
         connection.close();
 
-        databaseURL = String.format("jdbc:mysql://localhost:3306/%s?serverTimezone=UTC",s);
-    }
-
-    public String getURL() {
-        return databaseURL;
+        databaseURL = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
     }
 
     public void updatePlayer(Player player) throws Exception {

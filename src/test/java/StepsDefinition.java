@@ -2,10 +2,12 @@ import Base.*;
 import Base.Gurkins.*;
 import Base.Players.AI;
 import Base.Players.Player;
+import Online.Database;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+
 
 import static org.junit.Assert.*;
 
@@ -511,8 +513,72 @@ public class StepsDefinition {
         assertTrue(game.getAIPlayer().checkWin());
     }
 
+    Database database;
 
+    @When("I create a database")
+    public void i_create_a_database() throws Exception {
+         database = new Database("newDatabase");
+    }
 
+    @Then("I should make sure it doesn't exist already")
+    public void i_should_make_sure_it_doesn_t_exist_already() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
 
+    @When("I try to create a database that already exists")
+    public void i_try_to_create_a_database_that_already_exists() {
+        //write code here that turns blablabla
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("I should receive an error database already exists")
+    public void i_should_receive_an_error_database_already_exists() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @When("I connect to a database")
+    public void i_connect_to_a_database() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("I should know that the i have access")
+    public void i_should_know_that_the_i_have_access() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @When("I try to connect to a non-existent database")
+    public void i_try_to_connect_to_a_non_existent_database() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("I should receive an error database doesnt exist")
+    public void i_should_receive_an_error_database_doesnt_exist() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @When("I update my player data to the database")
+    public void i_update_my_player_data_to_the_database() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("the database should be updated")
+    public void the_database_should_be_updated() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @When("I try to retrieve data from the database")
+    public void i_try_to_retrieve_data_from_the_database() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("my local data should be updated")
+    public void my_local_data_should_be_updated() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
 
 }
