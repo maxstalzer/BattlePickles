@@ -1,9 +1,7 @@
 package Gui;
 
-import Base.BoardObserver;
-import Base.Coordinates;
+import Base.*;
 import Base.Players.Player;
-import Base.Turn;
 import Controller.Controller;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -20,7 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class GameView extends Application {
+public class GameView extends Application implements GameObserver {
 
     private Controller controller; // Controller
     private Stage primaryStage; // Primary stage
@@ -33,6 +31,7 @@ public class GameView extends Application {
 
     private Scene attackScene1;// Attack scene for player1
     private Scene attackScene2; // Attack scene for player2
+    private Scene waitScene; // Wait scene
 
     public Container getContainer() {
         return container;
@@ -58,22 +57,18 @@ public class GameView extends Application {
 
     }
 
-    public void initAttackViews(Boolean singlePlayer) { // Initialize attack views
-        if (singlePlayer) {
-            shotContainer1 = new ShootingContainer(controller);
-            attackScene1 = new Scene(shotContainer1);
-            VBox layout = new VBox();
-            attackScene2 = new Scene(layout, 500, 500);
-            Label label1 = new Label("AI's turn");
-            label1.setFont(new Font("Arial Bold", 24));
-            layout.getChildren().addAll(label1);
-            layout.setAlignment(Pos.CENTER);
-        } else {
-            shotContainer1 = new ShootingContainer(controller);
-            attackScene1 = new Scene(shotContainer1);
-            shotContainer2 = new ShootingContainer(controller);
-            attackScene2 = new Scene(shotContainer2);
-        }
+    public void initAttackViews() { // Initialize attack views
+
+        shotContainer1 = new ShootingContainer(controller);
+        attackScene1 = new Scene(shotContainer1);
+        shotContainer2 = new ShootingContainer(controller);
+        attackScene2 = new Scene(shotContainer2);
+        VBox layout = new VBox();
+        waitScene = new Scene(layout, 500, 500);
+        Label label1 = new Label("Waitig for other player");
+        label1.setFont(new Font("Arial Bold", 24));
+        layout.getChildren().addAll(label1);
+        layout.setAlignment(Pos.CENTER);
 
 
     }
@@ -206,10 +201,11 @@ public class GameView extends Application {
 
     }
 
-    public void showGameplay(String turn) {
+    public void showGameplay(String turn, Boolean singleplayer) { // Show gameplay scene
+        System.out.println("showGameplay" + turn);
         if (turn.equals("1") ) {
             primaryStage.setScene(attackScene1);
-        } else {
+        } else if (turn.equals("2") && !singleplayer) {
             primaryStage.setScene(attackScene2);
         }
     }
@@ -227,6 +223,27 @@ public class GameView extends Application {
 
     public ShootingContainer getP2AttackView() {
         return shotContainer2;
+    }
+
+    public void showWait() {
+        primaryStage.setScene(waitScene);
+    }
+
+    public void showWinner(Player winner) {
+        VBox layout = new VBox();
+        Scene scene = new Scene(layout, 500, 500);
+
+        Label label1 = new Label("Winner is " + winner.getName());
+        label1.setFont(new Font("Arial Bold", 24));
+
+        Button backButton = new Button("Go to main menu");
+        backButton.setOnAction(e -> controller.showMainMenu());
+
+        layout.getChildren().addAll(label1, backButton);
+        layout.setAlignment(Pos.CENTER);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
 

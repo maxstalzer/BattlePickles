@@ -4,7 +4,10 @@ import Base.Players.AI;
 import Base.Players.Player;
 import Controller.Controller;
 
-public class Game {
+import java.util.HashSet;
+import java.util.Set;
+
+public class Game implements GameObserver{
     Boolean multiplayer; // true if multiplayer, false if singleplayer
     Player player1; // Player 1
     Player player2; // Player 2
@@ -14,6 +17,8 @@ public class Game {
     private String initial_turn; // Initial// turn
 
     private Controller controller; // Controller
+
+    private Set<GameObserver> gameObserverSet = new HashSet<GameObserver>();
 
     public Game(Boolean multiplayer, Controller controller) { // Constructor
         this.multiplayer = multiplayer;
@@ -79,9 +84,11 @@ public class Game {
     public void attack(Coordinates coords) {
         if (Turn.getTurn().equals("1")) {
             player1.shoot(player2.getGurkinBoard(), coords);
+
         } else  {
             player2.shoot(player1.getGurkinBoard(), coords);
         }
+        checkWin();
     }
 
     public Player getOpponent() {
@@ -89,5 +96,24 @@ public class Game {
             return player2;
         }
         return player1;
+    }
+
+    public void checkWin() {
+        if (player1.checkWin()) {
+            showWinner(player1);
+        } else if (player2.checkWin()) {
+            showWinner(player2);
+        }
+    }
+
+    public void showWinner(Player player) {
+        game_Over = true;
+        for (GameObserver gameObserver : gameObserverSet) {
+            gameObserver.showWinner(player);
+        }
+    }
+
+    public void addGameObserver(GameObserver gameObserver) {
+        gameObserverSet.add(gameObserver);
     }
 }

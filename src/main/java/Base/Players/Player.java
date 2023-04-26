@@ -1,11 +1,8 @@
 package Base.Players;
 
 
-import Base.Board;
-import Base.Coordinates;
-import Base.Direction;
+import Base.*;
 import Base.Gurkins.*;
-import Base.Turn;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -107,8 +104,8 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
                     }
                 }
                 this.remaining_gurkins --;// decrement the number of gurkins remaining
-                changeTurn();
             }
+            changeTurn();
         } else if (result.equals("miss")) { // if the shot was a miss
             this.shotResults.setMiss(coords);   // set the shot results to a miss
             changeTurn();
@@ -180,10 +177,12 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
     }
 
     public void registerObserver(PlayerObserver observer) {
+        System.out.println("registered observer");
         playerObservers.add(observer);
     }
 
     public void registerAttackObserver(PlayerAttackObserver observer) {
+        System.out.println("registered attack observer");
         attackObservers.add(observer);
     }
 

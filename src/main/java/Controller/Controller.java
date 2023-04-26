@@ -25,6 +25,7 @@ public class Controller {
 
     public Gurkin Gurktype;
 
+
     public enum gurkinID {
         Pickle,
         Yardlong,
@@ -56,15 +57,17 @@ public class Controller {
 
     public void startLocalMultiplayerGame(String text, String text1) {
         game = new Game(true, this);
+        game.addGameObserver(gameView);
         game.getPlayer1().setName(text);
         game.getPlayer2().setName(text1);
-        gameView.initAttackViews(false);
+        gameView.initAttackViews();
         gameView.showPlacement(game.getPlayer1());
     }
 
     // Creates a new singleplayer game with the given difficulty
     public void startSingleplayerGame(String playerName, String difficulty) {
-        game = new Game(false, this);
+        game = new Game(false, this); // new singleplayer game
+        game.addGameObserver(gameView); // add game observer to game
         game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel());
         game.getPlayer1().setName(playerName);
         if (difficulty == "Easy") {
@@ -75,7 +78,7 @@ public class Controller {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Hard, game.getPlayer1());
         }
         game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer());
-        gameView.initAttackViews(true);
+        gameView.initAttackViews();
         gameView.showPlacement(game.getPlayer1());
 
     }
@@ -142,21 +145,24 @@ public class Controller {
     }
 
     public void showGameplay() {
+        System.out.println("Starting gameplay");
         game.getCurrentPlayer().getResultBoard().registerObserver(gameView.getCurrentAttackView(Turn.getTurn()));
         game.getCurrentPlayer().registerAttackObserver(gameView.getCurrentAttackView(Turn.getTurn()));
-        gameView.showGameplay(Turn.getTurn());
+        gameView.showGameplay(Turn.getTurn(), game.getMultiplayer());
     }
 
 
     public void makeShot(Coordinates coordinates) {
-        game.getCurrentPlayer().shoot(game.getOpponent().getGurkinBoard(), coordinates);
+        game.attack(coordinates);
 
     }
 
     public void changeTurnView() {
-        gameView.showGameplay(Turn.getTurn());
+        System.out.println("Changing turn to " + Turn.getTurn());
+        showGameplay();
         if (Turn.getTurn().equals("2") && !game.getMultiplayer()) {
            Coordinates aishot = game.getAIPlayer().generateAttack();
+            System.out.println("AI shot: " + aishot.getX() + " " + aishot.getY());
            makeShot(aishot);
         }
     }

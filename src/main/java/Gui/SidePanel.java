@@ -107,8 +107,5 @@ public class SidePanel extends VBox implements PlayerObserver {
 
     }
 
-    public void updateTurnView() {
-
-    }
 
 }
