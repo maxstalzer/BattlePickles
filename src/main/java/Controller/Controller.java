@@ -92,8 +92,6 @@ public class Controller {
 
         gameView.getContainer().placeGurkin(startCors,direction,gurkin);
 
-
-        System.out.println(game.getCurrentPlayer().getGurkinBoard());
     }
 
 
