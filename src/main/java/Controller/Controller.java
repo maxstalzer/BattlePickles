@@ -50,8 +50,11 @@ public class Controller {
         gameView.showGameMode();
     }
 
-    public void startMultiplayerGame(String text, String text1) {
-
+    public void startLocalMultiplayerGame(String text, String text1) {
+        game = new Game(true);
+        game.getPlayer1().setName(text);
+        game.getPlayer2().setName(text1);
+        gameView.showPlacement(game.getPlayer1());
     }
 
     // Creates a new singleplayer game with the given difficulty

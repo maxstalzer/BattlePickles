@@ -107,7 +107,7 @@ public class GameView extends Application{
         p2NameField.setMaxWidth(100);
 
         Button startButton = new Button("Start Game");
-        startButton.setOnAction(e -> controller.startMultiplayerGame(p1NameField.getText(), p2NameField.getText()));
+        startButton.setOnAction(e -> controller.startLocalMultiplayerGame(p1NameField.getText(), p2NameField.getText()));
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showGameMode());
