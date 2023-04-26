@@ -51,7 +51,7 @@ public class Controller {
     }
 
     public void startLocalMultiplayerGame(String text, String text1) {
-        game = new Game(true);
+        game = new Game(true, this);
         game.getPlayer1().setName(text);
         game.getPlayer2().setName(text1);
         gameView.showPlacement(game.getPlayer1());
@@ -59,7 +59,7 @@ public class Controller {
 
     // Creates a new singleplayer game with the given difficulty
     public void startSingleplayerGame(String playerName, String difficulty) {
-        game = new Game(false);
+        game = new Game(false, this);
         game.getPlayer1().setName(playerName);
         if (difficulty == "Easy") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
@@ -71,7 +71,7 @@ public class Controller {
         gameView.showPlacement(game.getPlayer1());
     }
 
-    private Gurkin gurkTranslate (gurkinID gurkinID) {
+    public Gurkin gurkTranslate (gurkinID gurkinID) {
         if (gurkinID.equals(Controller.gurkinID.Pickle)) {
             return new Pickle();
         } else if (gurkinID.equals(Controller.gurkinID.Yardlong)) {
@@ -86,13 +86,26 @@ public class Controller {
 
     }
 
-    public void placeGurkin(Coordinates startCors, Direction.direction direction, gurkinID gurkin) {
-        game.getCurrentPlayer().validGurkinSetup(gurkTranslate(gurkin), direction, startCors);
-
-
-        gameView.getContainer().placeGurkin(startCors,direction,gurkin);
+    public gurkinID gurkTranslate (Gurkin gurkin) {
+        if (gurkin instanceof Pickle) {
+            return gurkinID.Pickle;
+        } else if (gurkin instanceof Yardlong) {
+            return gurkinID.Yardlong;
+        } else if (gurkin instanceof Zuchinni) {
+            return gurkinID.Zuchinni;
+        } else if (gurkin instanceof Conichon) {
+            return gurkinID.Conichon;
+        } else {
+            return gurkinID.Gherkin;
+        }
 
     }
+
+    public void placeGurkin(Coordinates startCors, Direction.direction direction, gurkinID gurkin) {
+        game.getCurrentPlayer().getGurkinBoard().placeGurkin(startCors, direction, gurkTranslate(gurkin));
+    }
+
+
 
 
 

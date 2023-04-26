@@ -1,5 +1,6 @@
 package Gui;
 
+import Base.BoardObserver;
 import Base.Coordinates;
 import Base.Players.Player;
 import Controller.Controller;
@@ -15,7 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class GameView extends Application{
+public class GameView extends Application {
 
     private Controller controller; // Controller
     private Stage primaryStage; // Primary stage

@@ -1,7 +1,5 @@
 import Base.Game;
-import ConsoleView.ConsoleUI;
 import Gui.GameView;
-import Gui.mainGui;
 import Controller.*;
 import javafx.application.Application;
 

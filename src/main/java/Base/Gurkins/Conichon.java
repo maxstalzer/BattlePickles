@@ -7,4 +7,6 @@ public class Conichon extends  Gurkin {
     public Character toChar() {
         return 'c';
     }
+
+
 }
