@@ -6,6 +6,7 @@ import Base.Players.Player;
 import Base.Turn;
 import Controller.Controller;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,7 +14,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -48,9 +51,9 @@ public class GameView extends Application {
     public void start(Stage primaryStage) { // Start method
         this.controller = new Controller(this);
         this.primaryStage = primaryStage;
+
         this.container = new Container(controller);
         this.seaScene = new Scene(container);
-
         controller.showMainMenu(); // Show main menu
 
     }
@@ -88,8 +91,14 @@ public class GameView extends Application {
 
 
     public void startMainMenu() { // Start main menu
-        VBox layout = new VBox();
+        BorderPane layout = new BorderPane();
         Scene scene = new Scene(layout, 500, 500);
+
+        //Creating an image
+        Image image = new Image("Brine copy.gif");
+
+        //Setting the image view
+        ImageView imageView = new ImageView(image);
 
         Label label1 = new Label("BattlePickles ©");
         label1.setFont(new Font("Arial Bold", 24));
@@ -98,8 +107,13 @@ public class GameView extends Application {
         Button startButton = new Button("Start");
         startButton.setOnAction(e -> showGameMode());
 
-        layout.getChildren().addAll(label1, startButton);
-        layout.setAlignment(Pos.CENTER);
+        VBox centerBox = new VBox(label1, startButton);
+        centerBox.setAlignment(Pos.CENTER);
+        centerBox.setSpacing(20); // Add spacing between elements
+
+        layout.setCenter(centerBox);
+        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
+
         primaryStage.setTitle("You don't know what you're getting yourself into");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -110,18 +124,21 @@ public class GameView extends Application {
         VBox layout = new VBox();
         Scene scene = new Scene(layout, 500, 500);
 
-        Label label2 = new Label("Game mode");
+        Label label2 = new Label("Game Select");
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showMainMenu());
 
-        Button AIButton = new Button("AI");
+        Button AIButton = new Button("Singleplayer");
         AIButton.setOnAction(e -> controller.showSingleplayer());
 
         Button multiplayerButton = new Button("Multiplayer");
         multiplayerButton.setOnAction(e -> controller.showMultiplayer());
 
-        layout.getChildren().addAll(label2, AIButton, multiplayerButton, backButton);
+        Button LoadSaved = new Button("Load saved game");
+        // LoadSaved.setOnAction(e -> controller.showMultiplayer());
+
+        layout.getChildren().addAll(label2, AIButton, multiplayerButton, LoadSaved, backButton);
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
@@ -164,6 +181,11 @@ public class GameView extends Application {
 
         MenuButton menuButton = new MenuButton("");
         menuButton.getItems().addAll(new MenuItem("Easy"), new MenuItem("Medium"), new MenuItem("Hard"));
+        menuButton.setText("Easy");
+
+        menuButton.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
+            menuButton.setText(menuItem.getText());
+        }));
 
         Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> controller.startSingleplayerGame(p1NameField.getText(), menuButton.getText()));

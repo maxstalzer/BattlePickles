@@ -21,7 +21,8 @@ import java.util.List;
 
 import static Base.Direction.direction.Horizontal;
 import static Base.Direction.direction.Vertical;
-public class Container extends BorderPane implements BoardObserver { //This is the container that contains the Sea class
+
+public class Container extends BorderPane implements BoardObserver{ //This is the container that contains the Sea class
     Coordinates Gurks;
     double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
 

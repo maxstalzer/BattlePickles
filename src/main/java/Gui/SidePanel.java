@@ -12,9 +12,11 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.io.FileNotFoundException;
 import java.util.List;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -48,6 +50,13 @@ public class SidePanel extends VBox implements PlayerObserver {
         this.controller=controller;
         javafx.scene.control.Label label1 = new javafx.scene.control.Label("Choose Gurk Type ©");
         setAlignment(Pos.CENTER);
+
+        Button Quit = new Button("Quit");
+        Quit.setOnAction(e -> controller.showMainMenu());
+        getChildren().add(Quit);
+
+
+
         getChildren().add(label1);
         MenuButton menu = new MenuButton("Directions");
         MenuItem horiz = new MenuItem("Horizontal");

@@ -1,6 +1,4 @@
-import Base.Game;
 import Gui.GameView;
-import Controller.*;
 import javafx.application.Application;
 
 public class Main
