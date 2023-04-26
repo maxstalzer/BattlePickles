@@ -13,14 +13,19 @@ public class OnlineGame {
     private Dao<GameState, Integer> gameStateDao;
     private Player currentPlayer;
 
+    private Player otherPlayer;
+
     public Player getCurrentPlayer() {
         return this.currentPlayer;
+    }
+    public Player getOtherPlayer() {
+        return this.otherPlayer;
     }
 
     public OnlineGame() throws SQLException {
         String databaseUrl = "jdbc:mysql://localhost:3306/game_db";
-        String databaseUsername = "username";
-        String databasePassword = "password";
+        String databaseUsername = "root";
+        String databasePassword = "12345678";
 
         ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, databaseUsername, databasePassword);
 
@@ -40,6 +45,10 @@ public class OnlineGame {
         currentPlayer = players.get(0);
         currentPlayer.setCurrentPlayer(true);
         playerDao.update(currentPlayer);
+
+        otherPlayer = players.get(1);
+        otherPlayer.setCurrentPlayer(false);
+        playerDao.update(currentPlayer);
     }
 
     public void switchPlayer() throws SQLException {
@@ -47,6 +56,7 @@ public class OnlineGame {
         for (Player player : players) {
             if (player.getId() != currentPlayer.getId()) {
                 currentPlayer.setCurrentPlayer(false);
+                otherPlayer = currentPlayer;
                 playerDao.update(currentPlayer);
                 player.setCurrentPlayer(true);
                 playerDao.update(player);

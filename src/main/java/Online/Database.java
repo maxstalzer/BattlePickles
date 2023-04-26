@@ -6,10 +6,9 @@ import Base.Players.Player;
 import Base.Tile;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.db.DatabaseType;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.UpdateBuilder;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,12 +16,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
+import java.sql.ResultSet;
 
-public class DatabaseSetup {
+
+public class Database {
     private String databaseURL;
     private String username = "root";
     private String password = "12345678";
-    public DatabaseSetup(String s) throws  Exception {
+
+    public Database(String s) throws  Exception {
 
         String databaseUrl = "jdbc:mysql://localhost:3306?serverTimezone=UTC";
 
@@ -45,12 +47,24 @@ public class DatabaseSetup {
         return databaseURL;
     }
 
-    public void updatePlayer(Player p) throws SQLException {
+    public void updatePlayer(Player player) throws Exception {
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
-
         Dao<Player, Integer> playerDao = DaoManager.createDao(connectionSource, Player.class);
+        Dao<Board, Integer> boardDao = DaoManager.createDao(connectionSource, Board.class);
+        Dao<Tile, Integer> tileDao = DaoManager.createDao(connectionSource, Tile.class);
+        Dao<Gurkin, Integer> gurkinDao = DaoManager.createDao(connectionSource, Gurkin.class);
 
-        playerDao.update(p);
+        // Update player and its associated objects
+        playerDao.update(player);
+        Board board = player.getGurkinBoard();
+        boardDao.update(board);
+        for (Tile tile : board.getTiles()) {
+            tileDao.update(tile);
+            if (tile.hasGurkin()) {
+                gurkinDao.update(tile.getGurkin());
+            }
+        }
+        connectionSource.close();
     }
 
     public Player retrievePlayer(int id) throws Exception {
@@ -86,5 +100,26 @@ public class DatabaseSetup {
         connectionSource.close();
         return player;
     }
+
+
+    public void setupConnection(String databaseName) {
+        try {
+            String url = String.format("jdbc:mysql://172.20.10.3:3306/%s?serverTimezone=UTC",databaseName);
+            String username = "root";
+            String password = "12345678";
+            Connection conn = DriverManager.getConnection(url, username, password);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM TABLE_NAME");
+            while (rs.next()) {
+                System.out.println(rs.getString("COLUMN_NAME"));
+            }
+            conn.close();
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+
+
 }
 

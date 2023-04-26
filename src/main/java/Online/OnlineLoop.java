@@ -4,7 +4,7 @@ import Base.Players.Player;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-
+/*
 public class OnlineLoop {
     private OnlineGame game;
     private boolean gameOver;
@@ -15,7 +15,7 @@ public class OnlineLoop {
         scanner = new Scanner(System.in);
     }
 
-    /*
+
     public void start() throws SQLException {
         while (!gameOver) {
             // Get the current player
@@ -25,9 +25,7 @@ public class OnlineLoop {
             waitForPlayerInput(currentPlayer);
 
             // Switch to the other player
-            OnlineGame.switchPlayer();
-
-            //write the actual player turn here
+            game.switchPlayer();
 
             // Check if the game is over
             if (game.GameOver()) {
@@ -57,6 +55,4 @@ public class OnlineLoop {
         Player otherPlayer = game.getOtherPlayer();
         System.out.println(otherPlayer.getName() + ", it's your turn now!");
     }
-
-     */
-}
+}*/
