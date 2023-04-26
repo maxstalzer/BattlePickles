@@ -7,9 +7,8 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
 
-public class OnlineTurn {
+public class OnlineGame {
     private Dao<Player, Integer> playerDao;
     private Dao<GameState, Integer> gameStateDao;
     private Player currentPlayer;
@@ -18,7 +17,7 @@ public class OnlineTurn {
         return this.currentPlayer;
     }
 
-    public OnlineTurn() throws SQLException {
+    public OnlineGame() throws SQLException {
         String databaseUrl = "jdbc:mysql://localhost:3306/game_db";
         String databaseUsername = "username";
         String databasePassword = "password";

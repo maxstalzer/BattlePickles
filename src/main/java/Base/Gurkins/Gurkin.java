@@ -17,8 +17,6 @@ public abstract class Gurkin {
     Gurkin(int size) {
         this.size = size;
         this.lives = size;
-
-
     }
     public int getSize() {
         return this.size;

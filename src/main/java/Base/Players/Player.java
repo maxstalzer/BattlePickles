@@ -36,7 +36,7 @@ public class  Player {
     public Board getGurkinBoard() {
         return gurkinBoard;
     } // the board of gurkins
-
+    public void setGurkinBoard(Board b) {this.gurkinBoard = b;}
     public Player() { // Constructor
 
 //      Setup the gurkin board

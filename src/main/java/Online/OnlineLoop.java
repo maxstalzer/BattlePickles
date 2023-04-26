@@ -6,12 +6,12 @@ import java.util.Scanner;
 
 
 public class OnlineLoop {
-    private OnlineTurn game;
+    private OnlineGame game;
     private boolean gameOver;
     private Scanner scanner;
 
     public OnlineLoop() throws SQLException {
-        OnlineTurn game = new OnlineTurn();
+        OnlineGame game = new OnlineGame();
         scanner = new Scanner(System.in);
     }
 
@@ -25,7 +25,7 @@ public class OnlineLoop {
             waitForPlayerInput(currentPlayer);
 
             // Switch to the other player
-            game.switchPlayer();
+            OnlineGame.switchPlayer();
 
             //write the actual player turn here
 
