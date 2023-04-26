@@ -87,7 +87,7 @@ public class Controller {
     }
 
     public void placeGurkin(Coordinates startCors, Direction.direction direction, gurkinID gurkin) {
-        game.getCurrentPlayer().getGurkinBoard().placeGurkin(gurkTranslate(gurkin), direction, startCors);
+        game.getCurrentPlayer().validGurkinSetup(gurkTranslate(gurkin), direction, startCors);
 
 
         gameView.getContainer().placeGurkin(startCors,direction,gurkin);

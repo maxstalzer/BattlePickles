@@ -16,7 +16,24 @@ import javafx.stage.Screen;
 import java.io.FileInputStream;
 
 public class GuiGurks extends Canvas {
-    double gridsize = Screen.getPrimary().getBounds().getMaxY()/12;
+    public double getScale() {
+        return scale;
+    }
+
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
+
+    public double getGridsize() {
+        return gridsize;
+    }
+
+    public void setGridsize(double gridsize) {
+        this.gridsize = gridsize;
+    }
+
+    private double scale =1;
+    private double gridsize = Screen.getPrimary().getBounds().getMaxY()/12;
 
     public GuiGurks(Coordinates coords, Gurkin gurktype,Direction.direction dir) { //Contructor for the Gurks.
 
@@ -78,41 +95,36 @@ public class GuiGurks extends Canvas {
     }
 
     public void setImage(Gurkin gurktype) { //This sets the image so that it is the same as the specified gurkin
-        int scale =1;
         if (gurktype instanceof Pickle) {
-            //int size=Pickle.getSize();
-            int size = 3; // I would like for the size to be defined off the type instead, as it is above. Right now the sizes are arbitrary
-            setWidth(gridsize);
-            setHeight(gridsize*size);
+            int size = gurktype.getSize();
+            setWidth(gridsize*scale);
+            setHeight(gridsize*size*scale);
             Image image = new Image("battleship.png"); // makes an Image object which is passed to the drawImage function which draws the graphic on the canvas/GuiGurks Object
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Yardlong) {
-            // int size=Pickle.getSize();
-            int height = 2;
+            int size = gurktype.getSize();
             setWidth(gridsize);
-            setHeight(gridsize*height);
+            setHeight(gridsize*size*scale);
             Image image = new Image("carrier.png");
-            getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*height*scale);
+            getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Zuchinni) {
-            // int size=Pickle.getSize();
-            int height = 1;
+            int size = gurktype.getSize();
             setWidth(gridsize);
-            setHeight(gridsize*height);
+            setHeight(gridsize*size*scale);
             Image image = new Image("cruiser.png");
-            getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*height*scale);
+            getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Gherkin) {
-            // int size=Pickle.getSize();
-            int height = 4;
+            int size = gurktype.getSize();
             setWidth(gridsize);
-            setHeight(gridsize*height);
+            setHeight(gridsize*size*scale);
             Image image = new Image("destroyer.png");
-            getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*height*scale);
+            getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Conichon) {
-            int height = 4;
+            int size = gurktype.getSize();
             setWidth(gridsize);
-            setHeight(gridsize*height);
+            setHeight(gridsize*size*scale);
             Image image = new Image("submarine.png");
-            getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*height*scale);
+            getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         }
     }
 

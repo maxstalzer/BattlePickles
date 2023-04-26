@@ -5,20 +5,23 @@ import Base.Direction;
 import Base.Gurkins.*;
 import Controller.Controller;
 import io.cucumber.java.ro.Si;
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.awt.*;
 import java.util.List;
 
 import static Base.Direction.direction.Vertical;
 
-public class SidePanel extends Pane {
+public class SidePanel extends VBox {
 
     Controller controller;
     public SidePanel(Controller controller) {
         this.controller=controller;
         javafx.scene.control.Label label1 = new javafx.scene.control.Label("Choose Gurk Type ©");
-
+        setAlignment(Pos.CENTER);
         getChildren().add(label1);
 
 
@@ -27,6 +30,8 @@ public class SidePanel extends Pane {
         getChildren().add(new SidePanelGurks( new Yardlong(),controller,this));
         getChildren().add(new SidePanelGurks( new Zuchinni(),controller,this));
         getChildren().add(new SidePanelGurks( new Gherkin(),controller,this));
+        getChildren().add(new SidePanelGurks( new Conichon(),controller,this));
+
 
     }
     public void addGurkToSidePanel(Gurkin gurk) {
