@@ -18,7 +18,7 @@ import java.io.FileInputStream;
 public class GuiGurks extends Canvas {
     double gridsize = Screen.getPrimary().getBounds().getMaxY()/12;
 
-    public GuiGurks(Coordinates coords, Gurkin gurktype,Direction.direction dir) { //Contructor for the Gurks.
+    public GuiGurks(Coordinates coords, Gurkin gurktype, Direction.direction dir) { //Contructor for the Gurks.
 
 
         setImage(gurktype); // Calls the method defined below
@@ -84,34 +84,34 @@ public class GuiGurks extends Canvas {
             int size = 3; // I would like for the size to be defined off the type instead, as it is above. Right now the sizes are arbitrary
             setWidth(gridsize);
             setHeight(gridsize*size);
-            Image image = new Image("battleship.png"); // makes an Image object which is passed to the drawImage function which draws the graphic on the canvas/GuiGurks Object
+            Image image = new Image("Pickle.png"); // makes an Image object which is passed to the drawImage function which draws the graphic on the canvas/GuiGurks Object
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Yardlong) {
             // int size=Pickle.getSize();
-            int height = 2;
+            int height = 5;
             setWidth(gridsize);
             setHeight(gridsize*height);
-            Image image = new Image("carrier.png");
+            Image image = new Image("Armenian.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*height*scale);
         } else if (gurktype instanceof Zuchinni) {
             // int size=Pickle.getSize();
-            int height = 1;
+            int height = 4;
             setWidth(gridsize);
             setHeight(gridsize*height);
-            Image image = new Image("cruiser.png");
+            Image image = new Image("Zucchini.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*height*scale);
         } else if (gurktype instanceof Gherkin) {
             // int size=Pickle.getSize();
-            int height = 4;
+            int height = 3;
             setWidth(gridsize);
             setHeight(gridsize*height);
-            Image image = new Image("destroyer.png");
+            Image image = new Image("gherkin.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*height*scale);
         } else if (gurktype instanceof Conichon) {
-            int height = 4;
+            int height = 2;
             setWidth(gridsize);
             setHeight(gridsize*height);
-            Image image = new Image("submarine.png");
+            Image image = new Image("Conichon.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*height*scale);
         }
     }
