@@ -5,6 +5,7 @@ import Base.Direction;
 import Base.Game;
 import Base.Gurkins.*;
 import Base.Players.AI;
+import Base.Players.Player;
 import Base.Turn;
 import Gui.GameView;
 import Gui.GridTile;
@@ -55,6 +56,7 @@ public class Controller {
         game = new Game(true, this);
         game.getPlayer1().setName(text);
         game.getPlayer2().setName(text1);
+        gameView.initAttackViews(false);
         gameView.showPlacement(game.getPlayer1());
     }
 
@@ -71,6 +73,7 @@ public class Controller {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Hard, game.getPlayer1());
         }
         game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer());
+        gameView.initAttackViews(true);
         gameView.showPlacement(game.getPlayer1());
 
     }
@@ -132,19 +135,28 @@ public class Controller {
                     showGameplay();
             }
         } else {
-            Turn.changeTurn();
             showGameplay();
         }
     }
 
     public void showGameplay() {
-        game.getCurrentPlayer().getResultBoard().registerObserver(gameView.getShotContainer());
-        gameView.showGameplay(game.getCurrentPlayer());
-
+        game.getCurrentPlayer().getResultBoard().registerObserver(gameView.getCurrentAttackView(Turn.getTurn()));
+        game.getCurrentPlayer().registerAttackObserver(gameView.getCurrentAttackView(Turn.getTurn()));
+        gameView.showGameplay(Turn.getTurn());
     }
+
 
     public void makeShot(Coordinates coordinates) {
         game.getCurrentPlayer().shoot(game.getOpponent().getGurkinBoard(), coordinates);
+
+    }
+
+    public void changeTurnView() {
+        gameView.showGameplay(Turn.getTurn());
+        if (Turn.getTurn().equals("2") && !game.getMultiplayer()) {
+           Coordinates aishot = game.getAIPlayer().generateAttack();
+           makeShot(aishot);
+        }
     }
 
 

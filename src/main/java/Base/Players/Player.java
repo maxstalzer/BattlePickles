@@ -14,7 +14,7 @@ import java.util.Set;
 //import com.j256.ormlite.table.DatabaseTable;
 
 //@DatabaseTable(tableName = "Player")
-public class  Player implements PlayerObserver{
+public class  Player implements PlayerObserver, PlayerAttackObserver{
 //    @DatabaseField(canBeNull = false)
     String name; // The name of the player
 //    @DatabaseField(canBeNull = false)
@@ -30,6 +30,8 @@ public class  Player implements PlayerObserver{
     private int id;
 
     private Set<PlayerObserver> playerObservers = new HashSet<PlayerObserver>();
+
+    private Set<PlayerAttackObserver> attackObservers = new HashSet<PlayerAttackObserver>();
 
     public Player(int id, String name, Boolean CurrentPlayer) {
         this.id = id;
@@ -85,10 +87,10 @@ public class  Player implements PlayerObserver{
 //  Allows a player to shoot at given coordinates on the opposing player's board
 
     public void shoot(Board board, Coordinates coords) {
+        System.out.println("Player " + this.turnID + " is shooting at " + coords.getX() + ", " + coords.getY());
         String result = board.attack(coords); // attack the tile at the coordinates
         if (result.equals("hit")) { // if the shot was a hit
-            this.shotResults.setHit(coords); // set the shot results to a hit
-            Turn.changeTurn(); // change turn
+            this.shotResults.setHit(coords);// set the shot results to a hit
             Gurkin gurk = board.getTile(coords).getGurkin(); // get the gurkin that was hit
             if (gurk.deadGurk()) { // if the gurkin is dead
                 this.shotResults.setKill(coords); // set the shot results to a kill
@@ -104,15 +106,28 @@ public class  Player implements PlayerObserver{
                         this.shotResults.setKill(new Coordinates(coords.getX(), coords.getY() - i));
                     }
                 }
-                this.remaining_gurkins --; // decrement the number of gurkins remaining
+                this.remaining_gurkins --;// decrement the number of gurkins remaining
+                changeTurn();
             }
         } else if (result.equals("miss")) { // if the shot was a miss
-            this.shotResults.setMiss(coords); // set the shot results to a miss
-            Turn.changeTurn();
+            this.shotResults.setMiss(coords);   // set the shot results to a miss
+            changeTurn();
         }
-
-        // Trigger some kind of update to the GUI based on shot results board
     }
+
+    @Override
+    public void changeTurn() {
+        Turn.changeTurn();
+        System.out.println("Player" + Turn.getTurn() + "'s turn");
+        notifyTurnObservers();
+    }
+
+    public void notifyTurnObservers() {
+        for (PlayerAttackObserver observer : attackObservers) {
+            observer.changeTurn();
+        }
+    }
+
     public boolean checkWin() { // checks if the player has won
         if (this.remaining_gurkins == 0) {
 
@@ -168,6 +183,10 @@ public class  Player implements PlayerObserver{
         playerObservers.add(observer);
     }
 
+    public void registerAttackObserver(PlayerAttackObserver observer) {
+        attackObservers.add(observer);
+    }
+
     public void finalisePlacement() {
         for (PlayerObserver observer : playerObservers) {
             observer.finalisePlacement();
@@ -188,6 +207,8 @@ public class  Player implements PlayerObserver{
     public ShotResults getResultBoard() {
         return shotResults;
     }
+
+
 
 }
 

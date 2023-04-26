@@ -1,8 +1,6 @@
 package Base;
 
-import java.util.Objects;
-
-public class Turn {
+public class Turn { // Turn class
 
     private static String turn; // Turn
 

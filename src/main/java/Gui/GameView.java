@@ -3,6 +3,7 @@ package Gui;
 import Base.BoardObserver;
 import Base.Coordinates;
 import Base.Players.Player;
+import Base.Turn;
 import Controller.Controller;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -23,14 +24,20 @@ public class GameView extends Application {
 
     private Scene seaScene; // Sea scene
 
-    private ShootingContainer shotContainer; // Shot container
-    private Scene attackScene;// Attack scene
+    private ShootingContainer shotContainer1;// Shot container
+
+    private ShootingContainer shotContainer2;
+
+    private Scene attackScene1;// Attack scene for player1
+    private Scene attackScene2; // Attack scene for player2
 
     public Container getContainer() {
         return container;
     }
 
     private Container container;
+
+
 
 
 
@@ -41,14 +48,34 @@ public class GameView extends Application {
     public void start(Stage primaryStage) { // Start method
         this.controller = new Controller(this);
         this.primaryStage = primaryStage;
-
         this.container = new Container(controller);
         this.seaScene = new Scene(container);
-        this.shotContainer = new ShootingContainer(controller);
-        this.attackScene = new Scene(shotContainer);
+
         controller.showMainMenu(); // Show main menu
 
     }
+
+    public void initAttackViews(Boolean singlePlayer) { // Initialize attack views
+        if (singlePlayer) {
+            shotContainer1 = new ShootingContainer(controller);
+            attackScene1 = new Scene(shotContainer1);
+            VBox layout = new VBox();
+            attackScene2 = new Scene(layout, 500, 500);
+            Label label1 = new Label("AI's turn");
+            label1.setFont(new Font("Arial Bold", 24));
+            layout.getChildren().addAll(label1);
+            layout.setAlignment(Pos.CENTER);
+        } else {
+            shotContainer1 = new ShootingContainer(controller);
+            attackScene1 = new Scene(shotContainer1);
+            shotContainer2 = new ShootingContainer(controller);
+            attackScene2 = new Scene(shotContainer2);
+        }
+
+
+    }
+
+
 
     public void setController(Controller controller) { // Setters
         this.controller = controller;
@@ -157,12 +184,27 @@ public class GameView extends Application {
 
     }
 
-    public void showGameplay(Player player) {
-        primaryStage.setScene(attackScene);
+    public void showGameplay(String turn) {
+        if (turn.equals("1") ) {
+            primaryStage.setScene(attackScene1);
+        } else {
+            primaryStage.setScene(attackScene2);
+        }
     }
 
-    public ShootingContainer getShotContainer() {
-        return shotContainer;
+    public ShootingContainer getCurrentAttackView(String turn) {
+        if (turn.equals("1")) {
+            return shotContainer1;
+        } else {
+            return shotContainer2;
+        }
+    }
+    public ShootingContainer getP1AttackView() {
+        return shotContainer1;
+    }
+
+    public ShootingContainer getP2AttackView() {
+        return shotContainer2;
     }
 
 

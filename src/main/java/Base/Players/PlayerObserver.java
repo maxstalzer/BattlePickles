@@ -8,4 +8,6 @@ public interface PlayerObserver {
     public void updateSidePanel(ArrayList<Gurkin> gurk);
 
     public void finalisePlacement();
+
+
 }
