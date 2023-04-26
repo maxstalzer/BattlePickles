@@ -2,6 +2,8 @@ import Base.*;
 import Base.Gurkins.*;
 import Base.Players.AI;
 import Base.Players.Player;
+import Controller.Controller;
+import Gui.GameView;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -182,7 +184,7 @@ public class StepsDefinition {
         cords = new Coordinates(4,4);
         Coordinates nextCor = new Coordinates(4,5);
         g = new Conichon();
-        p2b.placeGurkin(g, Direction.direction.Vertical, cords);
+        p2b.placeGurkin(cords, Direction.direction.Vertical, g);
         p1.shoot(p2b, cords);
         p1.shoot(p2b, nextCor);
     }
@@ -197,7 +199,7 @@ public class StepsDefinition {
 
     @When("I create a singleplayer game")
     public void i_create_a_singleplayer_game() {
-       game = new Game(false);
+       game = new Game(false, new Controller(new GameView()));
     }
     @Then("I should create a new Player and AI")
     public void i_should_create_a_new_player_and_ai() {
@@ -208,7 +210,7 @@ public class StepsDefinition {
 
     @When("I create a multiplayer game")
     public void i_create_a_multiplayer_game() {
-        game = new Game(true);
+        game = new Game(true, new Controller(new GameView()));
     }
     @Then("I should create two new players")
     public void i_should_create_two_new_players() {
@@ -335,7 +337,7 @@ public class StepsDefinition {
 
     @Given("a game")
     public void a_game() {
-        game = new Game(true);
+        game = new Game(true, new Controller(new GameView()));
     }
 
 
@@ -441,7 +443,7 @@ public class StepsDefinition {
 
     @Given("a singleplayer game")
     public void a_singleplayer_game() {
-        game = new Game(false);
+        game = new Game(false,new Controller(new GameView()));
     }
     @When("I set the difficulty of the AI to easy")
     public void i_set_the_difficulty_of_the_ai_to_easy() {

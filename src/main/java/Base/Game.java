@@ -2,6 +2,7 @@ package Base;
 
 import Base.Players.AI;
 import Base.Players.Player;
+import Controller.Controller;
 
 public class Game {
     Boolean multiplayer; // true if multiplayer, false if singleplayer
@@ -10,9 +11,11 @@ public class Game {
     Boolean game_Over; // true if game is over
 
     private String gameID; // Game ID
-    private String initial_turn; // Initial turn
+    private String initial_turn; // Initial// turn
 
-    public Game(Boolean multiplayer) { // Constructor
+    private Controller controller; // Controller
+
+    public Game(Boolean multiplayer, Controller controller) { // Constructor
         this.multiplayer = multiplayer;
         Turn.init_turn();
         if (multiplayer) {
@@ -26,6 +29,7 @@ public class Game {
 
         int gameID = (int) (Math.random() * 1000000); // Generate random game ID
         this.gameID = Integer.toString(gameID);
+        this.controller = controller;
     }
 
     public Player getPlayer1() {
@@ -48,7 +52,7 @@ public class Game {
     } // Check if player has finished placing gurkins
 
     public Game deepClone() {   // Deep clone of game
-        Game copy = new Game(multiplayer);
+        Game copy = new Game(multiplayer, controller);
         copy.player1 = player1.deepClone();
         copy.player2 = player2.deepClone();
         copy.game_Over = game_Over;

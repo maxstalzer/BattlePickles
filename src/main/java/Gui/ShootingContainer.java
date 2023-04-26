@@ -1,7 +1,9 @@
 package Gui;
 
+import Base.Coordinates;
 import Base.Direction;
 import Base.Gurkins.*;
+import Base.Players.ResultObserver;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HorizontalDirection;
@@ -11,7 +13,7 @@ import javafx.stage.Screen;
 
 import static Base.Direction.direction.Vertical;
 
-public class ShootingContainer extends Pane{
+public class ShootingContainer extends Pane implements ResultObserver {
     public ShootingContainer() {
         getChildren().add(new Sea()); //Here we add the sea as a child in the Pane ie. makes it contain an instance of the sea object
         double gridsize = Screen.getPrimary().getBounds().getMaxY() / 12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
@@ -31,5 +33,20 @@ public class ShootingContainer extends Pane{
             }
 
         });
+    }
+
+    @Override
+    public void setHit(Coordinates coords) {
+
+    }
+
+    @Override
+    public void setMiss(Coordinates coords) {
+
+    }
+
+    @Override
+    public void setKill(Coordinates coords) {
+
     }
 }

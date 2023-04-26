@@ -31,7 +31,7 @@ public class  Player {
         this.CurrentPlayer = CurrentPlayer;
     }
 
-    private Character[][] shotResults = new Character[10][10]; // Stores results of shots
+    private ShotResults shotResults;  // Stores results of shots
 
     public Board getGurkinBoard() {
         return gurkinBoard;
@@ -43,6 +43,7 @@ public class  Player {
         this.gurkinBoard = new Board();
         this.remaining_gurkins = 0;
         turnID = Turn.getTurn();
+        this.shotResults = new ShotResults();
     }
 
     public void setCurrentPlayer(Boolean CurrentPlayer) {
@@ -53,7 +54,7 @@ public class  Player {
     }
 
     public Character[][] getShotResults() {
-        return shotResults;
+        return shotResults.getShotBoard();
     } // Returns shot results
 
     public void setName(String name) {
@@ -72,31 +73,29 @@ public class  Player {
 //  Allows a player to shoot at given coordinates on the opposing player's board
 
     public void shoot(Board board, Coordinates coords) {
-        String result = board.attack(coords);
-        int x = coords.getX();
-        int y = coords.getY();
+        String result = board.attack(coords); // attack the tile at the coordinates
         if (result.equals("hit")) { // if the shot was a hit
-            this.shotResults[x][y] = 'x';
+            this.shotResults.setHit(coords); // set the shot results to a hit
             Turn.changeTurn(); // change turn
             Gurkin gurk = board.getTile(coords).getGurkin(); // get the gurkin that was hit
             if (gurk.deadGurk()) { // if the gurkin is dead
-                this.shotResults[coords.getX()][coords.getY()] = 'k';
+                this.shotResults.setKill(coords); // set the shot results to a kill
                 for (int i = 0; i < gurk.getSize(); i++) {
                     if ((new Coordinates(coords.getX() + i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() + i, coords.getY())).check(gurk)) {
-                        this.shotResults[coords.getX()+i][coords.getY()] = 'k';
+                        this.shotResults.setKill(new Coordinates(coords.getX() + i, coords.getY())); // set the shot results to a kill
                     } else if ((new Coordinates(coords.getX() , coords.getY() + i).validCoords()) && board.getTile(new Coordinates(coords.getX() , coords.getY() + i)).check(gurk)) {
-                        this.shotResults[coords.getX()][coords.getY() + i] = 'k';
+                        this.shotResults.setKill(new Coordinates(coords.getX() , coords.getY() + i));
                     } else if ((new Coordinates(coords.getX() - i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() - i, coords.getY())).check(gurk)) {
-                        this.shotResults[coords.getX() - i][coords.getY()] = 'k';
+                        this.shotResults.setKill(new Coordinates(coords.getX() - i, coords.getY()));
 
                     } else if ((new Coordinates(coords.getX(), coords.getY() - i).validCoords()) &&board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).check(gurk)) {
-                        this.shotResults[coords.getX()][coords.getY() - i] = 'k';
+                        this.shotResults.setKill(new Coordinates(coords.getX(), coords.getY() - i));
                     }
                 }
                 this.remaining_gurkins --; // decrement the number of gurkins remaining
             }
         } else if (result.equals("miss")) { // if the shot was a miss
-            this.shotResults[x][y] = 'o';
+            this.shotResults.setMiss(coords); // set the shot results to a miss
             Turn.changeTurn();
         }
 
@@ -116,7 +115,7 @@ public class  Player {
     public Boolean validGurkinSetup(Gurkin gurk, Direction.direction direction, Coordinates cords) {
         boolean valid = cords.validCoords(direction, gurk, gurkinBoard);
         if (valid) {
-            gurkinBoard.placeGurkin(gurk, direction, cords);
+            gurkinBoard.placeGurkin(cords, direction, gurk);
             this.remaining_gurkins ++;
 
         }
