@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
 
 import java.awt.*;
 import java.util.List;
@@ -22,9 +23,17 @@ public class SidePanel extends VBox {
         this.controller=controller;
         javafx.scene.control.Label label1 = new javafx.scene.control.Label("Choose Gurk Type ©");
         setAlignment(Pos.CENTER);
+
+        Button Quit = new Button("Quit");
+        Quit.setOnAction(e -> {
+            controller.showMainMenu();
+
+        });
+        getChildren().add(Quit);
+
+
+
         getChildren().add(label1);
-
-
 
         getChildren().add(new SidePanelGurks( new Pickle(),controller,this));
         getChildren().add(new SidePanelGurks( new Yardlong(),controller,this));
