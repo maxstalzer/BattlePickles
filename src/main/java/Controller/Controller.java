@@ -5,6 +5,7 @@ import Base.Direction;
 import Base.Game;
 import Base.Gurkins.*;
 import Base.Players.AI;
+import Base.Turn;
 import Gui.GameView;
 import Gui.GridTile;
 import Gui.GuiGurks;
@@ -60,6 +61,7 @@ public class Controller {
     // Creates a new singleplayer game with the given difficulty
     public void startSingleplayerGame(String playerName, String difficulty) {
         game = new Game(false, this);
+        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel());
         game.getPlayer1().setName(playerName);
         if (difficulty == "Easy") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
@@ -68,7 +70,9 @@ public class Controller {
         } else if (difficulty == "Hard") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Hard, game.getPlayer1());
         }
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer());
         gameView.showPlacement(game.getPlayer1());
+
     }
 
     public Gurkin gurkTranslate (gurkinID gurkinID) {
@@ -102,8 +106,25 @@ public class Controller {
     }
 
     public void placeGurkin(Coordinates startCors, Direction.direction direction, gurkinID gurkin) {
-        game.getCurrentPlayer().getGurkinBoard().placeGurkin(startCors, direction, gurkTranslate(gurkin));
+        game.getCurrentPlayer().validGurkinSetup(gurkTranslate(gurkin), direction, startCors);
+
     }
+    public gurkinID getChosenGurk() {
+        return gameView.getContainer().getSidepanel().getGurktypeField();
+    }
+
+    public Direction.direction getChosenDir() {return gameView.getContainer().getSidepanel().getDir();}
+
+    public void redoPlacement() {
+        game.getCurrentPlayer().resetPlacement();
+        gameView.showPlacement(game.getCurrentPlayer());
+    }
+
+    public void endPlacement() {
+        Turn.changeTurn();
+
+    }
+
 
 
 

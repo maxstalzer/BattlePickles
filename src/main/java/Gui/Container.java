@@ -66,7 +66,7 @@ public class Container extends BorderPane implements BoardObserver { //This is t
 
                      */
 
-                    controller.placeGurkin(target.coords,Horizontal, Controller.gurkinID.Pickle);
+                    controller.placeGurkin(target.coords,controller.getChosenDir(), controller.getChosenGurk());
                 }
             }
 

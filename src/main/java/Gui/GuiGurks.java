@@ -58,9 +58,9 @@ public class GuiGurks extends Canvas {
 
     }
 
+    Gurkin gurktype;
     public GuiGurks(Coordinates coords, Controller.gurkinID gurkinID, Direction.direction dir) { //Contructor for the Gurks.
 
-        Gurkin gurktype;
 
         if (gurkinID == Controller.gurkinID.Pickle) {
             gurktype = new Pickle();
@@ -128,7 +128,7 @@ public class GuiGurks extends Canvas {
         }
     }
 
-
-
-
+    public Gurkin getGurktype() {
+        return gurktype;
+    }
 }

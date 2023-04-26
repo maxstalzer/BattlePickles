@@ -84,6 +84,7 @@ public class Board implements BoardObserver{ // Board class
                 getTile(new Coordinates(startCoor.getX(), startCoor.getY() + i)).setGurkin(g);
             }
         }
+
         notifyPlacedGurkin(g, dir, startCoor);
     }
 
@@ -97,6 +98,7 @@ public class Board implements BoardObserver{ // Board class
 
     private void notifyPlacedGurkin(Gurkin g, Direction.direction dir, Coordinates startCoor) {
         for (BoardObserver observer : observers) {
+
             observer.placeGurkin(startCoor, dir, g);
         }
     }
@@ -110,6 +112,8 @@ public class Board implements BoardObserver{ // Board class
         }
     }
 
-
+    public void registerBoardObserver(BoardObserver observer) {
+        observers.add(observer);
+    }
 }
 

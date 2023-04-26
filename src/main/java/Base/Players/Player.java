@@ -6,11 +6,15 @@ import Base.Coordinates;
 import Base.Direction;
 import Base.Gurkins.*;
 import Base.Turn;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 //import com.j256.ormlite.field.DatabaseField;
 //import com.j256.ormlite.table.DatabaseTable;
 
 //@DatabaseTable(tableName = "Player")
-public class  Player {
+public class  Player implements PlayerObserver{
 //    @DatabaseField(canBeNull = false)
     String name; // The name of the player
 //    @DatabaseField(canBeNull = false)
@@ -25,14 +29,17 @@ public class  Player {
 //    @DatabaseField(generatedId = true)
     private int id;
 
+    private Set<PlayerObserver> playerObservers = new HashSet<PlayerObserver>();
+
     public Player(int id, String name, Boolean CurrentPlayer) {
         this.id = id;
         this.name = name;
         this.CurrentPlayer = CurrentPlayer;
     }
 
-    private ShotResults shotResults;  // Stores results of shots
+    private ShotResults shotResults;// Stores results of shots
 
+    private ArrayList<Gurkin> unplacedGurks;
     public Board getGurkinBoard() {
         return gurkinBoard;
     } // the board of gurkins
@@ -44,14 +51,19 @@ public class  Player {
         this.remaining_gurkins = 0;
         turnID = Turn.getTurn();
         this.shotResults = new ShotResults();
+        this.unplacedGurks = new ArrayList<Gurkin>();
+        unplacedGurks.add(new Pickle());
+        unplacedGurks.add(new Gherkin());
+        unplacedGurks.add(new Conichon());
+        unplacedGurks.add(new Yardlong());
+        unplacedGurks.add(new Zuchinni());
+
     }
 
     public void setCurrentPlayer(Boolean CurrentPlayer) {
         this.CurrentPlayer = CurrentPlayer;
     }
-    public int getId () {
-        return this.id;
-    }
+
 
     public Character[][] getShotResults() {
         return shotResults.getShotBoard();
@@ -114,13 +126,19 @@ public class  Player {
     // places a gurkin on the board if it can be placed
     public Boolean validGurkinSetup(Gurkin gurk, Direction.direction direction, Coordinates cords) {
         boolean valid = cords.validCoords(direction, gurk, gurkinBoard);
-        if (valid) {
+        if (valid && remaining_gurkins < 5) {
             gurkinBoard.placeGurkin(cords, direction, gurk);
+            for (int i = 0; i < unplacedGurks.size(); i++) {
+               if (unplacedGurks.get(i).getClass().equals(gurk.getClass())) {
+                   unplacedGurks.remove(i);
+                   break;
+               }
+            }
+            updateSidePanel(unplacedGurks);
             this.remaining_gurkins ++;
-
         }
-        if (!(remaining_gurkins < 5)) {
-            Turn.changeTurn();
+        if (remaining_gurkins >= 5) {
+            finalisePlacement();
         }
         return valid;
     }
@@ -134,5 +152,38 @@ public class  Player {
         copy.turnID = turnID;
         return copy;
     }
+
+    @Override
+    public void updateSidePanel(ArrayList<Gurkin> gurks) {
+        notifyPlacement(gurks);
+    }
+
+    public void notifyPlacement(ArrayList<Gurkin> gurks) {
+        for (PlayerObserver observer : playerObservers) {
+            observer.updateSidePanel(gurks);
+        }
+    }
+
+    public void registerObserver(PlayerObserver observer) {
+        playerObservers.add(observer);
+    }
+
+    public void finalisePlacement() {
+        for (PlayerObserver observer : playerObservers) {
+            observer.finalisePlacement();
+        }
+    }
+
+    public void resetPlacement() {
+        this.remaining_gurkins = 0;
+        this.gurkinBoard = new Board();
+        this.unplacedGurks = new ArrayList<Gurkin>();
+        unplacedGurks.add(new Pickle());
+        unplacedGurks.add(new Gherkin());
+        unplacedGurks.add(new Conichon());
+        unplacedGurks.add(new Yardlong());
+        unplacedGurks.add(new Zuchinni());
+    }
+
 }
 
