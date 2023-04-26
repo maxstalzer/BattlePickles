@@ -1,15 +1,13 @@
 package Gui;
 
 import Base.Coordinates;
-import Base.Direction;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Screen;
 
-public class Shot extends Canvas {
+public class Hit extends Canvas {
 
-    public Shot(Coordinates coords) {
+    public Hit(Coordinates coords) {
 
         double gridsize = Screen.getPrimary().getBounds().getMaxY()/12;
         setWidth(gridsize);

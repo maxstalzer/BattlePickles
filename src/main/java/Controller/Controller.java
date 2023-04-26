@@ -121,9 +121,32 @@ public class Controller {
     }
 
     public void endPlacement() {
-        Turn.changeTurn();
+        if (game.getMultiplayer()) {
+            switch (Turn.getTurn()) {
+                case "1":
+                    Turn.changeTurn();
+                    gameView.showPlacement(game.getPlayer2());
+                    break;
+                case "2":
+                    Turn.changeTurn();
+                    showGameplay();
+            }
+        } else {
+            Turn.changeTurn();
+            showGameplay();
+        }
+    }
+
+    public void showGameplay() {
+        game.getCurrentPlayer().getResultBoard().registerObserver(gameView.getShotContainer());
+        gameView.showGameplay(game.getCurrentPlayer());
 
     }
+
+    public void makeShot(Coordinates coordinates) {
+        game.getCurrentPlayer().shoot(game.getOpponent().getGurkinBoard(), coordinates);
+    }
+
 
 
 

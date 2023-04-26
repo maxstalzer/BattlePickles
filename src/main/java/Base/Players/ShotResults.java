@@ -21,15 +21,18 @@ public class ShotResults implements ResultObserver {
     @Override
     public void setHit(Coordinates coords) {
         shotBoard[coords.getX()][coords.getY()] = 'x';
+        notifyHit(coords);
     }
     @Override
     public void setMiss(Coordinates coords) {
         shotBoard[coords.getX()][coords.getY()] = 'o';
+        notifyMiss(coords);
     }
 
     @Override
     public void setKill (Coordinates coords) {
         shotBoard[coords.getX()][coords.getY()] = 'k';
+        notifyKill(coords);
     }
     public void addObserver(ResultObserver observer) {
         observers.add(observer);
@@ -50,6 +53,10 @@ public class ShotResults implements ResultObserver {
         for (ResultObserver observer : observers) {
             observer.setKill(coords);
         }
+    }
+
+    public void registerObserver(ResultObserver observer) {
+        observers.add(observer);
     }
 
 }

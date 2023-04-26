@@ -23,6 +23,9 @@ public class GameView extends Application {
 
     private Scene seaScene; // Sea scene
 
+    private ShootingContainer shotContainer; // Shot container
+    private Scene attackScene;// Attack scene
+
     public Container getContainer() {
         return container;
     }
@@ -41,6 +44,8 @@ public class GameView extends Application {
 
         this.container = new Container(controller);
         this.seaScene = new Scene(container);
+        this.shotContainer = new ShootingContainer(controller);
+        this.attackScene = new Scene(shotContainer);
         controller.showMainMenu(); // Show main menu
 
     }
@@ -150,6 +155,14 @@ public class GameView extends Application {
 
         primaryStage.setScene(seaScene);
 
+    }
+
+    public void showGameplay(Player player) {
+        primaryStage.setScene(attackScene);
+    }
+
+    public ShootingContainer getShotContainer() {
+        return shotContainer;
     }
 
 

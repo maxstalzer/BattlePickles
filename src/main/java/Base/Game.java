@@ -83,4 +83,11 @@ public class Game {
             player2.shoot(player1.getGurkinBoard(), coords);
         }
     }
+
+    public Player getOpponent() {
+        if (Turn.getTurn().equals("1")) {
+            return player2;
+        }
+        return player1;
+    }
 }

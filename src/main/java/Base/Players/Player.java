@@ -185,5 +185,9 @@ public class  Player implements PlayerObserver{
         unplacedGurks.add(new Zuchinni());
     }
 
+    public ShotResults getResultBoard() {
+        return shotResults;
+    }
+
 }
 
