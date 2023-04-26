@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import static Base.Direction.direction.Vertical;
@@ -26,7 +27,11 @@ public class SidePanel extends VBox {
 
         Button Quit = new Button("Quit");
         Quit.setOnAction(e -> {
-            controller.showMainMenu();
+            try {
+                controller.showMainMenu();
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
 
         });
         getChildren().add(Quit);

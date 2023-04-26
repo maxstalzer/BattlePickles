@@ -10,6 +10,8 @@ import Gui.GridTile;
 import Gui.GuiGurks;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+
 import static Base.Direction.direction.Horizontal;
 import static Base.Direction.direction.Vertical;
 
@@ -34,7 +36,7 @@ public class Controller {
     }
 
 
-    public void showMainMenu() {
+    public void showMainMenu() throws FileNotFoundException {
         gameView.startMainMenu();
     }
 

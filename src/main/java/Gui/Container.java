@@ -59,7 +59,7 @@ public class Container extends BorderPane { //This is the container that contain
 
                      */
 
-                    controller.placeGurkin(target.coords,Horizontal, Controller.gurkinID.Pickle);
+                    controller.placeGurkin(target.coords,Horizontal, Controller.gurkinID.Gherkin);
                 }
             }
 
