@@ -6,12 +6,12 @@ import com.j256.ormlite.support.DatabaseConnection;
 public class ServerTest {
 
         public static void main(String[] args) {
-
+            String databaseName = "jdbcdemo";
             // The URL of the database on your friend's computer
-            String databaseUrl = "jdbc:mysql://172.20.10.3:3306/jdbcdemo";
+            String databaseUrl = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
 
             // The username and password for the database
-            String username = "root";
+            String username = "sigurd";
             String password = "12345678";
 
             // Create a connection source with the specified URL, username, and password
@@ -26,7 +26,7 @@ public class ServerTest {
             // Check the connection to the database
             DatabaseConnection connection = null;
             try {
-                connection = connectionSource.getReadOnlyConnection("test123");
+                connection = connectionSource.getReadOnlyConnection("*");
                 System.out.println("Connection established.");
             } catch (SQLException e) {
                 System.out.println("Failed to establish connection: " + e.getMessage());

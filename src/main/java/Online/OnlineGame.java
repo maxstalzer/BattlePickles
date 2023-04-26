@@ -15,6 +15,8 @@ public class OnlineGame {
 
     private Player otherPlayer;
 
+    private boolean gameOver = false;
+
     public Player getCurrentPlayer() {
         return this.currentPlayer;
     }
@@ -22,9 +24,9 @@ public class OnlineGame {
         return this.otherPlayer;
     }
 
-    public OnlineGame() throws SQLException {
-        String databaseUrl = "jdbc:mysql://localhost:3306/game_db";
-        String databaseUsername = "root";
+    public OnlineGame(String databaseName) throws SQLException {
+        String databaseUrl = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+        String databaseUsername = "sigurd";
         String databasePassword = "12345678";
 
         ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, databaseUsername, databasePassword);
@@ -64,5 +66,15 @@ public class OnlineGame {
                 break;
             }
         }
+    }
+    // Needs to be implemented further
+    public void updateGameState() {}
+    // Needs to be implemented further
+    public Player getWinner() {
+        return currentPlayer;
+    }
+    // Needs to be implemented further
+    public boolean GameOver() {
+        return this.gameOver;
     }
 }
