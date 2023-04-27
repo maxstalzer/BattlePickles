@@ -77,20 +77,37 @@ public class Controller {
     }
 
 
-    public void startLocalMultiplayerGame(String text, String text1) { // Start a new local multiplayer game
+    public void startLocalMultiplayerGame(String player1Name, String player2Name) { // Start a new local multiplayer game
         game = new Game(true, this); // new multiplayer game
-        game.addGameObserver(gameView); // add game observer to game
-        game.getPlayer1().setName(text);  // set the name of player 1
-        game.getPlayer2().setName(text1); // set the name of player 2
+
+        // init views
+        gameView.initPlacementViews(); //Initialising the placement views of the players
         gameView.initAttackViews(); // initialising the attack views of the players
+        // Setting player names
+        game.getPlayer1().setName(player1Name);  // set the name of player 1
+        game.getPlayer2().setName(player2Name); // set the name of player 2
+
+        // Adding observers
+        game.addGameObserver(gameView); // add game observer to game
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer()); // register the placement container1 as an observer to player 1s board
+        game.getPlayer2().getGurkinBoard().registerBoardObserver(gameView.getContainer2()); // register the placement container2 as an observer to player 2s board
+        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel()); // register the sidepanel as an observer to player 1
+        game.getPlayer2().registerObserver(gameView.getContainer2().getSidepanel()); // register the sidepanel as an observer to player 2
+
+
+
+
+
+
         gameView.showPlacement(Turn.getTurn(), game.getMultiplayer()); // show the placement scene for player 1
     }
 
     // Creates a new singleplayer game with the given difficulty
     public void startSingleplayerGame(String playerName, String difficulty) {
-        game = new Game(false, this); // new singleplayer game
+        game = new Game(false, this);// new singleplayer game
+        gameView.initPlacementViews(); // init the placement views
         game.addGameObserver(gameView); // add game observer to game
-        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel());
+        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel()); // register the sidepanel as an observer to player 1
         game.getPlayer1().setName(playerName);
         if (difficulty == "Easy") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
