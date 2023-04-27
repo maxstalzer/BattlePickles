@@ -93,11 +93,6 @@ public class Board implements BoardObserver{ // Board class
         notifyPlacedGurkin(g, dir, startCoor);
     }
 
-//    public void endPlacement() { // End the placement of gurkins
-//        for (BoardObserver observer : observers) {
-//            observer.endPlacement();
-//        }
-//    }
 
     public Board deepClone() { // Deep clone the board
         Board clone = new Board();

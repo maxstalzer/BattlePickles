@@ -18,6 +18,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class GameView extends Application implements GameObserver {
 
     private Controller controller; // Controller
@@ -131,7 +133,13 @@ public class GameView extends Application implements GameObserver {
         multiplayerButton.setOnAction(e -> controller.showMultiplayer());
 
         Button LoadSaved = new Button("Load saved game");
-        // LoadSaved.setOnAction(e -> controller.showMultiplayer());
+         LoadSaved.setOnAction(e -> {
+             try {
+                 controller.showLoadSavedGame();
+             } catch (Exception ex) {
+                 throw new RuntimeException(ex);
+             }
+         });
 
         layout.getChildren().addAll(label2, AIButton, multiplayerButton, LoadSaved, backButton);
         layout.setAlignment(Pos.CENTER);
@@ -239,6 +247,38 @@ public class GameView extends Application implements GameObserver {
         backButton.setOnAction(e -> controller.showMainMenu());
 
         layout.getChildren().addAll(label1, backButton);
+        layout.setAlignment(Pos.CENTER);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public void showLoadSavedGame(List<String> databaseNames) {
+        VBox layout = new VBox();
+        Scene scene = new Scene(layout, 500, 500);
+
+        Label label3 = new Label("Select Game to load");
+
+        MenuButton menuButton = new MenuButton("");
+        // Add all the names of the games in the database to the menu using a for loop
+        for (String gameName : databaseNames) {
+            MenuItem menuItem = new MenuItem(gameName);
+            menuButton.getItems().add(menuItem);
+        }
+
+        menuButton.setText("Choose Game Save");
+
+        menuButton.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
+            menuButton.setText(menuItem.getText());
+        }));
+
+        Button startButton = new Button("Load Game");
+        startButton.setOnAction(e -> controller.loadGame(menuButton.getText()));
+
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> controller.showMainMenu());
+
+        layout.getChildren().addAll(label3, menuButton, startButton, backButton);
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);

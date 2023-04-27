@@ -3,27 +3,28 @@ package Base.Players;
 
 import Base.*;
 import Base.Gurkins.*;
+import com.j256.ormlite.field.DatabaseField;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-//import com.j256.ormlite.field.DatabaseField;
-//import com.j256.ormlite.table.DatabaseTable;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-//@DatabaseTable(tableName = "Player")
+@DatabaseTable(tableName = "Player")
 public class  Player implements PlayerObserver, PlayerAttackObserver{
-//    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false)
     String name; // The name of the player
-//    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false)
     int remaining_gurkins; //   The number of gurkins remaining to be shot
-//    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
     Board gurkinBoard; // The board that the player uses to place their gurkins
     String turnID; // stores if it's player 1 or 2 (unknown)
 
-//    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false)
     private Boolean CurrentPlayer;
 
-//    @DatabaseField(generatedId = true)
+    @DatabaseField(generatedId = true)
     private int id;
 
     private Set<PlayerObserver> playerObservers = new HashSet<PlayerObserver>();
@@ -114,6 +115,7 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
     @Override
     public void changeTurn() {
         Turn.changeTurn();
+        System.out.println("Player " + Turn.getTurn() + "'s turn");
         notifyTurnObservers();
     }
 
@@ -201,6 +203,10 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
 
     public ShotResults getResultBoard() {
         return shotResults;
+    }
+
+    public int getId () {
+        return this.id;
     }
 
 

@@ -12,6 +12,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.DatabaseConnection;
 import com.j256.ormlite.table.TableUtils;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -19,6 +20,8 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+
 
 
 public class Database {
@@ -58,6 +61,10 @@ public class Database {
         TableUtils.createTableIfNotExists(connectionSource, Gurkin.class);
 
         connection.close();
+    }
+
+    public Database() {
+
     }
 
     public void updatePlayer(Player player) throws Exception {
@@ -161,7 +168,20 @@ public class Database {
         }
     }
 
+    public List<String> getDatabases() throws Exception {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://172.20.10.3:3306/", username, password);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SHOW DATABASES");
 
+        List<String> databases = new ArrayList<>();
 
+        while (resultSet.next()) {
+            String databaseName = resultSet.getString("Database");
+            if (!((databaseName.equals("information_schema")) || (databaseName.equals("mysql")) || (databaseName.equals("performance_schema")) || (databaseName.equals("sys")))) {
+                databases.add(databaseName);
+            }
+        }
+        return databases;
+    }
 }
 

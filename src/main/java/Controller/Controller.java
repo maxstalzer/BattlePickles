@@ -10,6 +10,7 @@ import Base.Turn;
 import Gui.GameView;
 import Gui.GridTile;
 import Gui.GuiGurks;
+import Online.Database;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -24,6 +25,8 @@ public class Controller {
     private Stage primaryStage;
 
     public Gurkin Gurktype;
+
+    private Database database;
 
 
     public enum gurkinID {
@@ -55,13 +58,27 @@ public class Controller {
         gameView.showGameMode();
     }
 
-    public void startLocalMultiplayerGame(String text, String text1) {
-        game = new Game(true, this);
-        game.addGameObserver(gameView);
-        game.getPlayer1().setName(text);
-        game.getPlayer2().setName(text1);
-        gameView.initAttackViews();
-        gameView.showPlacement(game.getPlayer1());
+    public void showLoadSavedGame() throws Exception {
+        database = new Database();
+        database.TestConnection("");
+        gameView.showLoadSavedGame(database.getDatabases());
+    }
+
+    public void loadGame(String gameName) {
+        System.out.println("loaded");
+
+//        game = database.loadGame(gameView.getSelectedGame());
+//        game.addGameObserver(gameView);
+//        gameView.initAttackViews();
+//        gameView.showPlacement(game.getPlayer1());
+    }
+    public void startLocalMultiplayerGame(String text, String text1) { // Start a new local multiplayer game
+        game = new Game(true, this); // new multiplayer game
+        game.addGameObserver(gameView); // add game observer to game
+        game.getPlayer1().setName(text);  // set the name of player 1
+        game.getPlayer2().setName(text1); // set the name of player 2
+        gameView.initAttackViews(); // initialising the attack views of the players
+        gameView.showPlacement(game.getPlayer1()); // show the placement scene for player 1
     }
 
     // Creates a new singleplayer game with the given difficulty
@@ -145,6 +162,7 @@ public class Controller {
     }
 
     public void showGameplay() {
+        System.out.println(Turn.getTurn());
         game.getCurrentPlayer().getResultBoard().registerObserver(gameView.getCurrentAttackView(Turn.getTurn()));
         game.getCurrentPlayer().registerAttackObserver(gameView.getCurrentAttackView(Turn.getTurn()));
         gameView.showGameplay(Turn.getTurn(), game.getMultiplayer());
@@ -153,6 +171,7 @@ public class Controller {
 
     public void makeShot(Coordinates coordinates) {
         game.attack(coordinates);
+        System.out.println(coordinates.getX() + coordinates.getY() + " shot");
 
     }
 
@@ -160,8 +179,10 @@ public class Controller {
         showGameplay();
         if (Turn.getTurn().equals("2") && !game.getMultiplayer()) {
            Coordinates aishot = game.getAIPlayer().generateAttack();
+            System.out.println(aishot.getX() + aishot.getY() + "AI shot");
            makeShot(aishot);
         }
+
     }
 
 
