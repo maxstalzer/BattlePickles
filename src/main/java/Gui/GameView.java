@@ -261,10 +261,12 @@ public class GameView extends Application implements GameObserver {
 
     }
 
-    public void showGameplay(String turn, Boolean singleplayer) { // Show gameplay scene
+    public void showGameplay(String turn, Boolean multiplayer) { // Show gameplay scene
+        System.out.println(turn);
         if (turn.equals("1") ) {
             primaryStage.setScene(attackScene1);
-        } else if (turn.equals("2") && !singleplayer) {
+        } else if (turn.equals("2") && multiplayer) {
+            System.out.println("showing attack scene 2");
             primaryStage.setScene(attackScene2);
         }
     }

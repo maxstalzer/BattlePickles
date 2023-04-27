@@ -89,14 +89,17 @@ public class Controller {
 
         // Adding observers
         game.addGameObserver(gameView); // add game observer to game
+        // register placement observers
         game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer()); // register the placement container1 as an observer to player 1s board
         game.getPlayer2().getGurkinBoard().registerBoardObserver(gameView.getContainer2()); // register the placement container2 as an observer to player 2s board
         game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel()); // register the sidepanel as an observer to player 1
         game.getPlayer2().registerObserver(gameView.getContainer2().getSidepanel()); // register the sidepanel as an observer to player 2
 
-
-
-
+        // register attack observers
+        game.getPlayer1().getResultBoard().registerObserver(gameView.getP1AttackView()); // register shot board ovserver
+        game.getPlayer1().registerAttackObserver(gameView.getP1AttackView()); // regiseter attackview observers
+        game.getPlayer2().getResultBoard().registerObserver(gameView.getP2AttackView()); // register shot board ovserver
+        game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
 
 
         gameView.showPlacement(Turn.getTurn(), game.getMultiplayer()); // show the placement scene for player 1
@@ -105,10 +108,24 @@ public class Controller {
     // Creates a new singleplayer game with the given difficulty
     public void startSingleplayerGame(String playerName, String difficulty) {
         game = new Game(false, this);// new singleplayer game
+        game.getPlayer1().setName(playerName); // init player name
+
         gameView.initPlacementViews(); // init the placement views
+        gameView.initAttackViews(); // init the attack views'
+
+        // Adding observers
         game.addGameObserver(gameView); // add game observer to game
+        // placement observers
         game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel()); // register the sidepanel as an observer to player 1
-        game.getPlayer1().setName(playerName);
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer()); // register the placement container1 as an observer to player 1s board
+
+        //attack observers
+        game.getPlayer1().getResultBoard().registerObserver(gameView.getP1AttackView()); // register shot board ovserver
+        game.getPlayer1().registerAttackObserver(gameView.getP1AttackView()); // regiseter attackview observers
+        game.getPlayer2().getResultBoard().registerObserver(gameView.getP2AttackView()); // register shot board ovserver
+        game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
+
+        // Setting AI difficulty
         if (difficulty == "Easy") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
         } else if (difficulty == "Medium") {
@@ -116,8 +133,8 @@ public class Controller {
         } else if (difficulty == "Hard") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Hard, game.getPlayer1());
         }
-        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer());
-        gameView.initAttackViews();
+
+
         gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
 
     }
@@ -184,26 +201,22 @@ public class Controller {
     }
 
     public void showGameplay() {
-        System.out.println(Turn.getTurn());
-        game.getCurrentPlayer().getResultBoard().registerObserver(gameView.getCurrentAttackView(Turn.getTurn()));
-        game.getCurrentPlayer().registerAttackObserver(gameView.getCurrentAttackView(Turn.getTurn()));
         gameView.showGameplay(Turn.getTurn(), game.getMultiplayer());
     }
 
 
     public void makeShot(Coordinates coordinates) {
         game.attack(coordinates);
-        System.out.println(coordinates.getX() + coordinates.getY() + " shot");
 
     }
 
     public void changeTurnView() {
-        showGameplay();
         if (Turn.getTurn().equals("2") && !game.getMultiplayer()) {
            Coordinates aishot = game.getAIPlayer().generateAttack();
             System.out.println(aishot.getX() + aishot.getY() + "AI shot");
            makeShot(aishot);
         }
+        showGameplay();
 
     }
 

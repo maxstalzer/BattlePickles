@@ -72,7 +72,7 @@ public class SidePanel extends VBox implements PlayerObserver {
         MenuItem vert = new MenuItem("Vertical");
         vert.setStyle( "-fx-font-family: Joystix ; -fx-font-size: 18;");
         menu.setText("Horizontal");
-//see if we would like to use this as it is
+        //see if we would like to use this as it is
         menu.getItems().addAll( horiz, vert);
         getChildren().add(menu);
         //menu.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {

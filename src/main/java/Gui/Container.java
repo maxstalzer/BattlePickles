@@ -99,4 +99,6 @@ public class Container extends BorderPane implements BoardObserver{ //This is th
         cross.getGraphicsContext2D().drawImage(image,0,0,gridsize,gridsize);
     }
 
+    //todo: fix that all gurkins are the same for player2
+
 }
