@@ -17,6 +17,7 @@ import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -46,6 +47,9 @@ public class GameView extends Application implements GameObserver {
     private MediaPlayer mainMenuMusic;
     private MediaPlayer finalSound;
 
+    private double screenWidth;
+
+    private double screenHeight;
 
 
 
@@ -67,6 +71,8 @@ public class GameView extends Application implements GameObserver {
         this.primaryStage = primaryStage;
         this.mainMenuMusic = new MediaPlayer(new Media(new File("src/main/resources/menu.mp3").toURI().toString()));
         this.finalSound = new MediaPlayer(new Media(new File("src/main/resources/NothingToSeeHere.mp3").toURI().toString()));
+        this.screenHeight = Screen.getPrimary().getBounds().getHeight();
+        this.screenWidth = Screen.getPrimary().getBounds().getWidth();
         controller.showMainMenu(); // Show main menu
 
     }
@@ -74,8 +80,8 @@ public class GameView extends Application implements GameObserver {
     public void initPlacementViews() { // Initialize placement views
         this.container1 = new Container(controller);
         this.container2 = new Container(controller);
-        this.placementScene1 = new Scene(container1);
-        this.placementScene2 = new Scene(container2);
+        this.placementScene1 = new Scene(container1, screenWidth, screenHeight);
+        this.placementScene2 = new Scene(container2, screenWidth, screenHeight);
     }
 
     public void initAttackViews() { // Initialize attack views
@@ -84,12 +90,12 @@ public class GameView extends Application implements GameObserver {
         attackScene1 = new Scene(shotContainer1);
         shotContainer2 = new ShootingContainer(controller);
         attackScene2 = new Scene(shotContainer2);
-        VBox layout = new VBox();
-        waitScene = new Scene(layout, 500, 500);
-        Label label1 = new Label("Waitig for other player");
-        label1.setFont(new Font("Arial Bold", 24));
-        layout.getChildren().addAll(label1);
-        layout.setAlignment(Pos.CENTER);
+//        VBox layout = new VBox();
+//        waitScene = new Scene(layout, screenWidth, screenHeight);
+//        Label label1 = new Label("Waitig for other player");
+//        label1.setFont(new Font("Arial Bold", 24));
+//        layout.getChildren().addAll(label1);
+//        layout.setAlignment(Pos.CENTER);
     }
 
 
@@ -106,7 +112,7 @@ public class GameView extends Application implements GameObserver {
 
     public void startMainMenu() { // Start main menu
         BorderPane layout = new BorderPane();
-        Scene scene = new Scene(layout, 700, 700);
+        Scene scene = new Scene(layout, screenWidth, screenHeight);
 
         //Creating an image
         Image image = new Image("Brine copy.gif");
@@ -148,7 +154,7 @@ public class GameView extends Application implements GameObserver {
         layout.setStyle(
                 "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
 
-        Scene scene = new Scene(layout, 700, 700);
+        Scene scene = new Scene(layout, screenWidth, screenHeight);
         Image image = new Image("Brine copy.gif");
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
 
@@ -177,12 +183,13 @@ public class GameView extends Application implements GameObserver {
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
-        primaryStage.show();
+//        primaryStage.setFullScreen(true);
+//        primaryStage.show();
     }
 
     public void showMultiplayer() { // Show multiplayer menu
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, 700, 700);
+        Scene scene = new Scene(layout, screenWidth, screenHeight);
         Image image = new Image("Brine copy.gif");
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
 
@@ -209,14 +216,13 @@ public class GameView extends Application implements GameObserver {
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
     public void showSingleplayer() { // Show singleplayer menu
         VBox layout = new VBox();
         layout.setStyle(
                 "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
-        Scene scene = new Scene(layout, 700, 700);
+        Scene scene = new Scene(layout, screenWidth, screenHeight);
         Image image = new Image("Brine copy.gif");
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
 
@@ -247,7 +253,6 @@ public class GameView extends Application implements GameObserver {
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
     public void showPlacement(String turn, Boolean multiplayer) { // Show placement scene
@@ -296,8 +301,9 @@ public class GameView extends Application implements GameObserver {
             hbox = new HBox(10, container1, shotContainer1);
             VBox vbox = new VBox(hbox, panel);
 
-            attackScene1 = new Scene(vbox, 1000, 3000);
+            attackScene1 = new Scene(vbox, screenWidth, screenHeight);
             primaryStage.setScene(attackScene1);
+//            primaryStage.setFullScreen(true);
         } else if (turn.equals("2") && multiplayer) {
             container2.hideSidePanel();
 
@@ -309,12 +315,10 @@ public class GameView extends Application implements GameObserver {
             hbox = new HBox(10, container2, shotContainer2);
             VBox vbox = new VBox(hbox, panel);
 
-            attackScene2 = new Scene(vbox, 1000, 3000);
+            attackScene2 = new Scene(vbox, screenWidth, screenHeight);
             primaryStage.setScene(attackScene2);
         }
     }
-
-
 
     public Container getCurrentPlacementView(String turn) {
         if (turn.equals("1")) {
@@ -346,7 +350,7 @@ public class GameView extends Application implements GameObserver {
     public void showWinner(Player winner) {
         mainMenuMusic.stop();
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, 700, 700);
+        Scene scene = new Scene(layout, screenWidth, screenWidth);
         BackgroundImage image = new BackgroundImage(new Image("Brine copy.gif"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
         layout.setBackground(new Background(image));
 
@@ -367,12 +371,11 @@ public class GameView extends Application implements GameObserver {
 
 
         primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
     public void showLoadSavedGame(List<String> databaseNames) {
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, 500, 500);
+        Scene scene = new Scene(layout, screenWidth, screenHeight);
 
         Label label3 = new Label("Select Game to load");
 
@@ -405,12 +408,11 @@ public class GameView extends Application implements GameObserver {
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
     public void showSaveGame(String exceptionMessage) {
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, 500, 500);
+        Scene scene = new Scene(layout, screenWidth, screenHeight);
 
         Label label3 = new Label(exceptionMessage);
 
@@ -435,12 +437,12 @@ public class GameView extends Application implements GameObserver {
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
-        primaryStage.show();
+
     }
 
     public void showCheckPlacementView() {
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, 500, 500);
+        Scene scene = new Scene(layout, screenWidth, screenHeight);
 
         Label label3 = new Label("Are you sure you want to place your ships here?");
 
@@ -460,7 +462,6 @@ public class GameView extends Application implements GameObserver {
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
-        primaryStage.show();
     }
 }
 
