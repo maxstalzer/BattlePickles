@@ -10,6 +10,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 
+import static Base.Direction.direction.Horizontal;
 import static Base.Direction.direction.Vertical;
 
 public class SidePanelGurks extends GuiGurks {
@@ -32,22 +33,22 @@ public class SidePanelGurks extends GuiGurks {
         setScale(0.5);
         if (gurktype instanceof Pickle) {
             setImage(new Pickle());
-            sidePanel.setGurktypeField(gurkinID.Pickle);
+            setGurktypeField(gurkinID.Pickle);
             toFront();
         } else if (gurktype instanceof Yardlong) {
             setImage(new Yardlong());
-            sidePanel.setGurktypeField(gurkinID.Yardlong);
+            setGurktypeField(gurkinID.Yardlong);
             toFront();
         } else if (gurktype instanceof Zuchinni) {
-            sidePanel.setGurktypeField(gurkinID.Zuchinni);
+            setGurktypeField(gurkinID.Zuchinni);
             setImage(new Zuchinni());
             toFront();
         } else if (gurktype instanceof Gherkin) {
-            sidePanel.setGurktypeField(gurkinID.Gherkin);
+            setGurktypeField(gurkinID.Gherkin);
             setImage(new Gherkin());
             toFront();
         } else if (gurktype instanceof Conichon) {
-            sidePanel.setGurktypeField(gurkinID.Conichon);
+            setGurktypeField(gurkinID.Conichon);
             setImage(new Conichon());
             toFront();
         }
@@ -55,26 +56,24 @@ public class SidePanelGurks extends GuiGurks {
             @Override
             public void handle(Event event) {
                 SidePanelGurks gurk;
-//               ;
+
                 if (event.getTarget() instanceof SidePanelGurks) {
 
                     gurk = (SidePanelGurks) event.getTarget();
 
-//                    System.out.println(gurk.gurktype);
-
-                    if (gurk.gurktype instanceof Pickle) {
+                    if (gurk.getGurktypeField().equals(gurkinID.Pickle)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Pickle);
                         System.out.println("Pickle");
-                    } else if (gurk.gurktype instanceof Yardlong) {
+                    } else if (gurk.getGurktypeField().equals(gurkinID.Yardlong)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Yardlong);
                         System.out.println("2");
-                    } else if (gurk.gurktype instanceof Zuchinni) {
+                    } else if (gurk.getGurktypeField().equals(gurkinID.Zuchinni)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Zuchinni);
                         System.out.println("3");
-                    } else if (gurk.gurktype instanceof Gherkin) {
+                    } else if (gurk.getGurktypeField().equals(gurkinID.Gherkin)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Gherkin);
                         System.out.println("4");
-                    } else if (gurk.gurktype instanceof Conichon) {
+                    } else if (gurk.getGurktypeField().equals(gurkinID.Conichon)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Conichon);
                         System.out.println("5");
                     }

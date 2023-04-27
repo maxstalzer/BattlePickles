@@ -61,9 +61,9 @@ public class Board implements BoardObserver{ // Board class
     public String attack(Coordinates a) { // Attack a tile at coordinates and return the result
         if (!getTile(a).isHit()) {
             getTile(a).hitTile();
+            tileHit(a);
             if (getTile(a).hasGurkin()) {
                 getTile(a).getGurkin().decrementLives();
-                tileHit(a);
                return "hit";
             } else {
                 return "miss";

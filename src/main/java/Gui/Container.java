@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 
 import javax.swing.border.Border;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static Base.Direction.direction.Horizontal;
@@ -28,10 +29,16 @@ import static Base.Direction.direction.Vertical;
 
 public class Container extends Pane implements BoardObserver{ //This is the container that contains the Sea class
     Coordinates Gurks;
+
+    private List<GuiGurks> placedGurks;
     double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
 
     public Coordinates getGurks() {
         return Gurks;
+    }
+
+    private void removeGurkin (GuiGurks gurk) {
+        getChildren().remove(gurk);
     }
 
     public void setGurks(Coordinates gurks) {
@@ -53,13 +60,10 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
     Sea sea;
 
     public Container(Controller controller) {
+        this.placedGurks = new ArrayList<>(); //This is a list of all the gurks that have been placed on the board
         sea = new Sea();
-//        setCenter(sea);
-        sidepanel = new SidePanel(controller);
-////        setRight(sidepanel);
+        sidepanel = new SidePanel(controller, this);
         this.controller = controller;
-//        getChildren().add(new Sea());
-//        getChildren().add(sidepanel);
 
         HBox hbox = new HBox();
         hbox.getChildren().add(sea);
@@ -73,15 +77,7 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
 
                 if (event.getTarget() instanceof GridTile) { // If what you clicked on was a Tile ("GridTile) execute this code
 
-                    GridTile target = (GridTile) event.getTarget(); //save the GridTile Object as "target"
-                    /*
-                    GuiGurks gurk = new GuiGurks(target.coords,new Pickle(),Vertical); // create an instance of the type GuiGurk at the target coordinates. Here we need to have a way of specifying the two other arguments; gurktype and direction, respectively
-                    gurk.relocate(target.coords.getX()*(gridsize),target.coords.getY()*gridsize); //This places the gurk on the target coordinates
-                    getChildren().add(gurk); //this adds the gurk as a child on this object, ie the Container
-                    toFront(); //Moves it to the front, so that it displays over the grid color
-                    setGurkplace(target.coords);
-
-                     */
+                    GridTile target = (GridTile) event.getTarget(); //save the GridTile Object as "target"'
 
                     controller.placeGurkin(target.coords,controller.getChosenDir(), controller.getChosenGurk());
                 }
@@ -105,17 +101,19 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
         gurk.relocate(coords.getX()*(gridsize),coords.getY()*gridsize); //This places the gurk on the target coordinates
         getChildren().add(gurk); //this adds the gurk as a child on this object, ie the Container
         toFront(); //Moves it to the front, so that it displays over the grid color
-
+        placedGurks.add(gurk);
+        sidepanel.clearGurktypeField();
+//        sidepanel.removeGurkin(gurk.getGurktype());
     }
 
     @Override
     public void tileHit(Coordinates coords) {
-        Canvas cross = new Canvas(gridsize,gridsize);
-        Image image = new Image("cross.png");
-        cross.getGraphicsContext2D().drawImage(image,0,0,gridsize,gridsize);
+        Hit hit = new Hit(coords);
+        hit.relocate(coords.getX()*(gridsize),coords.getY()*gridsize);
+        getChildren().add(hit);
+        toFront();
+        // todo: add some kind of hit response?
     }
-
-    //todo: fix that all gurkins are the same for player2
 
     public void hideSidePanel() {
         sidepanel.setVisible(false);
@@ -127,6 +125,18 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
                 sea.getGridTiles(j,i).setOnMouseClicked(null);
             }
         }
+    }
+
+    public void resetPlacement() {
+        for (GuiGurks gurk: placedGurks) {
+            removeGurkin(gurk);
+        }
+        placedGurks.clear();
+        sidepanel.initSidePanel();
+    }
+
+    public List<GuiGurks> getPlacedGurks() {
+        return placedGurks;
     }
 
 }

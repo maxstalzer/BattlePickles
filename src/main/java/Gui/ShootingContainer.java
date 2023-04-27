@@ -54,7 +54,7 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
         kill.relocate(coords.getX() * (gridsize), coords.getY() * gridsize);
         getChildren().add(kill);
         toFront();
-        // TODO: needs to maybe remove the the hit mark from the view
+
     }
 
     @Override
