@@ -254,6 +254,7 @@ public class GameView extends Application implements GameObserver {
 
     public void showPlacement(String turn, Boolean multiplayer) { // Show placement scene
         if (turn.equals("1")) { // Shows the placement scene for player 1
+
             primaryStage.setScene(placementScene1);
         } else if (turn.equals("2") && multiplayer) {
             primaryStage.setScene(placementScene2);
@@ -262,11 +263,34 @@ public class GameView extends Application implements GameObserver {
     }
 
     public void showGameplay(String turn, Boolean multiplayer) { // Show gameplay scene
-        System.out.println(turn);
+        HBox hbox;
         if (turn.equals("1") ) {
+            container1.hideSidePanel();
+            container1.setScaleX(0.6);
+            container1.setScaleY(0.6);
+
+            shotContainer1.setScaleY(0.6);
+            shotContainer1.setScaleX(0.6);
+
+            hbox = new HBox(container1, shotContainer1);
+
+//            hbox.setSpacing(50);
+            // hbox.setAlignment(Pos.CENTER);
+            attackScene1 = new Scene(hbox);
             primaryStage.setScene(attackScene1);
         } else if (turn.equals("2") && multiplayer) {
-            System.out.println("showing attack scene 2");
+            container2.hideSidePanel();
+
+            container2.setScaleX(0.6);
+            container2.setScaleY(0.6);
+
+            shotContainer2.setScaleY(0.6);
+            shotContainer2.setScaleX(0.6);
+
+            hbox = new HBox(container2, shotContainer2);
+//            hbox.setSpacing(20);
+//            hbox.setAlignment(Pos.CENTER);
+            attackScene2 = new Scene(hbox);
             primaryStage.setScene(attackScene2);
         }
     }

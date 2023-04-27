@@ -123,4 +123,5 @@ public class SidePanel extends VBox implements PlayerObserver {
     }
 
 
+
 }

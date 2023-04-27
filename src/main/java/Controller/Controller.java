@@ -188,10 +188,12 @@ public class Controller {
         if (game.getMultiplayer()) {
             switch (Turn.getTurn()) {
                 case "1":
+                    gameView.getContainer().removeMouseClick();
                     Turn.changeTurn();
                     gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
                     break;
                 case "2":
+                    gameView.getContainer2().removeMouseClick();
                     Turn.changeTurn();
                     showGameplay();
             }

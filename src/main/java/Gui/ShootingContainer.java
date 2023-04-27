@@ -17,6 +17,7 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
     double gridsize = Screen.getPrimary().getBounds().getMaxY() / 12;  // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
     public ShootingContainer(Controller controller) {
         this.controller = controller;
+
         getChildren().add(new Sea()); //Here we add the sea as a child in the Pane ie. makes it contain an instance of the sea object
         setOnMouseClicked(new EventHandler<Event>() { //An event handler which activates when you click on the Container.
             @Override
@@ -60,5 +61,7 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
     public void changeTurn() {
         controller.changeTurnView();
     }
+
+
 
 }

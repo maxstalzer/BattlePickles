@@ -8,7 +8,10 @@ import Controller.Controller;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HorizontalDirection;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Screen;
@@ -16,13 +19,14 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 
 
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.List;
 
 import static Base.Direction.direction.Horizontal;
 import static Base.Direction.direction.Vertical;
 
-public class Container extends BorderPane implements BoardObserver{ //This is the container that contains the Sea class
+public class Container extends Pane implements BoardObserver{ //This is the container that contains the Sea class
     Coordinates Gurks;
     double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
 
@@ -42,15 +46,27 @@ public class Container extends BorderPane implements BoardObserver{ //This is th
         this.sidepanel = sidepanel;
     }
 
+
     SidePanel sidepanel;
 
     Controller controller;
+    Sea sea;
 
     public Container(Controller controller) {
-        setCenter(new Sea());
+        sea = new Sea();
+//        setCenter(sea);
         sidepanel = new SidePanel(controller);
-        setRight(sidepanel);
+////        setRight(sidepanel);
         this.controller = controller;
+//        getChildren().add(new Sea());
+//        getChildren().add(sidepanel);
+
+        HBox hbox = new HBox();
+        hbox.getChildren().add(sea);
+        hbox.getChildren().add(sidepanel);
+
+        getChildren().add(hbox);
+
         setOnMouseClicked(new EventHandler<Event>() { //An event handler which activates when you click on the Container.
             @Override
             public void handle(Event event) {
@@ -100,5 +116,17 @@ public class Container extends BorderPane implements BoardObserver{ //This is th
     }
 
     //todo: fix that all gurkins are the same for player2
+
+    public void hideSidePanel() {
+        sidepanel.setVisible(false);
+    }
+
+    public void removeMouseClick() {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                sea.getGridTiles(j,i).setOnMouseClicked(null);
+            }
+        }
+    }
 
 }
