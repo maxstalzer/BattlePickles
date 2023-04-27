@@ -114,7 +114,6 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
     @Override
     public void changeTurn() {
         Turn.changeTurn();
-        System.out.println("Player " + Turn.getTurn() + "'s turn");
         notifyTurnObservers();
     }
 

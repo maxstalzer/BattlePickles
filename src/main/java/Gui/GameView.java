@@ -56,13 +56,15 @@ public class GameView extends Application implements GameObserver {
     public void start(Stage primaryStage) { // Start method
         this.controller = new Controller(this);
         this.primaryStage = primaryStage;
+        controller.showMainMenu(); // Show main menu
 
+    }
+
+    public void initPlacementViews() { // Initialize placement views
         this.container1 = new Container(controller);
         this.container2 = new Container(controller);
         this.placementScene1 = new Scene(container1);
         this.placementScene2 = new Scene(container2);
-        controller.showMainMenu(); // Show main menu
-
     }
 
     public void initAttackViews() { // Initialize attack views
@@ -95,22 +97,33 @@ public class GameView extends Application implements GameObserver {
 
     public void startMainMenu() { // Start main menu
         BorderPane layout = new BorderPane();
-        Scene scene = new Scene(layout, 500, 500);
+        Scene scene = new Scene(layout, 700, 700);
 
         //Creating an image
         Image image = new Image("Brine copy.gif");
 
         //Setting the image view
-        ImageView imageView = new ImageView(image);
+        //ImageView imageView = new ImageView(image);
 
         Label label1 = new Label("BattlePickles ©");
-        label1.setFont(new Font("Arial Bold", 24));
+        //label1.setFont(new Font("Arial Bold", 24));
+        label1.setStyle("-fx-font-family: Joystix ; -fx-font-size: 35;");
+       // Label testControl = new Label("TRON");
+        //testControl.setStyle("-fx-font-family: TRON; -fx-font-size: 120;");
+
+        Button startButton = new Button("START");
 
 
-        Button startButton = new Button("Start");
         startButton.setOnAction(e -> showGameMode());
 
+
+
+
         VBox centerBox = new VBox(label1, startButton);
+        centerBox.setStyle("-fx-background-color: transparent;" +
+                "-fx-font-family: Joystix ; " +
+                "-fx-font-size: 24;" +
+                "-fx-border-color: transparent, black;");
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setSpacing(20); // Add spacing between elements
 
@@ -125,9 +138,17 @@ public class GameView extends Application implements GameObserver {
 
     public void showGameMode() { // Show game mode menu
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, 500, 500);
+        layout.setStyle(
+                "-fx-font-family: Joystix ; " +
+                "-fx-font-size: 18;" +
+                "-fx-border-color: transparent, black;");
+
+        Scene scene = new Scene(layout, 700, 700);
+        Image image = new Image("Brine copy.gif");
+        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
 
         Label label2 = new Label("Game Select");
+        label2.setStyle("-fx-font-family: Joystix ; -fx-font-size: 24;");
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showMainMenu());
@@ -156,13 +177,24 @@ public class GameView extends Application implements GameObserver {
 
     public void showMultiplayer() { // Show multiplayer menu
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, 500, 500);
+        Scene scene = new Scene(layout, 700, 700);
+        Image image = new Image("Brine copy.gif");
+        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
+
+        layout.setStyle(
+                "-fx-font-family: Joystix ; " +
+                        "-fx-font-size: 18;" +
+                        "-fx-border-color: transparent, black;");
 
         Label label4 = new Label("Input player names");
+        label4.setStyle("-fx-font-family: Joystix ; " +
+                "-fx-font-size: 24;" );
 
         TextField p1NameField = new TextField();
+        p1NameField.setStyle("-fx-font-family: Joystix ; + -fx-font-size: 18;");
         p1NameField.setMaxWidth(100);
         TextField p2NameField = new TextField();
+        p1NameField.setStyle("-fx-font-family: Joystix ; + -fx-font-size: 18;");
         p2NameField.setMaxWidth(100);
 
         Button startButton = new Button("Start Game");
@@ -180,10 +212,21 @@ public class GameView extends Application implements GameObserver {
 
     public void showSingleplayer() { // Show singleplayer menu
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, 500, 500);
+        layout.setStyle(
+                "-fx-font-family: Joystix ; " +
+                        "-fx-font-size: 18;" +
+                        "-fx-border-color: transparent, black;");
+        Scene scene = new Scene(layout, 700, 700);
+        Image image = new Image("Brine copy.gif");
+        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
+
 
         Label label3 = new Label("AI Difficulty");
         Label label5 = new Label("Player name");
+        label3.setStyle("-fx-font-family: Joystix ; " +
+                "-fx-font-size: 24;" );
+        label5.setStyle("-fx-font-family: Joystix ; " +
+                "-fx-font-size: 24;" );
 
         TextField p1NameField = new TextField();
         p1NameField.setMaxWidth(100);
@@ -210,19 +253,44 @@ public class GameView extends Application implements GameObserver {
     }
 
     public void showPlacement(String turn, Boolean multiplayer) { // Show placement scene
-        if (turn.equals("1")) {
+        if (turn.equals("1")) { // Shows the placement scene for player 1
+
             primaryStage.setScene(placementScene1);
         } else if (turn.equals("2") && multiplayer) {
             primaryStage.setScene(placementScene2);
         }
 
-
     }
 
-    public void showGameplay(String turn, Boolean singleplayer) { // Show gameplay scene
+    public void showGameplay(String turn, Boolean multiplayer) { // Show gameplay scene
+        HBox hbox;
         if (turn.equals("1") ) {
+            container1.hideSidePanel();
+            container1.setScaleX(0.6);
+            container1.setScaleY(0.6);
+
+            shotContainer1.setScaleY(0.6);
+            shotContainer1.setScaleX(0.6);
+
+            hbox = new HBox(container1, shotContainer1);
+
+//            hbox.setSpacing(50);
+            // hbox.setAlignment(Pos.CENTER);
+            attackScene1 = new Scene(hbox);
             primaryStage.setScene(attackScene1);
-        } else if (turn.equals("2") && !singleplayer) {
+        } else if (turn.equals("2") && multiplayer) {
+            container2.hideSidePanel();
+
+            container2.setScaleX(0.6);
+            container2.setScaleY(0.6);
+
+            shotContainer2.setScaleY(0.6);
+            shotContainer2.setScaleX(0.6);
+
+            hbox = new HBox(container2, shotContainer2);
+//            hbox.setSpacing(20);
+//            hbox.setAlignment(Pos.CENTER);
+            attackScene2 = new Scene(hbox);
             primaryStage.setScene(attackScene2);
         }
     }
@@ -248,7 +316,14 @@ public class GameView extends Application implements GameObserver {
 
     public void showWinner(Player winner) {
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, 500, 500);
+        Scene scene = new Scene(layout, 700, 700);
+        Image image = new Image("Brine copy.gif");
+        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
+
+        layout.setStyle("-fx-background-color: transparent;" +
+                "-fx-font-family: Joystix ; " +
+                "-fx-font-size: 24;" +
+                "-fx-border-color: transparent, black;");
 
         Label label1 = new Label("Winner is " + winner.getName());
         label1.setFont(new Font("Arial Bold", 24));

@@ -56,4 +56,10 @@ public class GridTile extends TilePane { //This class is the tiles in the grid
             }
         });
     }
+
+    public void resize() {
+        gridsize = Screen.getPrimary().getBounds().getMaxY()/24;
+        this.setPrefHeight(gridsize);
+        this.setPrefWidth(gridsize);
     }
+}
