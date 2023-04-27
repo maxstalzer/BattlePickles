@@ -56,13 +56,15 @@ public class GameView extends Application implements GameObserver {
     public void start(Stage primaryStage) { // Start method
         this.controller = new Controller(this);
         this.primaryStage = primaryStage;
+        controller.showMainMenu(); // Show main menu
 
+    }
+
+    public void initPlacementViews() { // Initialize placement views
         this.container1 = new Container(controller);
         this.container2 = new Container(controller);
         this.placementScene1 = new Scene(container1);
         this.placementScene2 = new Scene(container2);
-        controller.showMainMenu(); // Show main menu
-
     }
 
     public void initAttackViews() { // Initialize attack views

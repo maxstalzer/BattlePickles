@@ -190,7 +190,9 @@ public class Controller {
 
     }
 
-
+//    public void endGame() {
+//        gameView.showEndGame(game.getWinner());
+//    }
 
 
 
