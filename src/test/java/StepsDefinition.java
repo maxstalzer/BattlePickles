@@ -590,11 +590,13 @@ public class StepsDefinition {
     public void a_database() throws Exception {
         database = new Database("testDatabase");
     }
+
+
     @When("I save a game")
     public void i_save_a_game() throws Exception {
         game.getPlayer1().setName("testPlayer1");
         game.getPlayer2().setName("testPlayer2");
-        database.saveGame(game);
+        database.savePlayer(game.getPlayer1());
     }
     @Then("I should be able to load the game from the database")
     public void i_should_be_able_to_load_the_game_from_the_database() throws Exception {

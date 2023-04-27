@@ -81,6 +81,14 @@ public class Database {
         connectionSource.close();
     }
 
+    public void savePlayer(Player player) throws Exception {
+        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+        Dao<Player, Integer> playerDao = DaoManager.createDao(connectionSource, Player.class);
+        playerDao.create(player);
+
+        connectionSource.close();
+    }
+
     public Game loadGame(String databaseName) throws Exception {
         this.databaseURL =  String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
