@@ -75,9 +75,40 @@ public class Database {
 
     public void saveGame(Game game) throws Exception {
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+        Dao<Player, Integer> playerDao = DaoManager.createDao(connectionSource, Player.class);
+        Dao<Board, Integer> boardDao = DaoManager.createDao(connectionSource, Board.class);
+        Dao<Tile, Integer> tileDao = DaoManager.createDao(connectionSource, Tile.class);
+        Dao<Gurkin, Integer> gurkinDao = DaoManager.createDao(connectionSource, Gurkin.class);
         Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
-        gameDao.create(game);
 
+
+        Player pl1 = game.getPlayer1();
+        Player pl2 = game.getPlayer2();
+
+        Board board1 = pl1.getGurkinBoard();
+
+        boardDao.create(board1);
+        for (Tile tile : board1.getTiles()) {
+            tile.setBoard(board1);
+            if (tile.hasGurkin()) {
+                gurkinDao.create(tile.getGurkin());
+            }
+            tileDao.create(tile);
+        }
+
+        Board board2 = pl2.getGurkinBoard();
+        boardDao.create(board2);
+        for (Tile tile : board2.getTiles()) {
+            tile.setBoard(board2);
+            if (tile.hasGurkin()) {
+                gurkinDao.create(tile.getGurkin());
+            }
+            tileDao.create(tile);
+        }
+
+        playerDao.create(pl1);
+        playerDao.create(pl2);
+        gameDao.create(game);
         connectionSource.close();
     }
 
@@ -88,8 +119,14 @@ public class Database {
         Game game = gameDao.queryForId(1);
         connectionSource.close();
         return game;
+    }
 
-
+    public Game loadGame() throws Exception {
+        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+        Game game = gameDao.queryForId(1);
+        connectionSource.close();
+        return game;
     }
 
     public void updateGame(Game game) throws Exception {
@@ -128,14 +165,6 @@ public class Database {
         gameDao.update(game);
         connectionSource.close();
     }
-
-//    public Game retrieveGame() throws Exception {
-//        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
-//        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
-//        Game game = gameDao.queryForId(1);
-//        connectionSource.close();
-//        return game;
-//    }
 
     public Player retrievePlayer(int id) throws Exception {
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);

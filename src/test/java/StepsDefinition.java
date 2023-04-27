@@ -590,11 +590,24 @@ public class StepsDefinition {
     public void a_database() throws Exception {
         database = new Database("testDatabase");
     }
+
     @When("I save a game")
     public void i_save_a_game() throws Exception {
         game.getPlayer1().setName("testPlayer1");
         game.getPlayer2().setName("testPlayer2");
         database.saveGame(game);
+    }
+
+    @Then("I should be able to see it in the list of available saves")
+    public void i_should_be_able_to_see_it_in_the_list_of_available_saves() throws Exception {
+        String nameOf = "notTest";
+        Database database2 = new Database();
+        for (String name : database2.getDatabases()) {
+            if (name.equals("testDatabase")) {
+                nameOf = name;
+            }
+        }
+        assertEquals("testDatabase",nameOf);
     }
     @Then("I should be able to load the game from the database")
     public void i_should_be_able_to_load_the_game_from_the_database() throws Exception {
@@ -605,4 +618,17 @@ public class StepsDefinition {
         database.deleteDatabase("testDatabase");
     }
 
+    @When("my turn is over")
+    public void my_turn_is_over() {
+        game.getPlayer1().setCurrentPlayer(false);
+        game.getPlayer2().setCurrentPlayer(true);
+    }
+    @Then("i should be able to upload my game to the database")
+    public void i_should_be_able_to_upload_my_game_to_the_database() throws Exception {
+        Database database1 = new Database("yoyo");
+        database1.saveGame(game);
+        Game gametest = database1.loadGame();
+        assertEquals(game.getPlayer1().getName(),gametest.getPlayer1().getName());
+        database1.deleteDatabase("yoyo");
+    }
 }

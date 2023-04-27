@@ -22,7 +22,7 @@ public class Tile {
     @DatabaseField(canBeNull = false)
     private int y;
 
-    @DatabaseField(foreign = true,foreignAutoRefresh = true, columnName = "board_id")
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
     private Board board;
 
     public Tile() {}

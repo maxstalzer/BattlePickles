@@ -4,8 +4,11 @@ import Base.Players.AI;
 import Base.Players.Player;
 import Controller.Controller;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +19,9 @@ public class Game implements GameObserver {
 
     @DatabaseField(columnName = "multiplayer")
     Boolean multiplayer; // true if multiplayer, false if singleplayer
+
+    /* @ForeignCollectionField(columnName = "Players", eager = true)
+    private Collection<Player> players = new ArrayList<>(); */
 
     @DatabaseField(columnName = "player1_id", foreign = true,foreignAutoRefresh = true)
     Player player1; // Player 1
