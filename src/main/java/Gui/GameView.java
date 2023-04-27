@@ -42,7 +42,7 @@ public class GameView extends Application implements GameObserver {
 
 
 
-
+//small change
     public GameView() { // Constructor
     }
 
