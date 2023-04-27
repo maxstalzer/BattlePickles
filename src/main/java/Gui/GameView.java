@@ -17,7 +17,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import java.util.List;
 
 public class GameView extends Application implements GameObserver {
@@ -44,6 +45,8 @@ public class GameView extends Application implements GameObserver {
 
     private Container container1;
     private Container container2;
+
+    private String mainScreenMusic = 
 
 
 
@@ -264,6 +267,29 @@ public class GameView extends Application implements GameObserver {
 
     public void showGameplay(String turn, Boolean multiplayer) { // Show gameplay scene
         HBox hbox;
+
+        // Making the bottom stats panel
+        Button saveButton = new Button("Save & Quit"); // Save and quit button
+        saveButton.setOnAction(e -> {
+            try {
+                controller.saveGame();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        Button noSaveButton = new Button("Quit without saving"); // Quit without saving button
+        noSaveButton.setOnAction(e -> {
+            try {
+                controller.showMainMenu();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        VBox panel = new VBox(10, saveButton, noSaveButton);
+        panel.setAlignment(Pos.CENTER_RIGHT);
+        panel.setPadding(new Insets(10));
+
         if (turn.equals("1") ) {
             container1.hideSidePanel();
             container1.setScaleX(0.6);
@@ -272,11 +298,10 @@ public class GameView extends Application implements GameObserver {
             shotContainer1.setScaleY(0.6);
             shotContainer1.setScaleX(0.6);
 
-            hbox = new HBox(container1, shotContainer1);
+            hbox = new HBox(10, container1, shotContainer1);
+            VBox vbox = new VBox(hbox, panel);
 
-//            hbox.setSpacing(50);
-            // hbox.setAlignment(Pos.CENTER);
-            attackScene1 = new Scene(hbox);
+            attackScene1 = new Scene(vbox, 1000, 3000);
             primaryStage.setScene(attackScene1);
         } else if (turn.equals("2") && multiplayer) {
             container2.hideSidePanel();
@@ -286,11 +311,10 @@ public class GameView extends Application implements GameObserver {
 
             shotContainer2.setScaleY(0.6);
             shotContainer2.setScaleX(0.6);
+            hbox = new HBox(10, container2, shotContainer2);
+            VBox vbox = new VBox(hbox, panel);
 
-            hbox = new HBox(container2, shotContainer2);
-//            hbox.setSpacing(20);
-//            hbox.setAlignment(Pos.CENTER);
-            attackScene2 = new Scene(hbox);
+            attackScene2 = new Scene(vbox, 1000, 3000);
             primaryStage.setScene(attackScene2);
         }
     }
@@ -376,6 +400,33 @@ public class GameView extends Application implements GameObserver {
         primaryStage.show();
     }
 
+    public void showSaveGame(String exceptionMessage) {
+        VBox layout = new VBox();
+        Scene scene = new Scene(layout, 500, 500);
 
+        Label label3 = new Label(exceptionMessage);
 
+        TextField gameNameField = new TextField();
+        gameNameField.setMaxWidth(100);
+
+        Button startButton = new Button("Save Game");
+        startButton.setOnAction(e -> {
+            try {
+                controller.saveNewGame(gameNameField.getText());
+                controller.showMainMenu();
+            } catch (Exception ex) {
+                String exMessage = ex.getMessage();
+                showSaveGame(exMessage);
+            }
+        });
+
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> controller.showGameplay());
+
+        layout.getChildren().addAll(label3, gameNameField, startButton, backButton);
+        layout.setAlignment(Pos.CENTER);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 }

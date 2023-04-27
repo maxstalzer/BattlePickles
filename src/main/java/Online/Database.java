@@ -19,12 +19,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-
-
 
 
 public class Database {
@@ -85,24 +81,47 @@ public class Database {
         Player pl1 = game.getPlayer1();
         Player pl2 = game.getPlayer2();
 
+        game.setInitial_turn();
+
         Board board1 = pl1.getGurkinBoard();
 
         boardDao.create(board1);
+
+        Set<Gurkin> gurkinset1 = new HashSet<Gurkin>();
+
+        for (Tile tile : board1.getTiles()) {
+            if (tile.hasGurkin()) {
+                gurkinset1.add(tile.getGurkin());
+            }
+        }
+
+        for (Gurkin gurkin : gurkinset1) {
+            gurkinDao.create(gurkin);
+        }
+
         for (Tile tile : board1.getTiles()) {
             tile.setBoard(board1);
-            if (tile.hasGurkin()) {
-                gurkinDao.create(tile.getGurkin());
-            }
             tileDao.create(tile);
         }
 
         Board board2 = pl2.getGurkinBoard();
+
         boardDao.create(board2);
+
+        Set<Gurkin> gurkinset2 = new HashSet<Gurkin>();
+
+        for (Tile tile : board2.getTiles()) {
+            if (tile.hasGurkin()) {
+                gurkinset2.add(tile.getGurkin());
+            }
+        }
+
+        for (Gurkin gurkin : gurkinset2) {
+            gurkinDao.create(gurkin);
+        }
+
         for (Tile tile : board2.getTiles()) {
             tile.setBoard(board2);
-            if (tile.hasGurkin()) {
-                gurkinDao.create(tile.getGurkin());
-            }
             tileDao.create(tile);
         }
 

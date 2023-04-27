@@ -146,4 +146,9 @@ public class Game implements GameObserver {
     public Game() {
 
     }
+
+    public void setInitial_turn() {
+        initial_turn = Turn.getTurn();
+    }
+
 }

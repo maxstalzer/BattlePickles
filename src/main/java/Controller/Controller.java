@@ -14,6 +14,7 @@ import Online.Database;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import static Base.Direction.direction.Horizontal;
 import static Base.Direction.direction.Vertical;
@@ -222,10 +223,31 @@ public class Controller {
 
     }
 
-//    public void endGame() {
-//        gameView.showEndGame(game.getWinner());
-//    }
 
+    public void saveGame() throws Exception {
+        if (database == null) {
+            gameView.showSaveGame("Enter name for game save");
+        } else {
+            database.updateGame(game);
+        }
+    }
+
+    public void saveNewGame(String gameName) throws Exception {
+        database = new Database();
+        List<String> gameNames = database.getDatabases();
+
+        if (gameNames.contains(gameName)) {
+            throw new Exception("Game name already exists");
+        } else if (gameName.equals("")) {
+            throw new Exception("Game name cannot be empty");
+        } else if (gameName.contains(" ")) {
+            throw new Exception("Game name cannot contain spaces");
+        } else {
+            database = new Database(gameName);
+            database.saveGame(game);
+        }
+
+    }
 
 
 
