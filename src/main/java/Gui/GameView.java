@@ -110,10 +110,7 @@ public class GameView extends Application implements GameObserver {
 
 
         VBox centerBox = new VBox(label1, startButton);
-        centerBox.setStyle("-fx-background-color: transparent;" +
-                "-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" +
-                "-fx-border-color: transparent, black;");
+        centerBox.setStyle("-fx-background-color: transparent;-fx-font-family: Joystix ;-fx-font-size: 24;-fx-border-color: transparent, black;");
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setSpacing(20); // Add spacing between elements
 
@@ -129,9 +126,7 @@ public class GameView extends Application implements GameObserver {
     public void showGameMode() { // Show game mode menu
         VBox layout = new VBox();
         layout.setStyle(
-                "-fx-font-family: Joystix ; " +
-                "-fx-font-size: 18;" +
-                "-fx-border-color: transparent, black;");
+                "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
 
         Scene scene = new Scene(layout, 700, 700);
         Image image = new Image("Brine copy.gif");
@@ -166,19 +161,16 @@ public class GameView extends Application implements GameObserver {
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
 
         layout.setStyle(
-                "-fx-font-family: Joystix ; " +
-                        "-fx-font-size: 18;" +
-                        "-fx-border-color: transparent, black;");
+                "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
 
         Label label4 = new Label("Input player names");
-        label4.setStyle("-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" );
+        label4.setStyle("-fx-font-family: Joystix ;-fx-font-size: 24;" );
 
         TextField p1NameField = new TextField();
-        p1NameField.setStyle("-fx-font-family: Joystix ; + -fx-font-size: 18;");
+        p1NameField.setStyle("-fx-font-family: Joystix ; -fx-font-size: 18;");
         p1NameField.setMaxWidth(100);
         TextField p2NameField = new TextField();
-        p1NameField.setStyle("-fx-font-family: Joystix ; + -fx-font-size: 18;");
+        p1NameField.setStyle("-fx-font-family: Joystix ; -fx-font-size: 18;");
         p2NameField.setMaxWidth(100);
 
         Button startButton = new Button("Start Game");
@@ -197,9 +189,7 @@ public class GameView extends Application implements GameObserver {
     public void showSingleplayer() { // Show singleplayer menu
         VBox layout = new VBox();
         layout.setStyle(
-                "-fx-font-family: Joystix ; " +
-                        "-fx-font-size: 18;" +
-                        "-fx-border-color: transparent, black;");
+                "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
         Scene scene = new Scene(layout, 700, 700);
         Image image = new Image("Brine copy.gif");
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
@@ -207,10 +197,8 @@ public class GameView extends Application implements GameObserver {
 
         Label label3 = new Label("AI Difficulty");
         Label label5 = new Label("Player name");
-        label3.setStyle("-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" );
-        label5.setStyle("-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" );
+        label3.setStyle("-fx-font-family: Joystix ;-fx-font-size: 24;" );
+        label5.setStyle("-fx-font-family: Joystix ;-fx-font-size: 24;" );
 
         TextField p1NameField = new TextField();
         p1NameField.setMaxWidth(100);
@@ -273,10 +261,7 @@ public class GameView extends Application implements GameObserver {
         Image image = new Image("Brine copy.gif");
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
 
-        layout.setStyle("-fx-background-color: transparent;" +
-                "-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" +
-                "-fx-border-color: transparent, black;");
+        layout.setStyle("-fx-background-color: transparent;-fx-font-family: Joystix ;-fx-font-size: 24;-fx-border-color: transparent, black;");
 
         Label label1 = new Label("Winner is " + winner.getName());
         label1.setFont(new Font("Arial Bold", 24));

@@ -50,9 +50,7 @@ public class SidePanel extends VBox implements PlayerObserver {
         this.controller=controller;
         javafx.scene.control.Label label1 = new javafx.scene.control.Label("Select Gurk Direction  ©");
         label1.setStyle(
-                "-fx-font-family: Joystix ; " +
-                        "-fx-font-size: 18;" +
-                        "-fx-border-color: transparent, black;");
+                "-fx-font-family: Joystix ;-fx-font-size: 18;-fx-border-color: transparent, black;");
         setAlignment(Pos.CENTER);
 
         Button Quit = new Button("Quit");
