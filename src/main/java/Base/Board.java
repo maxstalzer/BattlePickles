@@ -23,9 +23,6 @@ public class Board implements BoardObserver{ // Board class
     @ForeignCollectionField(columnName = "Tiles", eager = true)
     private Collection<Tile> tiles = new ArrayList<>(); // 10x10 array of tiles
 
-    @DatabaseField(foreign = true,foreignAutoRefresh = true,columnName = "player_id")
-    private Player player;
-
     private Set<BoardObserver> observers = new HashSet<BoardObserver>(); // List of observers of the board
 
     // Initialize board
@@ -40,9 +37,7 @@ public class Board implements BoardObserver{ // Board class
         }
     }
 
-    public void setPlayer(Player player){
-        this.player = player;
-    }
+
 
     public void setId(int Id){
         this.id = id;
@@ -101,7 +96,6 @@ public class Board implements BoardObserver{ // Board class
     public Board deepClone() { // Deep clone the board
         Board clone = new Board();
         clone.setTiles(this);
-        clone.setPlayer(this.player);
         clone.setId(this.id);
         return clone;
     }
