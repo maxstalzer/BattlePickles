@@ -2,17 +2,25 @@ package Base;
 
 import Base.Players.AI;
 import Base.Players.Player;
+import Controller.Controller;
 
-public class Game {
+import java.util.HashSet;
+import java.util.Set;
+
+public class Game implements GameObserver{
     Boolean multiplayer; // true if multiplayer, false if singleplayer
     Player player1; // Player 1
     Player player2; // Player 2
     Boolean game_Over; // true if game is over
 
     private String gameID; // Game ID
-    private String initial_turn; // Initial turn
+    private String initial_turn; // Initial// turn
 
-    public Game(Boolean multiplayer) { // Constructor
+    private Controller controller; // Controller
+
+    private Set<GameObserver> gameObserverSet = new HashSet<GameObserver>();
+
+    public Game(Boolean multiplayer, Controller controller) { // Constructor
         this.multiplayer = multiplayer;
         Turn.init_turn();
         if (multiplayer) {
@@ -26,6 +34,7 @@ public class Game {
 
         int gameID = (int) (Math.random() * 1000000); // Generate random game ID
         this.gameID = Integer.toString(gameID);
+        this.controller = controller;
     }
 
     public Player getPlayer1() {
@@ -43,12 +52,12 @@ public class Game {
         return multiplayer;
     } // Getters
 
-    public boolean changePlacement(Player player) {
+    public boolean checkPlacement(Player player) {
         return (player.getRemaining_gurkins() == 5);
     } // Check if player has finished placing gurkins
 
     public Game deepClone() {   // Deep clone of game
-        Game copy = new Game(multiplayer);
+        Game copy = new Game(multiplayer, controller);
         copy.player1 = player1.deepClone();
         copy.player2 = player2.deepClone();
         copy.game_Over = game_Over;
@@ -70,5 +79,41 @@ public class Game {
             return player1;
         }
         return player2;
+    }
+
+    public void attack(Coordinates coords) {
+        if (Turn.getTurn().equals("1")) {
+            player1.shoot(player2.getGurkinBoard(), coords);
+
+        } else  {
+            player2.shoot(player1.getGurkinBoard(), coords);
+        }
+        checkWin();
+    }
+
+    public Player getOpponent() {
+        if (Turn.getTurn().equals("1")) {
+            return player2;
+        }
+        return player1;
+    }
+
+    public void checkWin() {
+        if (player1.checkWin()) {
+            showWinner(player1);
+        } else if (player2.checkWin()) {
+            showWinner(player2);
+        }
+    }
+
+    public void showWinner(Player player) {
+        game_Over = true;
+        for (GameObserver gameObserver : gameObserverSet) {
+            gameObserver.showWinner(player);
+        }
+    }
+
+    public void addGameObserver(GameObserver gameObserver) {
+        gameObserverSet.add(gameObserver);
     }
 }

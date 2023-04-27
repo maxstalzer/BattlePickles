@@ -15,7 +15,7 @@ public class OnlineLoop {
         scanner = new Scanner(System.in);
     }
 
-
+    /*
     public void start() throws SQLException {
         while (!game.GameOver()) {
             // Get the current player
@@ -53,3 +53,7 @@ public class OnlineLoop {
         System.out.println(otherPlayer.getName() + ", it's your turn now!");
     }
 }
+
+     *//*
+
+}*/

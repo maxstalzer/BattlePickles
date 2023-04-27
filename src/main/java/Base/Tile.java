@@ -1,28 +1,28 @@
 package Base;
 
 import Base.Gurkins.Gurkin;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+//import com.j256.ormlite.field.DatabaseField;
+//import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "Tile")
+//@DatabaseTable(tableName = "Tile")
 public class Tile {
-    @DatabaseField(canBeNull = false)
+//    @DatabaseField(canBeNull = false)
     private boolean gurkin; // If there is a gurkin on the tile
-    @DatabaseField(columnName = "gurkin_id", foreign = true,foreignAutoRefresh = true)
+//    @DatabaseField(columnName = "gurkin_id", foreign = true,foreignAutoRefresh = true)
     private Gurkin gurkinID; // The gurkin on the tile
-    @DatabaseField(canBeNull = false)
+//    @DatabaseField(canBeNull = false)
     private boolean isHit = false; // If the tile has been hit
 
     //added a bunch of variables and methods for online to work besides the @database ads -V
-    @DatabaseField(generatedId = true)
+//    @DatabaseField(generatedId = true)
     private int id;
 
-    @DatabaseField(canBeNull = false)
+//    @DatabaseField(canBeNull = false)
     private int x;
-    @DatabaseField(canBeNull = false)
+//    @DatabaseField(canBeNull = false)
     private int y;
 
-    @DatabaseField(foreign = true,foreignAutoRefresh = true, columnName = "board_id")
+//    @DatabaseField(foreign = true,foreignAutoRefresh = true, columnName = "board_id")
     private Board board;
 
     public Tile() {}

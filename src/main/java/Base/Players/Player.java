@@ -1,29 +1,34 @@
 package Base.Players;
 
 
-import Base.Board;
-import Base.Coordinates;
-import Base.Direction;
+import Base.*;
 import Base.Gurkins.*;
-import Base.Turn;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "Player")
-public class  Player {
-    @DatabaseField(canBeNull = false)
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+//import com.j256.ormlite.field.DatabaseField;
+//import com.j256.ormlite.table.DatabaseTable;
+
+//@DatabaseTable(tableName = "Player")
+public class  Player implements PlayerObserver, PlayerAttackObserver{
+//    @DatabaseField(canBeNull = false)
     String name; // The name of the player
-    @DatabaseField(canBeNull = false)
+//    @DatabaseField(canBeNull = false)
     int remaining_gurkins; //   The number of gurkins remaining to be shot
-    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+//    @DatabaseField(foreign = true,foreignAutoRefresh = true)
     Board gurkinBoard; // The board that the player uses to place their gurkins
     String turnID; // stores if it's player 1 or 2 (unknown)
 
-    @DatabaseField(canBeNull = false)
+//    @DatabaseField(canBeNull = false)
     private Boolean CurrentPlayer;
 
-    @DatabaseField(generatedId = true)
+//    @DatabaseField(generatedId = true)
     private int id;
+
+    private Set<PlayerObserver> playerObservers = new HashSet<PlayerObserver>();
+
+    private Set<PlayerAttackObserver> attackObservers = new HashSet<PlayerAttackObserver>();
 
     public Player(int id, String name, Boolean CurrentPlayer) {
         this.id = id;
@@ -31,8 +36,9 @@ public class  Player {
         this.CurrentPlayer = CurrentPlayer;
     }
 
-    private Character[][] shotResults = new Character[10][10]; // Stores results of shots
+    private ShotResults shotResults;// Stores results of shots
 
+    private ArrayList<Gurkin> unplacedGurks;
     public Board getGurkinBoard() {
         return gurkinBoard;
     } // the board of gurkins
@@ -43,17 +49,23 @@ public class  Player {
         this.gurkinBoard = new Board();
         this.remaining_gurkins = 0;
         turnID = Turn.getTurn();
+        this.shotResults = new ShotResults();
+        this.unplacedGurks = new ArrayList<Gurkin>();
+        unplacedGurks.add(new Pickle());
+        unplacedGurks.add(new Gherkin());
+        unplacedGurks.add(new Conichon());
+        unplacedGurks.add(new Yardlong());
+        unplacedGurks.add(new Zuchinni());
+
     }
 
     public void setCurrentPlayer(Boolean CurrentPlayer) {
         this.CurrentPlayer = CurrentPlayer;
     }
-    public int getId () {
-        return this.id;
-    }
+
 
     public Character[][] getShotResults() {
-        return shotResults;
+        return shotResults.getShotBoard();
     } // Returns shot results
 
     public void setName(String name) {
@@ -72,34 +84,45 @@ public class  Player {
 //  Allows a player to shoot at given coordinates on the opposing player's board
 
     public void shoot(Board board, Coordinates coords) {
-        String result = board.attack(coords);
-        int x = coords.getX();
-        int y = coords.getY();
+        String result = board.attack(coords); // attack the tile at the coordinates
         if (result.equals("hit")) { // if the shot was a hit
-            this.shotResults[x][y] = 'x';
-            Turn.changeTurn(); // change turn
+            this.shotResults.setHit(coords);// set the shot results to a hit
             Gurkin gurk = board.getTile(coords).getGurkin(); // get the gurkin that was hit
             if (gurk.deadGurk()) { // if the gurkin is dead
-                this.shotResults[coords.getX()][coords.getY()] = 'k';
+                this.shotResults.setKill(coords); // set the shot results to a kill
                 for (int i = 0; i < gurk.getSize(); i++) {
                     if ((new Coordinates(coords.getX() + i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() + i, coords.getY())).check(gurk)) {
-                        this.shotResults[coords.getX()+i][coords.getY()] = 'k';
+                        this.shotResults.setKill(new Coordinates(coords.getX() + i, coords.getY())); // set the shot results to a kill
                     } else if ((new Coordinates(coords.getX() , coords.getY() + i).validCoords()) && board.getTile(new Coordinates(coords.getX() , coords.getY() + i)).check(gurk)) {
-                        this.shotResults[coords.getX()][coords.getY() + i] = 'k';
+                        this.shotResults.setKill(new Coordinates(coords.getX() , coords.getY() + i));
                     } else if ((new Coordinates(coords.getX() - i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() - i, coords.getY())).check(gurk)) {
-                        this.shotResults[coords.getX() - i][coords.getY()] = 'k';
+                        this.shotResults.setKill(new Coordinates(coords.getX() - i, coords.getY()));
 
                     } else if ((new Coordinates(coords.getX(), coords.getY() - i).validCoords()) &&board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).check(gurk)) {
-                        this.shotResults[coords.getX()][coords.getY() - i] = 'k';
+                        this.shotResults.setKill(new Coordinates(coords.getX(), coords.getY() - i));
                     }
                 }
-                this.remaining_gurkins --; // decrement the number of gurkins remaining
+                this.remaining_gurkins --;// decrement the number of gurkins remaining
             }
+            changeTurn();
         } else if (result.equals("miss")) { // if the shot was a miss
-            this.shotResults[x][y] = 'o';
-            Turn.changeTurn();
+            this.shotResults.setMiss(coords);   // set the shot results to a miss
+            changeTurn();
         }
     }
+
+    @Override
+    public void changeTurn() {
+        Turn.changeTurn();
+        notifyTurnObservers();
+    }
+
+    public void notifyTurnObservers() {
+        for (PlayerAttackObserver observer : attackObservers) {
+            observer.changeTurn();
+        }
+    }
+
     public boolean checkWin() { // checks if the player has won
         if (this.remaining_gurkins == 0) {
 
@@ -113,13 +136,19 @@ public class  Player {
     // places a gurkin on the board if it can be placed
     public Boolean validGurkinSetup(Gurkin gurk, Direction.direction direction, Coordinates cords) {
         boolean valid = cords.validCoords(direction, gurk, gurkinBoard);
-        if (valid) {
-            gurkinBoard.placeGurkin(gurk, direction, cords);
+        if (valid && remaining_gurkins < 5) {
+            gurkinBoard.placeGurkin(cords, direction, gurk);
+            for (int i = 0; i < unplacedGurks.size(); i++) {
+               if (unplacedGurks.get(i).getClass().equals(gurk.getClass())) {
+                   unplacedGurks.remove(i);
+                   break;
+               }
+            }
+            updateSidePanel(unplacedGurks);
             this.remaining_gurkins ++;
-
         }
-        if (!(remaining_gurkins < 5)) {
-            Turn.changeTurn();
+        if (remaining_gurkins >= 5) {
+            finalisePlacement();
         }
         return valid;
     }
@@ -133,5 +162,48 @@ public class  Player {
         copy.turnID = turnID;
         return copy;
     }
+
+    @Override
+    public void updateSidePanel(ArrayList<Gurkin> gurks) {
+        notifyPlacement(gurks);
+    }
+
+    public void notifyPlacement(ArrayList<Gurkin> gurks) {
+        for (PlayerObserver observer : playerObservers) {
+            observer.updateSidePanel(gurks);
+        }
+    }
+
+    public void registerObserver(PlayerObserver observer) {
+        playerObservers.add(observer);
+    }
+
+    public void registerAttackObserver(PlayerAttackObserver observer) {
+        attackObservers.add(observer);
+    }
+
+    public void finalisePlacement() {
+        for (PlayerObserver observer : playerObservers) {
+            observer.finalisePlacement();
+        }
+    }
+
+    public void resetPlacement() {
+        this.remaining_gurkins = 0;
+        this.gurkinBoard = new Board();
+        this.unplacedGurks = new ArrayList<Gurkin>();
+        unplacedGurks.add(new Pickle());
+        unplacedGurks.add(new Gherkin());
+        unplacedGurks.add(new Conichon());
+        unplacedGurks.add(new Yardlong());
+        unplacedGurks.add(new Zuchinni());
+    }
+
+    public ShotResults getResultBoard() {
+        return shotResults;
+    }
+
+
+
 }
 
