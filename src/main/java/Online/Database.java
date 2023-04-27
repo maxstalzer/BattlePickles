@@ -1,6 +1,7 @@
 package Online;
 
 import Base.Board;
+import Base.Game;
 import Base.Gurkins.Gurkin;
 import Base.Players.Player;
 import Base.Tile;
@@ -8,6 +9,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.db.DatabaseType;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.DatabaseConnection;
 import com.j256.ormlite.table.TableUtils;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 
 
 
+
 public class Database {
     private String databaseURL;
     private String username = "sigurd";
@@ -31,7 +34,7 @@ public class Database {
 
     public Database(String databaseName) throws  Exception {
 
-        String databaseUrl = "jdbc:mysql://172.20.10.3:3306";
+        String databaseUrl = "jdbc:mysql://172.20.10.3:3306/";
 
         Connection connection = DriverManager.getConnection(databaseUrl, username, password);
 
@@ -60,6 +63,9 @@ public class Database {
         Dao<Gurkin, Integer> gurkinDao = DaoManager.createDao(connectionSource, Gurkin.class);
         TableUtils.createTableIfNotExists(connectionSource, Gurkin.class);
 
+        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+        TableUtils.createTableIfNotExists(connectionSource, Game.class);
+
         connection.close();
     }
 
@@ -67,25 +73,69 @@ public class Database {
 
     }
 
-    public void updatePlayer(Player player) throws Exception {
+    public void saveGame(Game game) throws Exception {
+        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+        gameDao.create(game);
+
+        connectionSource.close();
+    }
+
+    public Game loadGame(String databaseName) throws Exception {
+        this.databaseURL =  String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+        Game game = gameDao.queryForId(1);
+        connectionSource.close();
+        return game;
+
+
+    }
+
+    public void updateGame(Game game) throws Exception {
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
         Dao<Player, Integer> playerDao = DaoManager.createDao(connectionSource, Player.class);
         Dao<Board, Integer> boardDao = DaoManager.createDao(connectionSource, Board.class);
         Dao<Tile, Integer> tileDao = DaoManager.createDao(connectionSource, Tile.class);
         Dao<Gurkin, Integer> gurkinDao = DaoManager.createDao(connectionSource, Gurkin.class);
+        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+
 
         // Update player and its associated objects
-        playerDao.update(player);
-        Board board = player.getGurkinBoard();
-        boardDao.update(board);
-        for (Tile tile : board.getTiles()) {
+        Player pl1 = game.getPlayer1();
+        Player pl2 = game.getPlayer2();
+        playerDao.update(pl1);
+        playerDao.update(pl2);
+
+        Board board1 = pl1.getGurkinBoard();
+        boardDao.update(board1);
+        for (Tile tile : board1.getTiles()) {
             tileDao.update(tile);
             if (tile.hasGurkin()) {
                 gurkinDao.update(tile.getGurkin());
             }
         }
+
+        Board board2 = pl2.getGurkinBoard();
+        boardDao.update(board2);
+        for (Tile tile : board2.getTiles()) {
+            tileDao.update(tile);
+            if (tile.hasGurkin()) {
+                gurkinDao.update(tile.getGurkin());
+            }
+        }
+
+        gameDao.update(game);
         connectionSource.close();
     }
+
+//    public Game retrieveGame() throws Exception {
+//        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+//        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+//        Game game = gameDao.queryForId(1);
+//        connectionSource.close();
+//        return game;
+//    }
 
     public Player retrievePlayer(int id) throws Exception {
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
@@ -182,6 +232,29 @@ public class Database {
             }
         }
         return databases;
+    }
+
+    public void deleteDatabase (String databaseName) throws Exception {
+        String databaseUrl = "jdbc:mysql://localhost:3306/";
+        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, username, password);
+
+        try {
+            // Close any open database connections
+            connectionSource.close();
+
+            // Delete the database using SQL
+            Connection connection = DriverManager.getConnection(databaseUrl, username, password);
+
+            String deleteDatabaseQuery = String.format("DROP DATABASE IF EXISTS %s",databaseName);
+            Statement deleteDatabaseStatement = connection.createStatement();
+            deleteDatabaseStatement.executeUpdate(deleteDatabaseQuery);
+            connection.close();
+        } catch (SQLException e) {
+
+        } finally {
+            // Release the connection source
+            connectionSource.closeQuietly();
+        }
     }
 }
 

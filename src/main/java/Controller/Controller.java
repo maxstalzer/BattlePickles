@@ -64,21 +64,26 @@ public class Controller {
         gameView.showLoadSavedGame(database.getDatabases());
     }
 
-    public void loadGame(String gameName) {
+    public void loadGame(String gameName) throws Exception {
         System.out.println("loaded");
-
-//        game = database.loadGame(gameView.getSelectedGame());
-//        game.addGameObserver(gameView);
-//        gameView.initAttackViews();
-//        gameView.showPlacement(game.getPlayer1());
+        game = database.loadGame(gameName);
+        game.addGameObserver(gameView);
+        gameView.initAttackViews();
+        initLoadedGame();
     }
+
+    public void initLoadedGame() {
+        showGameplay();
+    }
+
+
     public void startLocalMultiplayerGame(String text, String text1) { // Start a new local multiplayer game
         game = new Game(true, this); // new multiplayer game
         game.addGameObserver(gameView); // add game observer to game
         game.getPlayer1().setName(text);  // set the name of player 1
         game.getPlayer2().setName(text1); // set the name of player 2
         gameView.initAttackViews(); // initialising the attack views of the players
-        gameView.showPlacement(game.getPlayer1()); // show the placement scene for player 1
+        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer()); // show the placement scene for player 1
     }
 
     // Creates a new singleplayer game with the given difficulty
@@ -96,7 +101,7 @@ public class Controller {
         }
         game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer());
         gameView.initAttackViews();
-        gameView.showPlacement(game.getPlayer1());
+        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
 
     }
 
@@ -142,7 +147,7 @@ public class Controller {
 
     public void redoPlacement() {
         game.getCurrentPlayer().resetPlacement();
-        gameView.showPlacement(game.getCurrentPlayer());
+        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
     }
 
     public void endPlacement() {
@@ -150,7 +155,7 @@ public class Controller {
             switch (Turn.getTurn()) {
                 case "1":
                     Turn.changeTurn();
-                    gameView.showPlacement(game.getPlayer2());
+                    gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
                     break;
                 case "2":
                     Turn.changeTurn();

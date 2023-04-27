@@ -8,7 +8,6 @@ import com.j256.ormlite.field.DatabaseField;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "Player")

@@ -25,7 +25,9 @@ public class GameView extends Application implements GameObserver {
     private Controller controller; // Controller
     private Stage primaryStage; // Primary stage
 
-    private Scene seaScene; // Sea scene
+    private Scene placementScene1; // Placement scene for player1
+
+    private Scene placementScene2; // Placement scene for player2
 
     private ShootingContainer shotContainer1;// Shot container
 
@@ -36,10 +38,12 @@ public class GameView extends Application implements GameObserver {
     private Scene waitScene; // Wait scene
 
     public Container getContainer() {
-        return container;
+        return container1;
     }
+    public Container getContainer2() { return container2; }
 
-    private Container container;
+    private Container container1;
+    private Container container2;
 
 
 
@@ -53,8 +57,10 @@ public class GameView extends Application implements GameObserver {
         this.controller = new Controller(this);
         this.primaryStage = primaryStage;
 
-        this.container = new Container(controller);
-        this.seaScene = new Scene(container);
+        this.container1 = new Container(controller);
+        this.container2 = new Container(controller);
+        this.placementScene1 = new Scene(container1);
+        this.placementScene2 = new Scene(container2);
         controller.showMainMenu(); // Show main menu
 
     }
@@ -203,9 +209,13 @@ public class GameView extends Application implements GameObserver {
         primaryStage.show();
     }
 
-    public void showPlacement(Player player) { // Show placement scene
+    public void showPlacement(String turn, Boolean multiplayer) { // Show placement scene
+        if (turn.equals("1")) {
+            primaryStage.setScene(placementScene1);
+        } else if (turn.equals("2") && multiplayer) {
+            primaryStage.setScene(placementScene2);
+        }
 
-        primaryStage.setScene(seaScene);
 
     }
 
@@ -273,7 +283,13 @@ public class GameView extends Application implements GameObserver {
         }));
 
         Button startButton = new Button("Load Game");
-        startButton.setOnAction(e -> controller.loadGame(menuButton.getText()));
+        startButton.setOnAction(e -> {
+            try {
+                controller.loadGame(menuButton.getText());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showMainMenu());

@@ -3,23 +3,27 @@ package Base;
 import Base.Gurkins.Gurkin;
 import Base.Players.Player;
 import Controller.Controller;
-//import com.j256.ormlite.field.DatabaseField;
-//import com.j256.ormlite.field.ForeignCollectionField;
-//import com.j256.ormlite.table.DatabaseTable;
+
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-//@DatabaseTable(tableName = "Board")
+
+
+
+@DatabaseTable(tableName = "Board")
 public class Board implements BoardObserver{ // Board class
-//    @DatabaseField(generatedId = true)
+    @DatabaseField(generatedId = true)
     private int id;
-//    @ForeignCollectionField(columnName = "Tiles", eager = true)
+    @ForeignCollectionField(columnName = "Tiles", eager = true)
     private Collection<Tile> tiles = new ArrayList<>(); // 10x10 array of tiles
 
-//    @DatabaseField(foreign = true,foreignAutoRefresh = true,columnName = "player_id")
+    @DatabaseField(foreign = true,foreignAutoRefresh = true,columnName = "player_id")
     private Player player;
 
     private Set<BoardObserver> observers = new HashSet<BoardObserver>(); // List of observers of the board
