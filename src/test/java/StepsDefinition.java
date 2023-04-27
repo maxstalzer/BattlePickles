@@ -2,8 +2,10 @@ import Base.*;
 import Base.Gurkins.*;
 import Base.Players.AI;
 import Base.Players.Player;
+import Online.Database;
 import Controller.Controller;
 import Gui.GameView;
+import io.cucumber.java.an.E;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -27,6 +29,10 @@ public class StepsDefinition {
     Boolean valid;
 
     Game game;
+
+    Database database;
+
+    Game loadedGame;
 
     @Given("a tile")
     public void a_tile() {
@@ -513,7 +519,116 @@ public class StepsDefinition {
         assertTrue(game.getAIPlayer().checkWin());
     }
 
+//    Database database;
+//
+//    @When("I create a database")
+//    public void i_create_a_database() throws Exception {
+//         database = new Database("newDatabase");
+//    }
+//
+//    @Then("I should make sure it doesn't exist already")
+//    public void i_should_make_sure_it_doesn_t_exist_already() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+//
+//    @When("I try to create a database that already exists")
+//    public void i_try_to_create_a_database_that_already_exists() {
+//        //write code here that turns blablabla
+//        throw new io.cucumber.java.PendingException();
+//    }
+//    @Then("I should receive an error database already exists")
+//    public void i_should_receive_an_error_database_already_exists() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+//
+//    @When("I connect to a database")
+//    public void i_connect_to_a_database() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+//    @Then("I should know that the i have access")
+//    public void i_should_know_that_the_i_have_access() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+//
+//    @When("I try to connect to a non-existent database")
+//    public void i_try_to_connect_to_a_non_existent_database() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+//    @Then("I should receive an error database doesnt exist")
+//    public void i_should_receive_an_error_database_doesnt_exist() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+//
+//    @When("I update my player data to the database")
+//    public void i_update_my_player_data_to_the_database() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+//    @Then("the database should be updated")
+//    public void the_database_should_be_updated() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+//
+//    @When("I try to retrieve data from the database")
+//    public void i_try_to_retrieve_data_from_the_database() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+//    @Then("my local data should be updated")
+//    public void my_local_data_should_be_updated() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+    @Given("a database")
+    public void a_database() throws Exception {
+        database = new Database("testDatabase");
+    }
 
+    @When("I save a game")
+    public void i_save_a_game() throws Exception {
+        game.getPlayer1().setName("testPlayer1");
+        game.getPlayer2().setName("testPlayer2");
+        database.saveGame(game);
+    }
 
+    @Then("I should be able to see it in the list of available saves")
+    public void i_should_be_able_to_see_it_in_the_list_of_available_saves() throws Exception {
+        String nameOf = "notTest";
+        Database database2 = new Database();
+        for (String name : database2.getDatabases()) {
+            if (name.equals("testDatabase")) {
+                nameOf = name;
+            }
+        }
+        assertEquals("testDatabase",nameOf);
+    }
+    @Then("I should be able to load the game from the database")
+    public void i_should_be_able_to_load_the_game_from_the_database() throws Exception {
+        loadedGame = database.loadGame("testDatabase");
+        assertEquals(game.getMultiplayer(), loadedGame.getMultiplayer());
+        assertEquals(game.getPlayer1().getName(), loadedGame.getPlayer1().getName());
+        assertEquals(game.getPlayer2().getName(), loadedGame.getPlayer2().getName());
+        database.deleteDatabase("testDatabase");
+    }
 
+    @When("my turn is over")
+    public void my_turn_is_over() {
+        game.getPlayer1().setCurrentPlayer(false);
+        game.getPlayer2().setCurrentPlayer(true);
+    }
+    @Then("i should be able to upload my game to the database")
+    public void i_should_be_able_to_upload_my_game_to_the_database() throws Exception {
+        Database database1 = new Database("yoyo");
+        database1.saveGame(game);
+        Game gametest = database1.loadGame();
+        assertEquals(game.getPlayer1().getName(),gametest.getPlayer1().getName());
+        database1.deleteDatabase("yoyo");
+    }
 }

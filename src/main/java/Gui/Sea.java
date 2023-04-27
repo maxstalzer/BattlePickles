@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
 public class Sea extends GridPane {
+    private GridTile[][] gridTiles = new GridTile[10][10];
     // double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; //Size of the grids in the gridPane
     public Sea() {
         int size = 10;
@@ -22,6 +23,7 @@ public class Sea extends GridPane {
                 g.setStyle("-fx-background-color: rgba(81, 162, 0, 0.5);");
                 // The gridTiles becomes blue.
                 add(g, j, i); //The gridTiles are added to the GridPane object.
+                gridTiles[j][i] = g;
             }
         }
 
@@ -33,5 +35,8 @@ public class Sea extends GridPane {
         setGridLinesVisible(true); //The lines of the grid are visible.
     }
 
+    public GridTile getGridTiles(int x, int y) {
+        return gridTiles[x][y];
+    }
 
 }

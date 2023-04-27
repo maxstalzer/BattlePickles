@@ -70,7 +70,7 @@ public class SidePanel extends VBox implements PlayerObserver {
         MenuItem vert = new MenuItem("Vertical");
         vert.setStyle( "-fx-font-family: Joystix ; -fx-font-size: 18;");
         menu.setText("Horizontal");
-//see if we would like to use this as it is
+        //see if we would like to use this as it is
         menu.getItems().addAll( horiz, vert);
         getChildren().add(menu);
         //menu.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
@@ -110,15 +110,7 @@ public class SidePanel extends VBox implements PlayerObserver {
     public void finalisePlacement() {
 //        Are you happy with your placement?
         // get input on happiness
-        Boolean cont = true; // get the player input and use here.
-        if (cont) {
-            controller.endPlacement();
-        } else {
-            controller.redoPlacement();
-
-        }
-
+        // if yes, then
+        controller.checkPlacement();
     }
-
-
 }

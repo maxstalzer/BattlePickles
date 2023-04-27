@@ -13,17 +13,22 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.scene.media.AudioClip;
+
+import java.io.File;
+import java.util.List;
 
 public class GameView extends Application implements GameObserver {
 
     private Controller controller; // Controller
     private Stage primaryStage; // Primary stage
 
-    private Scene seaScene; // Sea scene
+    private Scene placementScene1; // Placement scene for player1
+
+    private Scene placementScene2; // Placement scene for player2
 
     private ShootingContainer shotContainer1;// Shot container
 
@@ -34,15 +39,19 @@ public class GameView extends Application implements GameObserver {
     private Scene waitScene; // Wait scene
 
     public Container getContainer() {
-        return container;
+        return container1;
     }
+    public Container getContainer2() { return container2; }
 
-    private Container container;
+    private Container container1;
+    private Container container2;
+
+    private final String winningScreenMusic = "NothingToSeeHere.mp3";
 
 
 
 
-//small change
+
     public GameView() { // Constructor
     }
 
@@ -50,11 +59,15 @@ public class GameView extends Application implements GameObserver {
     public void start(Stage primaryStage) { // Start method
         this.controller = new Controller(this);
         this.primaryStage = primaryStage;
-
-        this.container = new Container(controller);
-        this.seaScene = new Scene(container);
         controller.showMainMenu(); // Show main menu
 
+    }
+
+    public void initPlacementViews() { // Initialize placement views
+        this.container1 = new Container(controller);
+        this.container2 = new Container(controller);
+        this.placementScene1 = new Scene(container1);
+        this.placementScene2 = new Scene(container2);
     }
 
     public void initAttackViews() { // Initialize attack views
@@ -144,8 +157,14 @@ public class GameView extends Application implements GameObserver {
         Button multiplayerButton = new Button("Multiplayer");
         multiplayerButton.setOnAction(e -> controller.showMultiplayer());
 
-        Button LoadSaved = new Button("Load game");
-        // LoadSaved.setOnAction(e -> controller.showMultiplayer());
+        Button LoadSaved = new Button("Load saved game");
+         LoadSaved.setOnAction(e -> {
+             try {
+                 controller.showLoadSavedGame();
+             } catch (Exception ex) {
+                 throw new RuntimeException(ex);
+             }
+         });
 
         layout.getChildren().addAll(label2, AIButton, multiplayerButton, LoadSaved, backButton);
         layout.setAlignment(Pos.CENTER);
@@ -224,14 +243,66 @@ public class GameView extends Application implements GameObserver {
         primaryStage.show();
     }
 
-    public void showPlacement(Player player) { // Show placement scene
-        primaryStage.setScene(seaScene);
+    public void showPlacement(String turn, Boolean multiplayer) { // Show placement scene
+        if (turn.equals("1")) { // Shows the placement scene for player 1
+
+            primaryStage.setScene(placementScene1);
+        } else if (turn.equals("2") && multiplayer) {
+            primaryStage.setScene(placementScene2);
+        }
+
     }
 
-    public void showGameplay(String turn, Boolean singleplayer) { // Show gameplay scene
+    public void showGameplay(String turn, Boolean multiplayer) { // Show gameplay scene
+        HBox hbox;
+
+        // Making the bottom stats panel
+        Button saveButton = new Button("Save & Quit"); // Save and quit button
+        saveButton.setOnAction(e -> {
+            try {
+                controller.saveGame();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        Button noSaveButton = new Button("Quit without saving"); // Quit without saving button
+        noSaveButton.setOnAction(e -> {
+            try {
+                controller.showMainMenu();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        VBox panel = new VBox(10, saveButton, noSaveButton);
+        panel.setAlignment(Pos.CENTER_RIGHT);
+        panel.setPadding(new Insets(10));
+
         if (turn.equals("1") ) {
+            container1.hideSidePanel();
+            container1.setScaleX(0.6);
+            container1.setScaleY(0.6);
+
+            shotContainer1.setScaleY(0.6);
+            shotContainer1.setScaleX(0.6);
+
+            hbox = new HBox(10, container1, shotContainer1);
+            VBox vbox = new VBox(hbox, panel);
+
+            attackScene1 = new Scene(vbox, 1000, 3000);
             primaryStage.setScene(attackScene1);
-        } else if (turn.equals("2") && !singleplayer) {
+        } else if (turn.equals("2") && multiplayer) {
+            container2.hideSidePanel();
+
+            container2.setScaleX(0.6);
+            container2.setScaleY(0.6);
+
+            shotContainer2.setScaleY(0.6);
+            shotContainer2.setScaleX(0.6);
+            hbox = new HBox(10, container2, shotContainer2);
+            VBox vbox = new VBox(hbox, panel);
+
+            attackScene2 = new Scene(vbox, 1000, 3000);
             primaryStage.setScene(attackScene2);
         }
     }
@@ -271,11 +342,104 @@ public class GameView extends Application implements GameObserver {
 
         layout.getChildren().addAll(label1, backButton);
         layout.setAlignment(Pos.CENTER);
+        AudioClip sound = new AudioClip(new File(winningScreenMusic).toURI().toString());
+        sound.play();
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public void showLoadSavedGame(List<String> databaseNames) {
+        VBox layout = new VBox();
+        Scene scene = new Scene(layout, 500, 500);
+
+        Label label3 = new Label("Select Game to load");
+
+        MenuButton menuButton = new MenuButton("");
+        // Add all the names of the games in the database to the menu using a for loop
+        for (String gameName : databaseNames) {
+            MenuItem menuItem = new MenuItem(gameName);
+            menuButton.getItems().add(menuItem);
+        }
+
+        menuButton.setText("Choose Game Save");
+
+        menuButton.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
+            menuButton.setText(menuItem.getText());
+        }));
+
+        Button startButton = new Button("Load Game");
+        startButton.setOnAction(e -> {
+            try {
+                controller.loadGame(menuButton.getText());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> controller.showMainMenu());
+
+        layout.getChildren().addAll(label3, menuButton, startButton, backButton);
+        layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    public void showSaveGame(String exceptionMessage) {
+        VBox layout = new VBox();
+        Scene scene = new Scene(layout, 500, 500);
 
+        Label label3 = new Label(exceptionMessage);
 
+        TextField gameNameField = new TextField();
+        gameNameField.setMaxWidth(100);
+
+        Button startButton = new Button("Save Game");
+        startButton.setOnAction(e -> {
+            try {
+                controller.saveNewGame(gameNameField.getText());
+                controller.showMainMenu();
+            } catch (Exception ex) {
+                String exMessage = ex.getMessage();
+                showSaveGame(exMessage);
+            }
+        });
+
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> controller.showGameplay());
+
+        layout.getChildren().addAll(label3, gameNameField, startButton, backButton);
+        layout.setAlignment(Pos.CENTER);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public void showCheckPlacementView() {
+        VBox layout = new VBox();
+        Scene scene = new Scene(layout, 500, 500);
+
+        Label label3 = new Label("Are you sure you want to place your ships here?");
+
+        Button yesButton = new Button("Yes");
+        yesButton.setOnAction(e -> {
+            try {
+                controller.endPlacement();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        Button noButton = new Button("No");
+        noButton.setOnAction(e -> controller.redoPlacement());
+
+        layout.getChildren().addAll(label3, yesButton, noButton);
+        layout.setAlignment(Pos.CENTER);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 }
+
+

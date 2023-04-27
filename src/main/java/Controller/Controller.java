@@ -10,9 +10,11 @@ import Base.Turn;
 import Gui.GameView;
 import Gui.GridTile;
 import Gui.GuiGurks;
+import Online.Database;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import static Base.Direction.direction.Horizontal;
 import static Base.Direction.direction.Vertical;
@@ -24,6 +26,8 @@ public class Controller {
     private Stage primaryStage;
 
     public Gurkin Gurktype;
+
+    private Database database;
 
 
     public enum gurkinID {
@@ -55,21 +59,91 @@ public class Controller {
         gameView.showGameMode();
     }
 
-    public void startLocalMultiplayerGame(String text, String text1) {
-        game = new Game(true, this);
-        game.addGameObserver(gameView);
-        game.getPlayer1().setName(text);
-        game.getPlayer2().setName(text1);
+    public void showLoadSavedGame() throws Exception {
+        database = new Database();
+        database.TestConnection("");
+        gameView.showLoadSavedGame(database.getDatabases());
+    }
+
+    public void loadGame(String gameName) throws Exception {
+        System.out.println("loaded");
+        game = database.loadGame(gameName);
+        // init views
         gameView.initAttackViews();
-        gameView.showPlacement(game.getPlayer1());
+        gameView.initPlacementViews();
+
+        // Adding observers
+        game.addGameObserver(gameView);
+
+        // register placement observers
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer());
+        game.getPlayer2().getGurkinBoard().registerBoardObserver(gameView.getContainer2());
+        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel());
+        game.getPlayer2().registerObserver(gameView.getContainer2().getSidepanel());
+
+        // register attack observers
+        game.getPlayer1().registerAttackObserver(gameView.getP1AttackView());
+        game.getPlayer2().registerAttackObserver(gameView.getP2AttackView());
+        initLoadedGame();
+    }
+
+    public void initLoadedGame() {
+
+        // init placement views
+        game.initLoadedGame();
+        showGameplay();
+    }
+
+
+    public void startLocalMultiplayerGame(String player1Name, String player2Name) { // Start a new local multiplayer game
+        game = new Game(true, this); // new multiplayer game
+
+        // init views
+        gameView.initPlacementViews(); //Initialising the placement views of the players
+        gameView.initAttackViews(); // initialising the attack views of the players
+        // Setting player names
+        game.getPlayer1().setName(player1Name);  // set the name of player 1
+        game.getPlayer2().setName(player2Name); // set the name of player 2
+
+        // Adding observers
+        game.addGameObserver(gameView); // add game observer to game
+        // register placement observers
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer()); // register the placement container1 as an observer to player 1s board
+        game.getPlayer2().getGurkinBoard().registerBoardObserver(gameView.getContainer2()); // register the placement container2 as an observer to player 2s board
+        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel()); // register the sidepanel as an observer to player 1
+        game.getPlayer2().registerObserver(gameView.getContainer2().getSidepanel()); // register the sidepanel as an observer to player 2
+
+        // register attack observers
+        game.getPlayer1().getResultBoard().registerObserver(gameView.getP1AttackView()); // register shot board ovserver
+        game.getPlayer1().registerAttackObserver(gameView.getP1AttackView()); // regiseter attackview observers
+        game.getPlayer2().getResultBoard().registerObserver(gameView.getP2AttackView()); // register shot board ovserver
+        game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
+
+
+        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer()); // show the placement scene for player 1
     }
 
     // Creates a new singleplayer game with the given difficulty
     public void startSingleplayerGame(String playerName, String difficulty) {
-        game = new Game(false, this); // new singleplayer game
+        game = new Game(false, this);// new singleplayer game
+        game.getPlayer1().setName(playerName); // init player name
+
+        gameView.initPlacementViews(); // init the placement views
+        gameView.initAttackViews(); // init the attack views'
+
+        // Adding observers
         game.addGameObserver(gameView); // add game observer to game
-        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel());
-        game.getPlayer1().setName(playerName);
+        // placement observers
+        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel()); // register the sidepanel as an observer to player 1
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer()); // register the placement container1 as an observer to player 1s board
+
+        //attack observers
+        game.getPlayer1().getResultBoard().registerObserver(gameView.getP1AttackView()); // register shot board ovserver
+        game.getPlayer1().registerAttackObserver(gameView.getP1AttackView()); // regiseter attackview observers
+        game.getPlayer2().getResultBoard().registerObserver(gameView.getP2AttackView()); // register shot board ovserver
+        game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
+
+        // Setting AI difficulty
         if (difficulty == "Easy") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
         } else if (difficulty == "Medium") {
@@ -77,9 +151,9 @@ public class Controller {
         } else if (difficulty == "Hard") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Hard, game.getPlayer1());
         }
-        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer());
-        gameView.initAttackViews();
-        gameView.showPlacement(game.getPlayer1());
+
+
+        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
 
     }
 
@@ -125,17 +199,23 @@ public class Controller {
 
     public void redoPlacement() {
         game.getCurrentPlayer().resetPlacement();
-        gameView.showPlacement(game.getCurrentPlayer());
+        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
+    }
+
+    public void checkPlacement() {
+        gameView.showCheckPlacementView();
     }
 
     public void endPlacement() {
         if (game.getMultiplayer()) {
             switch (Turn.getTurn()) {
                 case "1":
+                    gameView.getContainer().removeMouseClick();
                     Turn.changeTurn();
-                    gameView.showPlacement(game.getPlayer2());
+                    gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
                     break;
                 case "2":
+                    gameView.getContainer2().removeMouseClick();
                     Turn.changeTurn();
                     showGameplay();
             }
@@ -145,8 +225,6 @@ public class Controller {
     }
 
     public void showGameplay() {
-        game.getCurrentPlayer().getResultBoard().registerObserver(gameView.getCurrentAttackView(Turn.getTurn()));
-        game.getCurrentPlayer().registerAttackObserver(gameView.getCurrentAttackView(Turn.getTurn()));
         gameView.showGameplay(Turn.getTurn(), game.getMultiplayer());
     }
 
@@ -157,15 +235,40 @@ public class Controller {
     }
 
     public void changeTurnView() {
-        showGameplay();
         if (Turn.getTurn().equals("2") && !game.getMultiplayer()) {
            Coordinates aishot = game.getAIPlayer().generateAttack();
+            System.out.println(aishot.getX() + aishot.getY() + "AI shot");
            makeShot(aishot);
         }
+        showGameplay();
+
     }
 
 
+    public void saveGame() throws Exception {
+        if (database == null) {
+            gameView.showSaveGame("Enter name for game save");
+        } else {
+            database.updateGame(game);
+        }
+    }
 
+    public void saveNewGame(String gameName) throws Exception {
+        database = new Database();
+        List<String> gameNames = database.getDatabases();
+
+        if (gameNames.contains(gameName)) {
+            throw new Exception("Game name already exists");
+        } else if (gameName.equals("")) {
+            throw new Exception("Game name cannot be empty");
+        } else if (gameName.contains(" ")) {
+            throw new Exception("Game name cannot contain spaces");
+        } else {
+            database = new Database(gameName);
+            database.saveGame(game);
+        }
+
+    }
 
 
 

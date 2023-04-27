@@ -193,11 +193,7 @@ public class AI extends Player {
                     }
                 }
             }
-        else if (!knownGurkinLocations.isEmpty()) { // if known gurkin locations is not empty, return the first known location
-            return knownGurkinLocations.remove(0);
-        }
-        // If there are no known locations, generate a medium attack
-        return generateMediumAttack();
+        return knownGurkinLocations.remove(0);
 
     }
 

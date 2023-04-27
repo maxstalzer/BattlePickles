@@ -3,17 +3,36 @@ package Base;
 import Base.Players.AI;
 import Base.Players.Player;
 import Controller.Controller;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Game implements GameObserver{
+@DatabaseTable(tableName = "Game")
+public class Game implements GameObserver {
+    @DatabaseField(columnName = "id", generatedId = true)
+    private int id;
+
+    @DatabaseField(columnName = "multiplayer")
     Boolean multiplayer; // true if multiplayer, false if singleplayer
+
+    /* @ForeignCollectionField(columnName = "Players", eager = true)
+    private Collection<Player> players = new ArrayList<>(); */
+
+    @DatabaseField(columnName = "player1_id", foreign = true,foreignAutoRefresh = true)
     Player player1; // Player 1
+    @DatabaseField(columnName = "player2_id", foreign = true,foreignAutoRefresh = true)
     Player player2; // Player 2
+    @DatabaseField(columnName = "game_over")
     Boolean game_Over; // true if game is over
 
+    @DatabaseField(columnName = "game_id")
     private String gameID; // Game ID
+    @DatabaseField(columnName = "initial_turn")
     private String initial_turn; // Initial// turn
 
     private Controller controller; // Controller
@@ -40,14 +59,17 @@ public class Game implements GameObserver{
     public Player getPlayer1() {
         return player1;
     } // Getters
+
     public Player getPlayer2() {
         return player2;
     } // Getters
+
     public AI getAIPlayer() { // Returns AI player if singleplayer, null if multiplayer
         if (!multiplayer) {
             return (AI) player2;
         } else return null;
     }
+
     public Boolean getMultiplayer() {
         return multiplayer;
     } // Getters
@@ -74,7 +96,7 @@ public class Game implements GameObserver{
         return player1.getGurkinBoard();
     }
 
-    public Player getCurrentPlayer( ) {
+    public Player getCurrentPlayer() {
         if (Turn.getTurn().equals("1")) {
             return player1;
         }
@@ -85,7 +107,7 @@ public class Game implements GameObserver{
         if (Turn.getTurn().equals("1")) {
             player1.shoot(player2.getGurkinBoard(), coords);
 
-        } else  {
+        } else {
             player2.shoot(player1.getGurkinBoard(), coords);
         }
         checkWin();
@@ -116,4 +138,27 @@ public class Game implements GameObserver{
     public void addGameObserver(GameObserver gameObserver) {
         gameObserverSet.add(gameObserver);
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public Game() {
+
+    }
+
+    public void setInitial_turn() {
+        initial_turn = Turn.getTurn();
+    }
+
+    public void initLoadedGame() {
+        player1.getGurkinBoard().prepareViewGurkin();
+        player2.getGurkinBoard().prepareViewGurkin();
+        player1.getResultBoard().prepareResultsView();
+        player2.getResultBoard().prepareResultsView();
+
+        Turn.setTurn(initial_turn);
+
+    }
+
 }

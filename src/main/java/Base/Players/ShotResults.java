@@ -59,4 +59,18 @@ public class ShotResults implements ResultObserver {
         observers.add(observer);
     }
 
+    public void prepareResultsView() {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j< 10; j++) {
+                if (shotBoard[j][i] == 'k') {
+                    notifyKill(new Coordinates(j, i));
+                } else if (shotBoard[j][i] == 'x') {
+                    notifyHit(new Coordinates(j, i));
+                } else if (shotBoard[j][i] == 'o') {
+                    notifyMiss(new Coordinates(j, i));
+                }
+            }
+        }
+    }
+
 }
