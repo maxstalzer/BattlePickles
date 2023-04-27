@@ -68,12 +68,29 @@ public class Controller {
     public void loadGame(String gameName) throws Exception {
         System.out.println("loaded");
         game = database.loadGame(gameName);
-        game.addGameObserver(gameView);
+        // init views
         gameView.initAttackViews();
+        gameView.initPlacementViews();
+
+        // Adding observers
+        game.addGameObserver(gameView);
+
+        // register placement observers
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer());
+        game.getPlayer2().getGurkinBoard().registerBoardObserver(gameView.getContainer2());
+        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel());
+        game.getPlayer2().registerObserver(gameView.getContainer2().getSidepanel());
+
+        // register attack observers
+        game.getPlayer1().registerAttackObserver(gameView.getP1AttackView());
+        game.getPlayer2().registerAttackObserver(gameView.getP2AttackView());
         initLoadedGame();
     }
 
     public void initLoadedGame() {
+
+        // init placement views
+        game.initLoadedGame();
         showGameplay();
     }
 
@@ -183,6 +200,10 @@ public class Controller {
     public void redoPlacement() {
         game.getCurrentPlayer().resetPlacement();
         gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
+    }
+
+    public void checkPlacement() {
+        gameView.showCheckPlacementView();
     }
 
     public void endPlacement() {

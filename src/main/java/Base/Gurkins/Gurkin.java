@@ -13,6 +13,7 @@ public abstract class Gurkin {
     private int lives;
 
 
+
 //  Constructor for the class
     Gurkin(int size) {
         this.size = size;
@@ -20,6 +21,7 @@ public abstract class Gurkin {
     }
 
     public Gurkin() {}
+    public int getId() {return this.id;}
 
     public int getSize() {
         return this.size;

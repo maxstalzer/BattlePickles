@@ -18,4 +18,6 @@ public class Turn { // Turn class
         return turn;
     } // Getters
 
+    public static void setTurn(String initialTurn) {
+    }
 }

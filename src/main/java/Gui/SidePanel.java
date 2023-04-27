@@ -112,16 +112,7 @@ public class SidePanel extends VBox implements PlayerObserver {
     public void finalisePlacement() {
 //        Are you happy with your placement?
         // get input on happiness
-        Boolean cont = true; // get the player input and use here.
-        if (cont) {
-            controller.endPlacement();
-        } else {
-            controller.redoPlacement();
-
-        }
-
+        // if yes, then
+        controller.checkPlacement();
     }
-
-
-
 }

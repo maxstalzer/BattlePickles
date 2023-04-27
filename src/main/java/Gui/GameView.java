@@ -13,12 +13,12 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.AudioClip;
+
+import java.io.File;
 import java.util.List;
 
 public class GameView extends Application implements GameObserver {
@@ -46,7 +46,7 @@ public class GameView extends Application implements GameObserver {
     private Container container1;
     private Container container2;
 
-    private String mainScreenMusic = 
+    private final String winningScreenMusic = "NothingToSeeHere.mp3";
 
 
 
@@ -357,7 +357,8 @@ public class GameView extends Application implements GameObserver {
 
         layout.getChildren().addAll(label1, backButton);
         layout.setAlignment(Pos.CENTER);
-
+        AudioClip sound = new AudioClip(new File(winningScreenMusic).toURI().toString());
+        sound.play();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -429,4 +430,31 @@ public class GameView extends Application implements GameObserver {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+    public void showCheckPlacementView() {
+        VBox layout = new VBox();
+        Scene scene = new Scene(layout, 500, 500);
+
+        Label label3 = new Label("Are you sure you want to place your ships here?");
+
+        Button yesButton = new Button("Yes");
+        yesButton.setOnAction(e -> {
+            try {
+                controller.endPlacement();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        Button noButton = new Button("No");
+        noButton.setOnAction(e -> controller.redoPlacement());
+
+        layout.getChildren().addAll(label3, yesButton, noButton);
+        layout.setAlignment(Pos.CENTER);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 }
+
+

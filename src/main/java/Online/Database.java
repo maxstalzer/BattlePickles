@@ -135,17 +135,17 @@ public class Database {
         this.databaseURL =  String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
         Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
-        Game game = gameDao.queryForId(1);
+        List<Game> games = gameDao.queryForAll();
         connectionSource.close();
-        return game;
+        return games.get(0);
     }
 
     public Game loadGame() throws Exception {
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
         Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
-        Game game = gameDao.queryForId(1);
+        List<Game> games = gameDao.queryForAll();
         connectionSource.close();
-        return game;
+        return games.get(0);
     }
 
     public void updateGame(Game game) throws Exception {
@@ -165,28 +165,52 @@ public class Database {
 
         Board board1 = pl1.getGurkinBoard();
         boardDao.update(board1);
+
+        Set<Gurkin> gurkinset1 = new HashSet<Gurkin>();
+
+        for (Tile tile : board1.getTiles()) {
+            if (tile.hasGurkin()) {
+                gurkinset1.add(tile.getGurkin());
+            }
+        }
+        for (Gurkin gurkin : gurkinset1) {
+            gurkinDao.update(gurkin);
+        }
+
         for (Tile tile : board1.getTiles()) {
             tileDao.update(tile);
-            if (tile.hasGurkin()) {
-                gurkinDao.update(tile.getGurkin());
-            }
         }
 
         Board board2 = pl2.getGurkinBoard();
         boardDao.update(board2);
+
+
+        Set<Gurkin> gurkinset2 = new HashSet<Gurkin>();
+
+        for (Tile tile : board2.getTiles()) {
+            if (tile.hasGurkin()) {
+                gurkinset2.add(tile.getGurkin());
+            }
+        }
+
+        for (Gurkin gurkin : gurkinset2) {
+            gurkinDao.update(gurkin);
+        }
+
         for (Tile tile : board2.getTiles()) {
             tileDao.update(tile);
-            if (tile.hasGurkin()) {
-                gurkinDao.update(tile.getGurkin());
-            }
         }
 
         gameDao.update(game);
         connectionSource.close();
     }
 
-    public Player retrievePlayer(int id) throws Exception {
+    public Game retrieveGame(int id) throws Exception {
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+
+        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+        Game game = gameDao.queryForId(id);
+
 
         // Retrieve the player with the given ID from the database
         Dao<Player, Integer> playerDao = DaoManager.createDao(connectionSource, Player.class);
@@ -216,8 +240,57 @@ public class Database {
         player.setGurkinBoard(board);
 
         connectionSource.close();
-        return player;
+        return game;
     }
+
+  /*  public Game retrieveGame(int id) throws Exception {
+        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+
+        // Retrieve the game from the database
+        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+        Game game = gameDao.queryForId(1); // Assuming the game has ID = 1
+
+        // Retrieve all players associated with the game from the database
+        Dao<Player, Integer> playerDao = DaoManager.createDao(connectionSource, Player.class);
+        List<Player> players = playerDao.queryForAll();
+
+        // Retrieve all boards associated with each player from the database
+        Dao<Board, Integer> boardDao = DaoManager.createDao(connectionSource, Board.class);
+        for (Player player : players) {
+            Board board = boardDao.queryForId(player.getGurkinBoard().getId());
+
+            // Retrieve all tiles associated with this board from the database
+            Dao<Tile, Integer> tileDao = DaoManager.createDao(connectionSource, Tile.class);
+            QueryBuilder<Tile, Integer> tilesQueryBuilder = tileDao.queryBuilder();
+            tilesQueryBuilder.where().eq("board_id", board.getId());
+            Collection<Tile> tiles = tileDao.query(tilesQueryBuilder.prepare());
+
+            QueryBuilder<Tile, Integer> tile1QueryBuilder = tileDao.queryBuilder();
+            tile1QueryBuilder.where().eq("board_id", board.getId());
+            Collection<Tile> tile1 = tileDao.query(tile1QueryBuilder.prepare());
+            Collection<Tile> tile1 =
+
+
+            // Retrieve all gurkins associated with each tile from the database
+            Dao<Gurkin, Integer> gurkinDao = DaoManager.createDao(connectionSource, Gurkin.class);
+            List<Gurkin> gurkins = gurkinDao.queryForAll();
+            for (Tile tile : tiles) {
+                if (tile.hasGurkin()){
+                    tile.get
+                }
+
+            }
+
+            // Set the retrieved board and tiles to the player object
+            board.setTiles(tiles);
+            player.setGurkinBoard(board);
+        }
+
+        game.setPlayers(players);
+
+        connectionSource.close();
+        return game;
+    }*/
 
 
     public void TestConnection(String databaseName) {

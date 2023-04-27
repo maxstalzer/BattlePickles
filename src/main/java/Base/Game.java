@@ -151,4 +151,14 @@ public class Game implements GameObserver {
         initial_turn = Turn.getTurn();
     }
 
+    public void initLoadedGame() {
+        player1.getGurkinBoard().prepareViewGurkin();
+        player2.getGurkinBoard().prepareViewGurkin();
+        player1.getResultBoard().prepareResultsView();
+        player2.getResultBoard().prepareResultsView();
+
+        Turn.setTurn(initial_turn);
+
+    }
+
 }

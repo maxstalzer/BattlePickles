@@ -1,6 +1,6 @@
 package Base;
 
-import Base.Gurkins.Gurkin;
+import Base.Gurkins.*;
 import Base.Players.Player;
 import Controller.Controller;
 
@@ -8,12 +8,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-
+import java.util.*;
 
 
 @DatabaseTable(tableName = "Board")
@@ -119,5 +114,130 @@ public class Board implements BoardObserver{ // Board class
     public void registerBoardObserver(BoardObserver observer) {
         observers.add(observer);
     }
+
+    public void prepareViewGurkin() {
+        Gurkin[] gurkins = new Gurkin[5];
+        Coordinates[] startCoors = new Coordinates[5];
+        Direction.direction[] startDirs = new Direction.direction[5];
+
+
+        List<Tile> conichonList = new ArrayList<>();
+        List<Tile> gherkinList = new ArrayList<>();
+        List<Tile> pickleList = new ArrayList<>();
+        List<Tile> yardlongList = new ArrayList<>();
+        List<Tile> zuchinniList = new ArrayList<>();
+
+        for (Tile tile : tiles) {
+            if (tile.hasGurkin() && (tile.getGurkin() instanceof Conichon)) {conichonList.add(tile);}
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Gherkin)) {gherkinList.add(tile);}
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Pickle)) {pickleList.add(tile);}
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Yardlong)) {yardlongList.add(tile);}
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Zuchinni)) {zuchinniList.add(tile);}
+        }
+        Tile lowest;
+
+        if (conichonList.get(0).getX() == conichonList.get(1).getX()) {
+            startDirs[0] = Direction.direction.Vertical;
+            lowest = conichonList.get(0);
+            for (Tile tile : conichonList) {
+                if (tile.getY() < lowest.getY()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[0] = new Coordinates(lowest.getX(), lowest.getY());
+        } else {
+            startDirs[0] = Direction.direction.Horizontal;
+            lowest = conichonList.get(0);
+            for (Tile tile : conichonList) {
+                if (tile.getX() < lowest.getX()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[0] = new Coordinates(lowest.getX(), lowest.getY());
+        }
+        if (gherkinList.get(0).getX() == gherkinList.get(1).getX()) {
+            startDirs[1] = Direction.direction.Vertical;
+            lowest = gherkinList.get(0);
+            for (Tile tile : gherkinList) {
+                if (tile.getY() < lowest.getY()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[1] = new Coordinates(lowest.getX(), lowest.getY());
+        } else {
+            startDirs[1] = Direction.direction.Horizontal;
+            lowest = gherkinList.get(0);
+            for (Tile tile : gherkinList) {
+                if (tile.getX() < lowest.getX()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[1] = new Coordinates(lowest.getX(), lowest.getY());
+        }
+        if (pickleList.get(0).getX() == pickleList.get(1).getX()) {
+            startDirs[2] = Direction.direction.Vertical;
+            lowest = pickleList.get(0);
+            for (Tile tile : pickleList) {
+                if (tile.getY() < lowest.getY()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[2] = new Coordinates(lowest.getX(), lowest.getY());
+        } else {
+            startDirs[2] = Direction.direction.Horizontal;
+            lowest = pickleList.get(0);
+            for (Tile tile : pickleList) {
+                if (tile.getX() < lowest.getX()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[2] = new Coordinates(lowest.getX(), lowest.getY());
+        }
+        if (yardlongList.get(0).getX() == yardlongList.get(1).getX()) {
+            startDirs[3] = Direction.direction.Vertical;
+            lowest = yardlongList.get(0);
+            for (Tile tile : yardlongList) {
+                if (tile.getY() < lowest.getY()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[3] = new Coordinates(lowest.getX(), lowest.getY());
+        } else {
+            startDirs[3] = Direction.direction.Horizontal;
+            lowest = yardlongList.get(0);
+            for (Tile tile : yardlongList) {
+                if (tile.getX() < lowest.getX()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[3] = new Coordinates(lowest.getX(), lowest.getY());
+
+        }
+        if (zuchinniList.get(0).getX() == zuchinniList.get(1).getX()) {
+            startDirs[4] = Direction.direction.Vertical;
+            lowest = zuchinniList.get(0);
+            for (Tile tile : zuchinniList) {
+                if (tile.getY() < lowest.getY()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[4] = new Coordinates(lowest.getX(), lowest.getY());
+        } else {
+            startDirs[4] = Direction.direction.Horizontal;
+            lowest = zuchinniList.get(0);
+            for (Tile tile : zuchinniList) {
+                if (tile.getX() < lowest.getX()) {
+                    lowest = tile;
+                }
+            }
+            startCoors[4] = new Coordinates(lowest.getX(), lowest.getY());
+        }
+        for (int i = 0; i < 5; i++) {
+            for (BoardObserver observer : observers) {
+                observer.placeGurkin(startCoors[i], startDirs[i], gurkins[i]);
+            }
+        }
+    }
 }
+
 

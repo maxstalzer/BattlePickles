@@ -206,7 +206,5 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
         return this.id;
     }
 
-
-
 }
 
