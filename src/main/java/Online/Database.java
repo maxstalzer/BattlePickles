@@ -10,6 +10,7 @@ import com.j256.ormlite.db.DatabaseType;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.DatabaseConnection;
+import com.j256.ormlite.table.TableUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,13 +35,29 @@ public class Database {
         String createDatabaseQuery = String.format("CREATE DATABASE %s",databaseName);
         Statement createDatabaseStatement = connection.createStatement();
         createDatabaseStatement.executeUpdate(createDatabaseQuery);
-
-        String useDatabaseQuery = String.format("USE %s",databaseName);
-        Statement useDatabaseStatement = connection.createStatement();
-        useDatabaseStatement.executeUpdate(useDatabaseQuery);
         connection.close();
 
         databaseURL = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+
+        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+
+        // Create table for Player class
+        Dao<Player, Integer> playerDao = DaoManager.createDao(connectionSource, Player.class);
+        TableUtils.createTableIfNotExists(connectionSource, Player.class);
+
+        // Create table for Board class
+        Dao<Board, Integer> boardDao = DaoManager.createDao(connectionSource, Board.class);
+        TableUtils.createTableIfNotExists(connectionSource, Board.class);
+
+        // Create table for Tile class
+        Dao<Tile, Integer> tileDao = DaoManager.createDao(connectionSource, Tile.class);
+        TableUtils.createTableIfNotExists(connectionSource, Tile.class);
+
+        // Create table for Gurkin class
+        Dao<Gurkin, Integer> gurkinDao = DaoManager.createDao(connectionSource, Gurkin.class);
+        TableUtils.createTableIfNotExists(connectionSource, Gurkin.class);
+
+        connection.close();
     }
 
     public void updatePlayer(Player player) throws Exception {
