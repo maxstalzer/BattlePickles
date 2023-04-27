@@ -43,8 +43,14 @@ public class Tile {
         this.x = x;
     }
 
+    public int getId() {
+        return id;
+    }
     public void setBoard(Board b) {
         this.board = b;
+    }
+    public int getBoardId() {
+        return board.getId();
     }
 
     //until here -V

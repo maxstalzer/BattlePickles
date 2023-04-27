@@ -5,19 +5,19 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 
+//this is basically the controller, will be transferred to the controller once we know what the fuck we're supposed to do
 public class OnlineLoop {
-    private OnlineTurn game;
-    private boolean gameOver;
+    private OnlineGame game;
     private Scanner scanner;
 
-    public OnlineLoop() throws SQLException {
-        OnlineTurn game = new OnlineTurn();
+    public OnlineLoop(String databaseName) throws SQLException {
+        OnlineGame game = new OnlineGame(databaseName);
         scanner = new Scanner(System.in);
     }
 
-    /*
+
     public void start() throws SQLException {
-        while (!gameOver) {
+        while (!game.GameOver()) {
             // Get the current player
             Player currentPlayer = game.getCurrentPlayer();
 
@@ -27,12 +27,6 @@ public class OnlineLoop {
             // Switch to the other player
             game.switchPlayer();
 
-            //write the actual player turn here
-
-            // Check if the game is over
-            if (game.GameOver()) {
-                gameOver = true;
-            }
         }
 
         // Print the winner
@@ -51,12 +45,11 @@ public class OnlineLoop {
         // TODO: Do the player's turn actions here (shoot tile, etc.)
 
         // Update the player and game state in the database
+        // updateGameState needs to be implemented further
         game.updateGameState();
 
         // Notify the other player that it's their turn
         Player otherPlayer = game.getOtherPlayer();
         System.out.println(otherPlayer.getName() + ", it's your turn now!");
     }
-
-     */
 }

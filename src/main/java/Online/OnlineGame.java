@@ -7,21 +7,27 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
 
-public class OnlineTurn {
+public class OnlineGame {
     private Dao<Player, Integer> playerDao;
     private Dao<GameState, Integer> gameStateDao;
     private Player currentPlayer;
 
+    private Player otherPlayer;
+
+    private boolean gameOver = false;
+
     public Player getCurrentPlayer() {
         return this.currentPlayer;
     }
+    public Player getOtherPlayer() {
+        return this.otherPlayer;
+    }
 
-    public OnlineTurn() throws SQLException {
-        String databaseUrl = "jdbc:mysql://localhost:3306/game_db";
-        String databaseUsername = "username";
-        String databasePassword = "password";
+    public OnlineGame(String databaseName) throws SQLException {
+        String databaseUrl = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+        String databaseUsername = "sigurd";
+        String databasePassword = "12345678";
 
         ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, databaseUsername, databasePassword);
 
@@ -41,6 +47,10 @@ public class OnlineTurn {
         currentPlayer = players.get(0);
         currentPlayer.setCurrentPlayer(true);
         playerDao.update(currentPlayer);
+
+        otherPlayer = players.get(1);
+        otherPlayer.setCurrentPlayer(false);
+        playerDao.update(currentPlayer);
     }
 
     public void switchPlayer() throws SQLException {
@@ -48,6 +58,7 @@ public class OnlineTurn {
         for (Player player : players) {
             if (player.getId() != currentPlayer.getId()) {
                 currentPlayer.setCurrentPlayer(false);
+                otherPlayer = currentPlayer;
                 playerDao.update(currentPlayer);
                 player.setCurrentPlayer(true);
                 playerDao.update(player);
@@ -55,5 +66,15 @@ public class OnlineTurn {
                 break;
             }
         }
+    }
+    // Needs to be implemented further
+    public void updateGameState() {}
+    // Needs to be implemented further
+    public Player getWinner() {
+        return currentPlayer;
+    }
+    // Needs to be implemented further
+    public boolean GameOver() {
+        return this.gameOver;
     }
 }

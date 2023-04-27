@@ -38,6 +38,9 @@ public class Board { // Board class
     public void setId(int Id){
         this.id = id;
     }
+    public int getId() {
+        return this.id;
+    }
 
     public Tile getTile(Coordinates a) {
         for (Tile tile : tiles) {
@@ -53,7 +56,9 @@ public class Board { // Board class
     public void setTiles(Board board) {
         this.tiles = board.getTiles();
     }
-
+    public void setTiles(Collection<Tile> t) {
+        this.tiles = t;
+    }
     public String attack(Coordinates a) { // Attack a tile at coordinates and return the result
         if (!getTile(a).isHit()) {
             getTile(a).hitTile();
