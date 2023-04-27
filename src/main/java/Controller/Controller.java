@@ -145,7 +145,6 @@ public class Controller {
     }
 
     public void showGameplay() {
-        System.out.println("Starting gameplay");
         game.getCurrentPlayer().getResultBoard().registerObserver(gameView.getCurrentAttackView(Turn.getTurn()));
         game.getCurrentPlayer().registerAttackObserver(gameView.getCurrentAttackView(Turn.getTurn()));
         gameView.showGameplay(Turn.getTurn(), game.getMultiplayer());
@@ -158,11 +157,9 @@ public class Controller {
     }
 
     public void changeTurnView() {
-        System.out.println("Changing turn to " + Turn.getTurn());
         showGameplay();
         if (Turn.getTurn().equals("2") && !game.getMultiplayer()) {
            Coordinates aishot = game.getAIPlayer().generateAttack();
-            System.out.println("AI shot: " + aishot.getX() + " " + aishot.getY());
            makeShot(aishot);
         }
     }

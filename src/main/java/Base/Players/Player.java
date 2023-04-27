@@ -84,7 +84,6 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
 //  Allows a player to shoot at given coordinates on the opposing player's board
 
     public void shoot(Board board, Coordinates coords) {
-        System.out.println("Player " + this.turnID + " is shooting at " + coords.getX() + ", " + coords.getY());
         String result = board.attack(coords); // attack the tile at the coordinates
         if (result.equals("hit")) { // if the shot was a hit
             this.shotResults.setHit(coords);// set the shot results to a hit
@@ -115,7 +114,6 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
     @Override
     public void changeTurn() {
         Turn.changeTurn();
-        System.out.println("Player" + Turn.getTurn() + "'s turn");
         notifyTurnObservers();
     }
 
@@ -177,12 +175,10 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
     }
 
     public void registerObserver(PlayerObserver observer) {
-        System.out.println("registered observer");
         playerObservers.add(observer);
     }
 
     public void registerAttackObserver(PlayerAttackObserver observer) {
-        System.out.println("registered attack observer");
         attackObservers.add(observer);
     }
 

@@ -15,6 +15,8 @@ public class AI extends Player {
 
     private ArrayList<Coordinates> knownGurkinLocations; // Used to store the locations of gurkins that the AI has found for Hard difficulty
 
+    private Player opponent; // The opponent of the AI
+
     public AI() { // Constructor
         this.name = ("AI Player");
         attackWeights = new double[10][10];
@@ -22,16 +24,7 @@ public class AI extends Player {
     }
 
     public void setDifficulty(Difficulty difficulty, Player opponent) { // Sets the difficulty of the AI
-        if (difficulty.equals(Difficulty.Hard)) {
-                knownGurkinLocations = new ArrayList<>();
-                for (int y = 0; y < 10; y++) {
-                    for (int x = 0; x < 10; x++) {
-                        if (opponent.getGurkinBoard().getTile(new Coordinates(x, y)).hasGurkin()) {
-                            knownGurkinLocations.add(new Coordinates(x, y));
-                        }
-                    }
-                }
-            }
+        this.opponent = opponent;
         this.difficulty = difficulty;
     }
 
@@ -67,10 +60,7 @@ public class AI extends Player {
                 return generateMediumAttack();
             }
             case Hard -> {
-                if (!knownGurkinLocations.isEmpty()) {
-                    return knownGurkinLocations.remove(0);
-                }
-                return generateMediumAttack();
+                return generateHardAttack();
             }
             default -> {
                 return generateEasyAttack();
@@ -78,7 +68,7 @@ public class AI extends Player {
         }
     }
     // Generate a random attack that is not a repeat of a preivous attack
-    public Coordinates generateEasyAttack() {
+    private Coordinates generateEasyAttack() {
         Random rand = new Random();
         int rX = rand.nextInt(10);
         int rY = rand.nextInt(10);
@@ -91,7 +81,7 @@ public class AI extends Player {
         return attack;
     }
     // Generates an attack based on the weights of the attackWeights array
-    public Coordinates generateMediumAttack() {
+    private Coordinates generateMediumAttack() {
         // Create a list of candidate attack coordinates
         ArrayList<Coordinates> candidates = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -192,6 +182,25 @@ public class AI extends Player {
         }
     }
 
+    private Coordinates generateHardAttack() {
+        if (knownGurkinLocations == null) { // if it hasnt been initialised, initialise it
+                knownGurkinLocations = new ArrayList<>();
+                for (int y = 0; y < 10; y++) {
+                    for (int x = 0; x < 10; x++) {
+                        if (opponent.getGurkinBoard().getTile(new Coordinates(x, y)).hasGurkin()) {
+                            knownGurkinLocations.add(new Coordinates(x, y));
+                        }
+                    }
+                }
+            }
+        else if (!knownGurkinLocations.isEmpty()) { // if known gurkin locations is not empty, return the first known location
+            return knownGurkinLocations.remove(0);
+        }
+        // If there are no known locations, generate a medium attack
+        return generateMediumAttack();
+
+    }
+
     public enum Difficulty { // Enum for the difficulty of the AI
         Easy,
         Medium,
@@ -199,8 +208,5 @@ public class AI extends Player {
 
     }
 
-//    public void shoot(Board board, Coordinates coords) { // Shoots at the given coordinates
-//
-//    }
 
 }

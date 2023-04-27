@@ -24,7 +24,6 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
 
                 if (event.getTarget() instanceof GridTile) { // If what you clicked on was a Tile ("GridTile) execute this code
                     GridTile target = (GridTile) event.getTarget(); //save the GridTile Object as "target"
-                    System.out.println("Clicked on: " + target.coords.getX() + ", " + target.coords.getY());
                     controller.makeShot(target.coords);
                 }
             }
@@ -34,7 +33,6 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
 
     @Override
     public void setHit(Coordinates coords) {
-        System.out.println("Hit at: " + coords.getX() + ", " + coords.getY());
         Hit hit = new Hit(coords);
         hit.relocate(coords.getX() * (gridsize), coords.getY() * gridsize);
         getChildren().add(hit);
@@ -43,7 +41,6 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
 
     @Override
     public void setMiss(Coordinates coords) {
-        System.out.println("Miss at: " + coords.getX() + ", " + coords.getY());
         Miss miss = new Miss(coords);
         miss.relocate(coords.getX() * (gridsize), coords.getY() * gridsize);
         getChildren().add(miss);
@@ -52,7 +49,6 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
 
     @Override
     public void setKill(Coordinates coords) {
-        System.out.println("Kill at: " + coords.getX() + ", " + coords.getY());
         Kill kill = new Kill(coords);
         kill.relocate(coords.getX() * (gridsize), coords.getY() * gridsize);
         getChildren().add(kill);

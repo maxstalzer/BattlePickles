@@ -54,11 +54,10 @@ public class SidePanelGurks extends GuiGurks {
         setOnMouseClicked(new EventHandler<Event>() { //An event handler which activates when you click on the Container.
             @Override
             public void handle(Event event) {
-                System.out.println("Seen");
                 SidePanelGurks gurk;
-//                System.out.println(event.getTarget());
+//               ;
                 if (event.getTarget() instanceof SidePanelGurks) {
-                    System.out.println("gurkseen");
+
                     gurk = (SidePanelGurks) event.getTarget();
 
 //                    System.out.println(gurk.gurktype);
