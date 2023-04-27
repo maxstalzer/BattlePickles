@@ -15,13 +15,7 @@ import java.util.List;
 public class Controller {
     private Game game;
     private GameView gameView;
-
-    private Stage primaryStage;
-
-    public Gurkin Gurktype;
-
     private Database database;
-
 
     public enum gurkinID {
         Pickle,
