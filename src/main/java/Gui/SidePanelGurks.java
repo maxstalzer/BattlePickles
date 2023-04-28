@@ -68,27 +68,31 @@ public class SidePanelGurks extends GuiGurks {
                     if (gurk.getGurktypeField().equals(gurkinID.Pickle)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Pickle);
                         gurkSound = new MediaPlayer(new Media(new File("src/main/resources/PickleSelected.mp3").toURI().toString()));
-                        gurkSound.setVolume(1);
+                        gurkSound.setVolume(1.2);
                         gurkSound.play();
                         System.out.println("Pickle");
                     } else if (gurk.getGurktypeField().equals(gurkinID.Yardlong)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Yardlong);
                         gurkSound = new MediaPlayer(new Media(new File("src/main/resources/YardlongSelected.mp3").toURI().toString()));
+                        gurkSound.setVolume(1.2);
                         gurkSound.play();
                         System.out.println("2");
                     } else if (gurk.getGurktypeField().equals(gurkinID.Zuchinni)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Zuchinni);
                         gurkSound = new MediaPlayer(new Media(new File("src/main/resources/ZuchiniSelected.mp3").toURI().toString()));
+                        gurkSound.setVolume(1.2);
                         gurkSound.play();
                         System.out.println("3");
                     } else if (gurk.getGurktypeField().equals(gurkinID.Gherkin)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Gherkin);
                         gurkSound = new MediaPlayer(new Media(new File("src/main/resources/GherkinSelected.mp3").toURI().toString()));
+                        gurkSound.setVolume(1.2);
                         gurkSound.play();
                         System.out.println("4");
                     } else if (gurk.getGurktypeField().equals(gurkinID.Conichon)) {
                         sidePanel.setGurktypeField(Controller.gurkinID.Conichon);
                         gurkSound = new MediaPlayer(new Media(new File("src/main/resources/ConichonSelected.mp3").toURI().toString()));
+                        gurkSound.setVolume(1.2);
                         gurkSound.play();
                         System.out.println("5");
                     }
