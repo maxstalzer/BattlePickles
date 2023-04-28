@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -195,9 +196,11 @@ public class GameView extends Application implements GameObserver {
         label4.setFont(joystixTitle);
 
         TextField p1NameField = new TextField();
+        p1NameField.setText("Player 1");
         p1NameField.setFont(joystix);
         p1NameField.setMaxWidth(100);
         TextField p2NameField = new TextField();
+        p2NameField.setText("Player 2");
         p2NameField.setFont(joystix);
         p2NameField.setMaxWidth(100);
 
@@ -229,6 +232,7 @@ public class GameView extends Application implements GameObserver {
         label5.setFont(joystix);
 
         TextField p1NameField = new TextField();
+
         p1NameField.setMaxWidth(100);
         p1NameField.setFont(joystix);
 
@@ -287,11 +291,27 @@ public class GameView extends Application implements GameObserver {
         });
         noSaveButton.setFont(joystixSave);
 
-        Label playerName = new Label();
-        playerName.setText(player.getName());
 
-        VBox panel = new VBox(10, playerName, saveButton, noSaveButton);
-        panel.setAlignment(Pos.CENTER_RIGHT);
+
+        Label playerName = new Label();
+        String displayName;
+        if (player.getName().equals("")) {
+            displayName = "Player " + turn;
+        } else {
+            displayName = player.getName();
+        }
+        playerName.setText(displayName);
+        playerName.setFont(joystixSave);
+
+        HBox playerBox = new HBox();
+        playerBox.getChildren().add(playerName);
+        playerBox.setAlignment(Pos.CENTER);
+        playerBox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 10;");
+
+
+
+        VBox panel = new VBox(10, playerBox, saveButton, noSaveButton);
+        panel.setAlignment(Pos.TOP_CENTER);
         panel.setPadding(new Insets(10));
         panel.setMaxWidth(400);
         panel.setMaxHeight(screenHeight);
@@ -305,24 +325,26 @@ public class GameView extends Application implements GameObserver {
             shotContainer1.setScaleY(0.6);
             shotContainer1.setScaleX(0.6);
 
+            container1.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
+            shotContainer1.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
 
             hbox = new HBox(container1, shotContainer1);
             hbox.setMaxWidth(screenWidth - 400);
             hbox.setMaxHeight(screenHeight);
             hbox.setAlignment(Pos.CENTER_LEFT);
             hbox.setSpacing(-500);
-            hbox.setStyle("-fx-background-color: transparent;");
-            hbox.setBackground(Background.EMPTY);
-
+//            hbox.setStyle("-fx-background-color: transparent;");
+//            hbox.setBackground(Background.EMPTY);
+            hbox.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
 
             HBox outerBox = new HBox(hbox, panel);
             outerBox.setMaxWidth(screenWidth);
             outerBox.setMaxHeight(screenHeight);
-            outerBox.setSpacing(40);
+            outerBox.setSpacing(100);
 
 
 
-            Image image = new Image("Brine copy.gif");
+            Image image = new Image("cucuer_back.jpg");
             BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
             BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
             outerBox.setBackground(new Background(backgroundImage));
@@ -380,7 +402,7 @@ public class GameView extends Application implements GameObserver {
         mainMenuMusic.stop();
         VBox layout = new VBox();
         Scene scene = new Scene(layout, screenWidth, screenWidth);
-        BackgroundImage image = new BackgroundImage(new Image("cucuer_back.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
+        BackgroundImage image = new BackgroundImage(new Image(""), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
         layout.setBackground(new Background(image));
 
         finalSound.play();

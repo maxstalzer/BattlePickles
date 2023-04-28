@@ -20,7 +20,7 @@ public class Sea extends GridPane {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 GridTile g = new GridTile(new Coordinates(j, i));
-                g.setStyle("-fx-background-color: rgba(81, 162, 0, 0.5);");
+                g.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8);");
                 // The gridTiles becomes blue.
                 add(g, j, i); //The gridTiles are added to the GridPane object.
                 gridTiles[j][i] = g;
