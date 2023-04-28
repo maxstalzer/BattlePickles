@@ -614,6 +614,7 @@ public class StepsDefinition {
     }
     @Then("I should be able to load the game from the database")
     public void i_should_be_able_to_load_the_game_from_the_database() throws Exception {
+        Board loadBoard = database.getBoard();
         loadedGame = database.loadGame("tester");
         loadedGame.getPlayer2().getGurkinBoard().getTile(new Coordinates(3,1)).setGurkin(new Yardlong());
         database.updateGame(loadedGame);

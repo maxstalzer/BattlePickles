@@ -686,5 +686,25 @@ public class Database {
             connectionSource.closeQuietly();
         }
     }
+
+    public Board getBoard() throws Exception {
+        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+        Dao<Board, Integer> boardDao = DaoManager.createDao(connectionSource, Board.class);
+        Board board = boardDao.queryForId(1);
+        // Access the Tile objects associated with the Board
+        Collection<Tile> tiles = board.getTiles();
+        System.out.println("-------------" + tiles.size() + "----------------");
+// Iterate over the Tile objects and perform any necessary operations
+        for (Tile tile : tiles) {
+            // Do something with each Tile object
+            System.out.println("X: " + tile.getX());
+            System.out.println("Y: " + tile.getY());
+        }
+        // Close the connection source and Dao when finished
+        boardDao.closeLastIterator();
+        connectionSource.close();
+        return board;
+    }
+
 }
 

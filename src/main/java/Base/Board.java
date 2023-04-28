@@ -25,6 +25,7 @@ public class Board implements BoardObserver{ // Board class
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
                 Tile tile = new Tile();
+                tile.setBoard(this);
                 tile.setX(x);
                 tile.setY(y);
                 tiles.add(tile);
