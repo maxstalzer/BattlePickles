@@ -13,7 +13,6 @@ import javafx.stage.Screen;
 
 public class Sea extends GridPane {
     private GridTile[][] gridTiles = new GridTile[10][10];
-    // double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; //Size of the grids in the gridPane
     public Sea() {
         int size = 10;
         double s = 100; // side of rectangle

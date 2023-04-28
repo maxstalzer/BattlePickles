@@ -33,7 +33,7 @@ public class GuiGurks extends Canvas {
     }
 
     private double scale =1;
-    private double gridsize = Screen.getPrimary().getBounds().getMaxY()/12;
+    private double gridsize = 956 /12;
 
     public GuiGurks(Coordinates coords, Gurkin gurktype,Direction.direction dir) { //Contructor for the Gurks.
 

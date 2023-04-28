@@ -59,6 +59,7 @@ public class GameView extends Application implements GameObserver {
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 24);
     private Font joystixTitle = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 50);
     private Font joystixSave = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 16);
+    private Font joystixSub = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 18);
 
     public Container getContainer1() { // returns container of player1
         return container1;
@@ -77,8 +78,9 @@ public class GameView extends Application implements GameObserver {
         this.primaryStage = primaryStage;
         this.mainMenuMusic = new MediaPlayer(new Media(new File("src/main/resources/menu.mp3").toURI().toString()));
         this.finalSound = new MediaPlayer(new Media(new File("src/main/resources/NothingToSeeHere.mp3").toURI().toString()));
-        this.screenHeight = Screen.getPrimary().getBounds().getHeight();
-        this.screenWidth = Screen.getPrimary().getBounds().getWidth();
+        this.screenHeight = 956;
+        this.screenWidth = 1470;
+        Font.loadFont(getClass().getResource("/joystix monospace.otf").toExternalForm(), 10);
         controller.showMainMenu(); // Show main menu
 
     }
@@ -141,7 +143,7 @@ public class GameView extends Application implements GameObserver {
         primaryStage.setTitle("You don't know what you're getting yourself into");
         primaryStage.setScene(scene);
         mainMenuMusic.setCycleCount(MediaPlayer.INDEFINITE);
-        mainMenuMusic.setVolume(0.3);
+        mainMenuMusic.setVolume(0.2);
         mainMenuMusic.play();
         primaryStage.show();
 
@@ -257,16 +259,18 @@ public class GameView extends Application implements GameObserver {
         p1NameField.setFont(joystix);
         p1NameField.setOnAction(e -> p1NameField.setText(""));
 
+
         MenuButton menuButton = new MenuButton("");
+        menuButton.setMinWidth(200);
+        menuButton.setAlignment(Pos.CENTER);
         MenuItem Easy = new MenuItem("Easy");
-        Easy.setStyle("-fx-font-family: myFont;");
-//        Easy.setFont
-        Easy.setStyle(joystix.getStyle());
+        Easy.setStyle("-fx-font-family: joystix; -fx-font-size: 24;");
+
         MenuItem Medium = new MenuItem("Medium");
-        Medium.setStyle(joystix.getStyle());
+        Medium.setStyle("-fx-font-family: joystix; -fx-font-size: 24;");
 
         MenuItem Hard = new MenuItem("Hard");
-        Hard.setStyle(joystix.getStyle());
+        Hard.setStyle("-fx-font-family: joystix; -fx-font-size: 24;");
 
         menuButton.getItems().addAll(Easy, Medium, Hard);
         menuButton.setText("Easy");
@@ -300,9 +304,9 @@ public class GameView extends Application implements GameObserver {
 
     public void showGameplay(String turn, Boolean multiplayer, Player currentplayer, Player opponent) { // Show gameplay scene
         HBox hbox;
-        // Making the bottom stats panel
+        // Making the Stats Panel
         Button saveButton = new Button("Save & Quit"); // Save and quit button
-        saveButton.setOnAction(e -> {
+        saveButton.setOnAction(e -> { // Save and quit button action, throws exception if it takes too long
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<?> future = executor.submit(() -> {
                 try {
@@ -325,7 +329,8 @@ public class GameView extends Application implements GameObserver {
                 alert.showAndWait();
             }
         });
-        saveButton.setFont(joystixSave);
+        saveButton.setFont(joystixSave); // setting font of the saveButton
+
 
         Button noSaveButton = new Button("Quit without saving"); // Quit without saving button
         noSaveButton.setOnAction(e -> {
@@ -337,8 +342,7 @@ public class GameView extends Application implements GameObserver {
         });
         noSaveButton.setFont(joystixSave);
 
-
-
+        // Showing the Current Player's name
         Label playerName = new Label(); // shows the name of the current player in an HBox
         String displayName;
         if (currentplayer.getName().equals("")) {
@@ -346,7 +350,6 @@ public class GameView extends Application implements GameObserver {
         } else {
             displayName = currentplayer.getName();
         }
-
         playerName.setText(displayName);
         playerName.setFont(joystix);
         HBox playerBox = new HBox();
@@ -354,8 +357,9 @@ public class GameView extends Application implements GameObserver {
         playerBox.setAlignment(Pos.CENTER);
         playerBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10; -fx-background-insets: 5px");
 
+
         // Showing the Current Player's stats
-        Label playerStats = new Label("Current Player's Stats");
+        Label playerStats = new Label("Current Stats");
         playerStats.setFont(joystix);
         Label playerShips = new Label("Undead Gurks: " + currentplayer.getRemaining_gurkins());
         playerShips.setFont(joystixSave);
@@ -367,7 +371,7 @@ public class GameView extends Application implements GameObserver {
         playerStatsBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;-fx-background-insets: 5px;");
 
 
-
+        // Putting the side panel together
         VBox panel = new VBox(10, playerBox,playerStatsBox, saveButton, noSaveButton);
         panel.setAlignment(Pos.TOP_CENTER);
         panel.setPadding(new Insets(10));
@@ -379,6 +383,7 @@ public class GameView extends Application implements GameObserver {
 
             container1.setScaleX(0.6);
             container1.setScaleY(0.6);
+            container1.setTranslateX(-150);
 
             shotContainer1.setScaleY(0.6);
             shotContainer1.setScaleX(0.6);
@@ -389,24 +394,24 @@ public class GameView extends Application implements GameObserver {
             // labeling the player's board
             Label playerBoardLabel = new Label(displayName + "'s Board");
             HBox playerBoardBox = new HBox(playerBoardLabel);
-            playerBoardBox.setMaxWidth(300);
+            playerBoardBox.setAlignment(Pos.CENTER);
+            playerBoardBox.setMaxWidth(455);
             playerBoardLabel.setFont(joystixSave);
-            playerBoardBox.setTranslateX(290);
-            playerBoardBox.setTranslateY(160);
+            playerBoardBox.setTranslateX(65);
+            playerBoardBox.setTranslateY(150);
             playerBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
             VBox placeBox = new VBox(playerBoardBox, container1);
 
             // Labeling results board
-            Label resultsBoardLabel = new Label("Results from shots at:" + opponent.getName() + "'s Board");
+            Label resultsBoardLabel = new Label("Results from shots at:" + opponent.getName());
             HBox resultsBoardBox = new HBox(resultsBoardLabel);
-            resultsBoardBox.setMaxWidth(500);
+            resultsBoardBox.setMaxWidth(455);
             resultsBoardLabel.setFont(joystixSave);
-            resultsBoardBox.setTranslateX(70);
+            resultsBoardBox.setAlignment(Pos.CENTER);
+            resultsBoardBox.setTranslateX(100);
             resultsBoardBox.setTranslateY(150);
             resultsBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
-            shotContainer1.setTranslateY(-30);
             VBox shotBox = new VBox(resultsBoardBox, shotContainer1);
-            // shotBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10; -fx-background-insets: 5px;");
 
             hbox = new HBox(placeBox, shotBox);
             hbox.setMaxWidth(screenWidth - 400);
@@ -433,9 +438,9 @@ public class GameView extends Application implements GameObserver {
             primaryStage.setScene(attackScene1);
         } else if (turn.equals("2") && multiplayer) {
             container2.hideSidePanel();
-
             container2.setScaleX(0.6);
             container2.setScaleY(0.6);
+            container2.setTranslateX(-150);
 
             shotContainer2.setScaleY(0.6);
             shotContainer2.setScaleX(0.6);
@@ -446,23 +451,26 @@ public class GameView extends Application implements GameObserver {
             // labeling the player's board
             Label playerBoardLabel = new Label(displayName + "'s Board");
             HBox playerBoardBox = new HBox(playerBoardLabel);
-            playerBoardBox.setMaxWidth(300);
+            playerBoardBox.setAlignment(Pos.CENTER);
+            playerBoardBox.setMaxWidth(455);
             playerBoardLabel.setFont(joystixSave);
-            playerBoardBox.setTranslateX(290);
-            playerBoardBox.setTranslateY(160);
+            playerBoardBox.setTranslateX(65);
+            playerBoardBox.setTranslateY(150);
             playerBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
             VBox placeBox = new VBox(playerBoardBox, container2);
 
             // Labeling results board
-            Label resultsBoardLabel = new Label("Results from shots at:" + opponent.getName() + "'s Board");
+            Label resultsBoardLabel = new Label("Results from shots at:" + opponent.getName());
             HBox resultsBoardBox = new HBox(resultsBoardLabel);
-            resultsBoardBox.setMaxWidth(500);
+            resultsBoardBox.setAlignment(Pos.CENTER);
+            resultsBoardBox.setMaxWidth(455);
             resultsBoardLabel.setFont(joystixSave);
-            resultsBoardBox.setTranslateX(70);
+            resultsBoardBox.setTranslateX(100);
             resultsBoardBox.setTranslateY(150);
             resultsBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
-            shotContainer2.setTranslateY(-30);
+
             VBox shotBox = new VBox(resultsBoardBox, shotContainer2);
+//            shotContainer2.setTranslateY(7.678);
 
             hbox = new HBox(placeBox, shotBox);
             hbox.setMaxWidth(screenWidth - 400);
@@ -629,7 +637,7 @@ public class GameView extends Application implements GameObserver {
             this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/PickleEat.mp3").toURI().toString()));
             return "PickleEat.gif";
         } else {
-            this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/BlenderPickle.mp3").toURI().toString()));
+            this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/PickleBomb.mp3").toURI().toString()));
             return "PickleBomb.gif";
         }
     }
@@ -654,7 +662,7 @@ public class GameView extends Application implements GameObserver {
         GIFbox.setSpacing(10);
         GIFbox.setPadding(new Insets(20));
 
-        BackgroundSize backgroundSize = new BackgroundSize(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight(), false, false, false, true);
+        BackgroundSize backgroundSize = new BackgroundSize(screenWidth, screenHeight, false, false, false, true);
         Image image = new Image(getPickleGif(gurk));
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
         GIFbox.setBackground(new Background(backgroundImage));
@@ -668,6 +676,7 @@ public class GameView extends Application implements GameObserver {
         Button Continue = new Button("Continue");
         Continue.setFont(joystix);
         Continue.setOnAction(event -> {
+            gifPlayer.stop();
             controller.triggerEndTurn();
             mainMenuMusic.play();
         } );

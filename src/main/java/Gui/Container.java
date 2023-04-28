@@ -25,7 +25,7 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
     private MediaPlayer placingSound;
 
     private List<GuiGurks> placedGurks;
-    double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
+    double gridsize = 956 /12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
 
     public Coordinates getGurks() {
         return Gurks;
@@ -55,7 +55,7 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
 
     public Container(Controller controller) {
         Image image = new Image("brine copy.gif");
-        BackgroundSize backgroundSize = new BackgroundSize(Screen.getPrimary().getBounds().getHeight(), Screen.getPrimary().getBounds().getWidth(), false, false, false, true);
+        BackgroundSize backgroundSize = new BackgroundSize(1470, 956, false, false, false, true);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
         setBackground(new Background(backgroundImage));
         this.placedGurks = new ArrayList<>(); //This is a list of all the gurks that have been placed on the board

@@ -18,7 +18,7 @@ import javafx.stage.Screen;
 import java.io.File;
 
 public class GridTile extends TilePane { //This class is the tiles in the grid
-    double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; //the size of each grid
+    double gridsize = 956 /12; //the size of each grid
     boolean isHit=false; //not implemented
     boolean hasGurk =false; //not implemented might not have to be
 
@@ -66,11 +66,5 @@ public class GridTile extends TilePane { //This class is the tiles in the grid
                 setOpacity(1);
             }
         });
-    }
-
-    public void resize() {
-        gridsize = Screen.getPrimary().getBounds().getMaxY()/24;
-        this.setPrefHeight(gridsize);
-        this.setPrefWidth(gridsize);
     }
 }

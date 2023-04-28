@@ -21,7 +21,7 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
 
     private Controller controller;
 
-    double gridsize = Screen.getPrimary().getBounds().getMaxY() / 12;  // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
+    double gridsize = 956 / 12;  // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
     public ShootingContainer(Controller controller) {
         this.controller = controller;
 
