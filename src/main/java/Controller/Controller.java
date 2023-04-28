@@ -219,7 +219,7 @@ public class Controller {
     }
 
     public void showGameplay() {
-        gameView.showGameplay(Turn.getTurn(), game.getMultiplayer());
+        gameView.showGameplay(Turn.getTurn(), game.getMultiplayer(), game.getCurrentPlayer());
     }
 
 
