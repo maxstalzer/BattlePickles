@@ -350,7 +350,7 @@ public class GameView extends Application implements GameObserver {
         mainMenuMusic.stop();
         VBox layout = new VBox();
         Scene scene = new Scene(layout, screenWidth, screenWidth);
-        BackgroundImage image = new BackgroundImage(new Image("Brine copy.gif"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
+        BackgroundImage image = new BackgroundImage(new Image("cucuer_back.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
         layout.setBackground(new Background(image));
 
         finalSound.play();
