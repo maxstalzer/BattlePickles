@@ -447,33 +447,6 @@ public class GameView extends Application implements GameObserver {
         primaryStage.setScene(scene);
 
     }
-
-    public void showCheckPlacementView() {
-        VBox layout = new VBox();
-        Scene scene = new Scene(layout, screenWidth, screenHeight);
-
-        Label label3 = new Label("Are you sure you want to place your ships here?");
-        label3.setFont(joystix);
-
-        Button yesButton = new Button("Yes");
-        yesButton.setOnAction(e -> {
-            try {
-                controller.endPlacement();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        yesButton.setFont(joystix);
-
-        Button noButton = new Button("No");
-        noButton.setOnAction(e -> controller.redoPlacement());
-        noButton.setFont(joystix);
-
-        layout.getChildren().addAll(label3, yesButton, noButton);
-        layout.setAlignment(Pos.CENTER);
-
-        primaryStage.setScene(scene);
-    }
 }
 
 

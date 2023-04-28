@@ -7,8 +7,11 @@ import Base.Gurkins.*;
 import Controller.Controller;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 
 
@@ -125,6 +128,10 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
 
     public List<GuiGurks> getPlacedGurks() {
         return placedGurks;
+    }
+
+    public void showCheckPlacementPopup() {
+        sidepanel.showCheckPlacementPopup();
     }
 
 }

@@ -5,7 +5,9 @@ import Base.Gurkins.*;
 import Observers.PlayerObserver;
 import Controller.Controller;
 import Controller.Controller.*;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
@@ -47,6 +49,10 @@ public class SidePanel extends VBox implements PlayerObserver {
     public SidePanel(Controller controller, Container container) {
         this.controller=controller;
         this.container = container;
+        setAlignment(Pos.CENTER);
+        setSpacing(10);
+        setPadding(new Insets(20));
+        setStyle("-fx-background-color: #ffffff; -fx-border-color: #168616; -fx-border-width: 5px; -fx-border-radius: 10px;");
         initSidePanel();
     }
 
@@ -90,8 +96,14 @@ public class SidePanel extends VBox implements PlayerObserver {
             menu.setText(menuItem.getText());
         }));
 
-        horiz.setOnAction(e -> setDir(Horizontal));
-        vert.setOnAction(e -> setDir(Vertical));
+        horiz.setOnAction(e -> {
+            setDir(Horizontal);
+            menu.setText("Horizontal");
+        });
+        vert.setOnAction(e -> {
+            setDir(Vertical);
+            menu.setText("Vertical");
+        });
         getChildren().add(menu);
     }
     public void addGurkToSidePanel(Gurkin gurk) {
@@ -113,4 +125,24 @@ public class SidePanel extends VBox implements PlayerObserver {
     public void finalisePlacement() { // check if the player wants to place their gurkins again
         controller.checkPlacement();
     }
+
+    public void showCheckPlacementPopup() {
+        VBox popup = new VBox();
+        popup.setAlignment(Pos.CENTER);
+        popup.setSpacing(10);
+        popup.setPadding(new Insets(20));
+        popup.setStyle("-fx-background-color: #ffffff; -fx-border-color: black; -fx-border-width: 5px; -fx-border-radius: 10px;");
+        Label label = new Label("Are you sure you want to place your gurkins here?");
+        Button yes = new Button("Yes");
+        yes.setOnAction(event -> {
+            controller.endPlacement();
+        } );
+        Button no = new Button("No");
+        no.setOnAction(event -> {
+            controller.redoPlacement();
+        });
+        popup.getChildren().addAll(label,yes,no);
+        getChildren().add(popup);
+    }
+
 }

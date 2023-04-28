@@ -196,7 +196,8 @@ public class Controller {
     }
 
     public void checkPlacement() {
-        gameView.showCheckPlacementView();
+        gameView.getCurrentPlacementView(Turn.getTurn()).showCheckPlacementPopup();
+
     }
 
     public void endPlacement() {
