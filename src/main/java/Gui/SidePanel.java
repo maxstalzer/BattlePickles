@@ -6,20 +6,19 @@ import Observers.PlayerObserver;
 import Controller.Controller;
 import Controller.Controller.*;
 import javafx.geometry.Pos;
-import javafx.scene.control.MenuButton;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 
 import java.util.ArrayList;
-
-import javafx.scene.control.MenuItem;
 
 
 import static Base.Direction.direction.Horizontal;
 import static Base.Direction.direction.Vertical;
 
 public class SidePanel extends VBox implements PlayerObserver {
-    private Direction.direction dir;
+    private Direction.direction dir = Horizontal;
     private gurkinID gurktypeField;
 
     private Container container;
@@ -62,7 +61,7 @@ public class SidePanel extends VBox implements PlayerObserver {
     }
 
     private void initSidePanelTop() {
-        javafx.scene.control.Label label1 = new javafx.scene.control.Label("Select Gurk Direction  ©");
+        Label label1 = new javafx.scene.control.Label("Press D to change direction ©");
         label1.setStyle(
                 "-fx-font-family: Joystix ;-fx-font-size: 18;-fx-border-color: transparent, black;");
         setAlignment(Pos.CENTER);
@@ -72,27 +71,29 @@ public class SidePanel extends VBox implements PlayerObserver {
         Quit.setOnAction(e -> controller.showMainMenu());
         getChildren().add(Quit);
 
-
-
-
         getChildren().add(label1);
 
-        MenuButton menu = new MenuButton("");
-        menu.setStyle( "-fx-font-family: Joystix ; -fx-font-size: 18;");
-        MenuItem horiz = new MenuItem("Horizontal");
-        horiz.setStyle( "-fx-font-family: Joystix ; -fx-font-size: 18;");
-        MenuItem vert = new MenuItem("Vertical");
-        vert.setStyle( "-fx-font-family: Joystix ; -fx-font-size: 18;");
-        menu.setText("Choose Direction");
-        //see if we would like to use this as it is
-        menu.getItems().addAll( horiz, vert);
-        menu.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
-            menu.setText(menuItem.getText());
-        }));
+        Label DirChoice = new Label("Horizontal");
+        DirChoice.setStyle(
+                "-fx-font-family: Joystix ;-fx-font-size: 18;-fx-border-color: transparent, black;");
 
-        horiz.setOnAction(e -> setDir(Horizontal));
-        vert.setOnAction(e -> setDir(Vertical));
-        getChildren().add(menu);
+        getChildren().add(DirChoice);
+
+        setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.D) {
+                if (dir == Vertical) {
+                    setDir(Horizontal);
+                    DirChoice.setText("Horizontal");
+                }
+                else {
+                    setDir(Vertical);
+                    DirChoice.setText("Vertical");
+                }
+            }
+        });
+
+
+        // getChildren().add(menu);
     }
     public void addGurkToSidePanel(Gurkin gurk) {
         getChildren().add(new SidePanelGurks(gurk,controller,this));
