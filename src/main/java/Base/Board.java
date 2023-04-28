@@ -1,9 +1,8 @@
 package Base;
 
 import Base.Gurkins.*;
-import Base.Players.Player;
-import Controller.Controller;
 
+import Observers.BoardObserver;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -12,13 +11,14 @@ import java.util.*;
 
 
 @DatabaseTable(tableName = "Board")
-public class Board implements BoardObserver{ // Board class
+public class Board implements BoardObserver { // Board class
     @DatabaseField(generatedId = true)
     private int id;
     @ForeignCollectionField(columnName = "Tiles", eager = true)
     private Collection<Tile> tiles = new ArrayList<>(); // 10x10 array of tiles
 
     private Set<BoardObserver> observers = new HashSet<BoardObserver>(); // List of observers of the board
+
 
     // Initialize board
     public Board() {
@@ -238,6 +238,26 @@ public class Board implements BoardObserver{ // Board class
             }
         }
     }
+//    public void initTerrain() {
+//        // randomly place terrain object on board tiles
+//        Random rand = new Random();
+//        int numTerrain = rand.nextInt(5) + 1;
+//        for (int i = 0; i < numTerrain; i++) {
+//            int x = rand.nextInt(10);
+//            int y = rand.nextInt(10);
+//            Coordinates coors = new Coordinates(x, y);
+//            if (getTile(coors).hasGurkin()) {
+//                i--;
+//            } else {
+//                placeTerrain(coors);
+//            }
+//        }
+//    }
+//
+//    public void placeTerrain(Coordinates coors) {
+//        getTile(coors).setGurkin(new Terrain());
+//        notifyPlacedGurkin(new Terrain() , Direction.direction.Horizontal, coors);
+//    }
 }
 
 

@@ -15,13 +15,7 @@ import java.util.List;
 public class Controller {
     private Game game;
     private GameView gameView;
-
-    private Stage primaryStage;
-
-    public Gurkin Gurktype;
-
     private Database database;
-
 
     public enum gurkinID {
         Pickle,
@@ -53,9 +47,9 @@ public class Controller {
     }
 
     public void showLoadSavedGame() throws Exception {
-        database = new Database();
-        database.TestConnection("");
-        gameView.showLoadSavedGame(database.getDatabases());
+            database = new Database();
+            database.TestConnection("");
+            gameView.showLoadSavedGame(database.getDatabases());
     }
 
     public void loadGame(String gameName) throws Exception {
@@ -202,7 +196,8 @@ public class Controller {
     }
 
     public void checkPlacement() {
-        gameView.showCheckPlacementView();
+        gameView.getCurrentPlacementView(Turn.getTurn()).showCheckPlacementPopup();
+
     }
 
     public void endPlacement() {
@@ -224,7 +219,7 @@ public class Controller {
     }
 
     public void showGameplay() {
-        gameView.showGameplay(Turn.getTurn(), game.getMultiplayer());
+        gameView.showGameplay(Turn.getTurn(), game.getMultiplayer(), game.getCurrentPlayer(), game.getOpponent());
     }
 
 
@@ -269,7 +264,13 @@ public class Controller {
 
     }
 
+    public void triggerEndTurn() {
+        game.getCurrentPlayer().changeTurn();
+    }
 
+    public void displayKillGIFView(Gurkin gurk) {
+        gameView.displaykillGIFView(gurk, game.getCurrentPlayer(), game.getOpponent());
+    }
 
 
 }

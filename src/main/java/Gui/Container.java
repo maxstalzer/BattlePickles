@@ -1,37 +1,31 @@
 package Gui;
 
-import Base.BoardObserver;
+import Observers.BoardObserver;
 import Base.Coordinates;
 import Base.Direction;
 import Base.Gurkins.*;
 import Controller.Controller;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.HorizontalDirection;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.transform.Rotate;
-import javafx.stage.Screen;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.Screen;
 
 
-import javax.swing.border.Border;
-import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Base.Direction.direction.Horizontal;
-import static Base.Direction.direction.Vertical;
-
 public class Container extends Pane implements BoardObserver{ //This is the container that contains the Sea class
     Coordinates Gurks;
+    private MediaPlayer placingSound;
 
     private List<GuiGurks> placedGurks;
-    double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
+    double gridsize = 956 /12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
 
     public Coordinates getGurks() {
         return Gurks;
@@ -60,6 +54,10 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
     Sea sea;
 
     public Container(Controller controller) {
+        Image image = new Image("brine copy.gif");
+        BackgroundSize backgroundSize = new BackgroundSize(1470, 956, false, false, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        setBackground(new Background(backgroundImage));
         this.placedGurks = new ArrayList<>(); //This is a list of all the gurks that have been placed on the board
         sea = new Sea();
         sidepanel = new SidePanel(controller, this);
@@ -103,7 +101,8 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
         toFront(); //Moves it to the front, so that it displays over the grid color
         placedGurks.add(gurk);
         sidepanel.clearGurktypeField();
-//        sidepanel.removeGurkin(gurk.getGurktype());
+        this.placingSound  = new MediaPlayer(new Media(new File("src/main/resources/Squish Sound Effect.mp3").toURI().toString()));
+        placingSound.play();
     }
 
     @Override
@@ -137,6 +136,10 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
 
     public List<GuiGurks> getPlacedGurks() {
         return placedGurks;
+    }
+
+    public void showCheckPlacementPopup() {
+        sidepanel.showCheckPlacementPopup();
     }
 
 }

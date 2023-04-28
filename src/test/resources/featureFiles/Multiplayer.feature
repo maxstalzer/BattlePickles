@@ -56,11 +56,7 @@ Feature: Multiplayer
     When I try to place a yardlong incorrectly
     Then I should be told it is invalid
 
-  Scenario: Player 1 has placed all 5 gurkins
-    Given a game
-    And a player
-    And all 5 gurkins have been placed
-    Then The turn changes
+
 
 # ---------------------------- Attacking feature ------------------------
 

@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class Miss extends Canvas {
     public Miss(Coordinates coords) {
-        double gridsize = Screen.getPrimary().getBounds().getMaxY()/12;
+        double gridsize = 956 /12;
         setWidth(gridsize);
         setHeight(gridsize);
 
