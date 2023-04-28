@@ -1,4 +1,4 @@
-package Base;
+package Observers;
 
 import Base.Players.Player;
 

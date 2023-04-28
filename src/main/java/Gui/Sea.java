@@ -28,9 +28,9 @@ public class Sea extends GridPane {
         }
 
         // Set background image
-        Image image = new Image("Brine copy.gif");
-        BackgroundImage bgImage = new BackgroundImage(image, null, null, null, null);
-        setBackground(new Background(bgImage));
+//        Image image = new Image("Brine copy.gif");
+//        BackgroundImage bgImage = new BackgroundImage(image, null, null, null, null);
+//        setBackground(new Background(bgImage));
 
         setGridLinesVisible(true); //The lines of the grid are visible.
     }

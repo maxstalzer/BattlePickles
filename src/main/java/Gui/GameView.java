@@ -3,6 +3,7 @@ package Gui;
 import Base.*;
 import Base.Players.Player;
 import Controller.Controller;
+import Observers.GameObserver;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
@@ -53,8 +55,8 @@ public class GameView extends Application implements GameObserver {
     private double screenHeight;
 
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 24);
-
     private Font joystixTitle = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 50);
+    private Font joystixSave = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 16);
 
     public Container getContainer1() { // returns container of player1
         return container1;
@@ -262,9 +264,8 @@ public class GameView extends Application implements GameObserver {
 
     }
 
-    public void showGameplay(String turn, Boolean multiplayer) { // Show gameplay scene
+    public void showGameplay(String turn, Boolean multiplayer, Player player) { // Show gameplay scene
         HBox hbox;
-
         // Making the bottom stats panel
         Button saveButton = new Button("Save & Quit"); // Save and quit button
         saveButton.setOnAction(e -> {
@@ -274,7 +275,7 @@ public class GameView extends Application implements GameObserver {
                 throw new RuntimeException(ex);
             }
         });
-        saveButton.setFont(joystix);
+        saveButton.setFont(joystixSave);
 
         Button noSaveButton = new Button("Quit without saving"); // Quit without saving button
         noSaveButton.setOnAction(e -> {
@@ -284,25 +285,49 @@ public class GameView extends Application implements GameObserver {
                 throw new RuntimeException(ex);
             }
         });
-        noSaveButton.setFont(joystix);
-        VBox panel = new VBox(10, saveButton, noSaveButton);
+        noSaveButton.setFont(joystixSave);
+
+        Label playerName = new Label();
+        playerName.setText(player.getName());
+
+        VBox panel = new VBox(10, playerName, saveButton, noSaveButton);
         panel.setAlignment(Pos.CENTER_RIGHT);
         panel.setPadding(new Insets(10));
+        panel.setMaxWidth(400);
+        panel.setMaxHeight(screenHeight);
 
         if (turn.equals("1") ) {
             container1.hideSidePanel();
+
             container1.setScaleX(0.6);
             container1.setScaleY(0.6);
 
             shotContainer1.setScaleY(0.6);
             shotContainer1.setScaleX(0.6);
 
-            hbox = new HBox(10, container1, shotContainer1);
-            VBox vbox = new VBox(hbox, panel);
 
-            attackScene1 = new Scene(vbox, screenWidth, screenHeight);
+            hbox = new HBox(container1, shotContainer1);
+            hbox.setMaxWidth(screenWidth - 400);
+            hbox.setMaxHeight(screenHeight);
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            hbox.setSpacing(-500);
+            hbox.setStyle("-fx-background-color: transparent;");
+            hbox.setBackground(Background.EMPTY);
+
+
+            HBox outerBox = new HBox(hbox, panel);
+            outerBox.setMaxWidth(screenWidth);
+            outerBox.setMaxHeight(screenHeight);
+            outerBox.setSpacing(40);
+
+
+
+            Image image = new Image("Brine copy.gif");
+            BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+            BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+            outerBox.setBackground(new Background(backgroundImage));
+            attackScene1 = new Scene(outerBox, screenWidth, screenHeight);
             primaryStage.setScene(attackScene1);
-//            primaryStage.setFullScreen(true);
         } else if (turn.equals("2") && multiplayer) {
             container2.hideSidePanel();
 
@@ -311,8 +336,13 @@ public class GameView extends Application implements GameObserver {
 
             shotContainer2.setScaleY(0.6);
             shotContainer2.setScaleX(0.6);
-            hbox = new HBox(10, container2, shotContainer2);
+            hbox = new HBox( container2, shotContainer2);
+            hbox.setPadding(new Insets(10));
+
             VBox vbox = new VBox(hbox, panel);
+            vbox.setSpacing(10);
+            vbox.setPadding(new Insets(10));
+
 
             attackScene2 = new Scene(vbox, screenWidth, screenHeight);
             primaryStage.setScene(attackScene2);
@@ -357,6 +387,7 @@ public class GameView extends Application implements GameObserver {
 
         Label label1 = new Label("Winner is " + winner.getName());
         label1.setFont(joystix);
+        label1.setEffect(new DropShadow());
 
         Button backButton = new Button("Go to main menu");
         backButton.setOnAction(e -> {
@@ -444,33 +475,6 @@ public class GameView extends Application implements GameObserver {
 
         primaryStage.setScene(scene);
 
-    }
-
-    public void showCheckPlacementView() {
-        VBox layout = new VBox();
-        Scene scene = new Scene(layout, screenWidth, screenHeight);
-
-        Label label3 = new Label("Are you sure you want to place your ships here?");
-        label3.setFont(joystix);
-
-        Button yesButton = new Button("Yes");
-        yesButton.setOnAction(e -> {
-            try {
-                controller.endPlacement();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        yesButton.setFont(joystix);
-
-        Button noButton = new Button("No");
-        noButton.setOnAction(e -> controller.redoPlacement());
-        noButton.setFont(joystix);
-
-        layout.getChildren().addAll(label3, yesButton, noButton);
-        layout.setAlignment(Pos.CENTER);
-
-        primaryStage.setScene(scene);
     }
 }
 

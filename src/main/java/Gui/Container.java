@@ -1,31 +1,22 @@
 package Gui;
 
-import Base.BoardObserver;
+import Observers.BoardObserver;
 import Base.Coordinates;
 import Base.Direction;
 import Base.Gurkins.*;
 import Controller.Controller;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.HorizontalDirection;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.transform.Rotate;
+import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
 
 
-import javax.swing.border.Border;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static Base.Direction.direction.Horizontal;
-import static Base.Direction.direction.Vertical;
 
 public class Container extends Pane implements BoardObserver{ //This is the container that contains the Sea class
     Coordinates Gurks;
@@ -137,6 +128,10 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
 
     public List<GuiGurks> getPlacedGurks() {
         return placedGurks;
+    }
+
+    public void showCheckPlacementPopup() {
+        sidepanel.showCheckPlacementPopup();
     }
 
 }

@@ -3,6 +3,8 @@ package Base.Players;
 
 import Base.*;
 import Base.Gurkins.*;
+import Observers.PlayerAttackObserver;
+import Observers.PlayerObserver;
 import com.j256.ormlite.field.DatabaseField;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.Set;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "Player")
-public class  Player implements PlayerObserver, PlayerAttackObserver{
+public class  Player implements PlayerObserver, PlayerAttackObserver {
     @DatabaseField
     String name; // The name of the player
     @DatabaseField
@@ -152,15 +154,15 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
         return valid;
     }
 
-    public Player deepClone() { // deep clones the player
-        Player copy = new Player();
-        copy.name = name;
-        copy.remaining_gurkins = remaining_gurkins;
-        copy.gurkinBoard = gurkinBoard.deepClone();
-        copy.shotResults = shotResults;
-        copy.turnID = turnID;
-        return copy;
-    }
+//    public Player deepClone() { // deep clones the player
+//        Player copy = new Player();
+//        copy.name = name;
+//        copy.remaining_gurkins = remaining_gurkins;
+//        copy.gurkinBoard = gurkinBoard.deepClone();
+//        copy.shotResults = shotResults;
+//        copy.turnID = turnID;
+//        return copy;
+//    }
 
     @Override
     public void updateSidePanel(ArrayList<Gurkin> gurks) {

@@ -196,7 +196,8 @@ public class Controller {
     }
 
     public void checkPlacement() {
-        gameView.showCheckPlacementView();
+        gameView.getCurrentPlacementView(Turn.getTurn()).showCheckPlacementPopup();
+
     }
 
     public void endPlacement() {
@@ -218,7 +219,7 @@ public class Controller {
     }
 
     public void showGameplay() {
-        gameView.showGameplay(Turn.getTurn(), game.getMultiplayer());
+        gameView.showGameplay(Turn.getTurn(), game.getMultiplayer(), game.getCurrentPlayer());
     }
 
 

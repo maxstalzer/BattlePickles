@@ -1,4 +1,4 @@
-package Base.Players;
+package Observers;
 
 import Base.Gurkins.Gurkin;
 

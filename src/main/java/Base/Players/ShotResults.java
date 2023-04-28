@@ -1,6 +1,7 @@
 package Base.Players;
 
 import Base.Coordinates;
+import Observers.ResultObserver;
 
 import java.util.Set;
 import java.util.HashSet;

@@ -1,9 +1,8 @@
 package Gui;
 
 import Base.Coordinates;
-import Base.Players.PlayerAttackObserver;
-import Base.Players.PlayerObserver;
-import Base.Players.ResultObserver;
+import Observers.PlayerAttackObserver;
+import Observers.ResultObserver;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;

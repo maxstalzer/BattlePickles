@@ -1,5 +1,7 @@
-package Base;
+package Observers;
 
+import Base.Coordinates;
+import Base.Direction;
 import Base.Gurkins.Gurkin;
 import Controller.*;
 
