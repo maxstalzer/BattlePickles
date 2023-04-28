@@ -5,6 +5,7 @@ import Base.Players.Player;
 import Controller.Controller;
 import Observers.GameObserver;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -55,7 +56,7 @@ public class GameView extends Application implements GameObserver {
 
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 24);
 
-
+    private Font joystixTitle = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 50);
 
     public Container getContainer1() { // returns container of player1
         return container1;
@@ -113,34 +114,27 @@ public class GameView extends Application implements GameObserver {
         Scene scene = new Scene(layout, screenWidth, screenHeight);
 
         //Creating an image
-        Image image = new Image("Brine copy.gif");
+        Image image = new Image("game_endcucucer.gif");
 
         //Setting the image view
         //ImageView imageView = new ImageView(image);
 
         Label label1 = new Label("BattlePickles ©");
-        label1.setFont(joystix);
-        //label1.setFont(new Font("Arial Bold", 24));
-//        label1.setStyle("-fx-font-family: Joystix ; -fx-font-size: 35;");
-       // Label testControl = new Label("TRON");
-        //testControl.setStyle("-fx-font-family: TRON; -fx-font-size: 120;");
+        label1.setFont(joystixTitle);
 
         Button startButton = new Button("START");
         startButton.setFont(joystix);
 
-
         startButton.setOnAction(e -> showGameMode());
 
-
-
-
         VBox centerBox = new VBox(label1, startButton);
-//        centerBox.setStyle("-fx-background-color: transparent;-fx-font-family: Joystix ;-fx-font-size: 24;-fx-border-color: transparent, black;");
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setSpacing(20); // Add spacing between elements
 
         layout.setCenter(centerBox);
-        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
+        BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        layout.setBackground(new Background(backgroundImage));
 
         primaryStage.setTitle("You don't know what you're getting yourself into");
         primaryStage.setScene(scene);
@@ -153,20 +147,25 @@ public class GameView extends Application implements GameObserver {
         VBox layout = new VBox();
 
         Scene scene = new Scene(layout, screenWidth, screenHeight);
-        Image image = new Image("Brine copy.gif");
-        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
+        Image image = new Image("game_endcucucer.gif");
+        BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        layout.setBackground(new Background(backgroundImage));
 
         Label label2 = new Label("Game Select");
-        label2.setFont(joystix);
+        label2.setFont(joystixTitle);
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showMainMenu());
+        backButton.setFont(joystix);
 
         Button AIButton = new Button("Singleplayer");
         AIButton.setOnAction(e -> controller.showSingleplayer());
+        AIButton.setFont(joystix);
 
         Button multiplayerButton = new Button("Multiplayer");
         multiplayerButton.setOnAction(e -> controller.showMultiplayer());
+        multiplayerButton.setFont(joystix);
 
         Button LoadSaved = new Button("Load saved game");
          LoadSaved.setOnAction(e -> {
@@ -176,23 +175,24 @@ public class GameView extends Application implements GameObserver {
                  throw new RuntimeException(ex);
              }
          });
+         LoadSaved.setFont(joystix);
 
         layout.getChildren().addAll(label2, AIButton, multiplayerButton, LoadSaved, backButton);
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
-//        primaryStage.setFullScreen(true);
-//        primaryStage.show();
     }
 
     public void showMultiplayer() { // Show multiplayer menu
         VBox layout = new VBox();
         Scene scene = new Scene(layout, screenWidth, screenHeight);
-        Image image = new Image("Brine copy.gif");
-        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
+        Image image = new Image("game_endcucucer.gif");
+        BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        layout.setBackground(new Background(backgroundImage));;
 
         Label label4 = new Label("Input player names");
-        label4.setFont(joystix);
+        label4.setFont(joystixTitle);
 
         TextField p1NameField = new TextField();
         p1NameField.setFont(joystix);
@@ -217,8 +217,10 @@ public class GameView extends Application implements GameObserver {
     public void showSingleplayer() { // Show singleplayer menu
         VBox layout = new VBox();
         Scene scene = new Scene(layout, screenWidth, screenHeight);
-        Image image = new Image("Brine copy.gif");
-        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
+        Image image = new Image("game_endcucucer.gif");
+        BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        layout.setBackground(new Background(backgroundImage));
 
 
         Label label3 = new Label("AI Difficulty");
@@ -233,7 +235,6 @@ public class GameView extends Application implements GameObserver {
         MenuButton menuButton = new MenuButton("");
         menuButton.getItems().addAll(new MenuItem("Easy"), new MenuItem("Medium"), new MenuItem("Hard"));
         menuButton.setText("Easy");
-
         menuButton.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
             menuButton.setText(menuItem.getText());
         }));
