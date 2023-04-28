@@ -16,7 +16,8 @@ public abstract class Gurkin {
     private int size;
     @DatabaseField
     private int lives;
-
+    @ForeignCollectionField(eager = true)
+    private Collection<Tile> tiles;
 
 //  Constructor for the class
     Gurkin(int size) {

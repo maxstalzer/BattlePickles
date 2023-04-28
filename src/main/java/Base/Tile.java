@@ -1,6 +1,6 @@
 package Base;
 
-import Base.Gurkins.Gurkin;
+import Base.Gurkins.*;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -11,7 +11,7 @@ import java.util.Collection;
 public class Tile {
     @DatabaseField(canBeNull = false)
     private boolean gurkin; // If there is a gurkin on the tile
-    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    @DatabaseField(foreign = true,foreignAutoRefresh = true,foreignColumnName = "id")
     private Gurkin gurkinID; // The gurkin on the tile
     @DatabaseField
     private String gurkinChar;
