@@ -297,7 +297,6 @@ public class GameView extends Application implements GameObserver {
             container1.hideSidePanel();
             VBox placementBox = new VBox (container1);
             VBox attackBox = new VBox(shotContainer1);
-
             attackBox.setPadding(new Insets(10));
             placementBox.setPadding(new Insets(10));
 
@@ -306,24 +305,27 @@ public class GameView extends Application implements GameObserver {
 
             shotContainer1.setScaleY(0.6);
             shotContainer1.setScaleX(0.6);
-            GridPane gridPane = new GridPane();
-            gridPane.setMinSize(screenWidth, screenHeight);
-            gridPane.setPadding(new Insets(10, 10, 10, 10));
-            gridPane.setVgap(5);
-            gridPane.setHgap(5);
-            gridPane.setAlignment(Pos.CENTER);
-            gridPane.add(placementBox, 0, 0);
-            gridPane.add(attackBox, 1, 0);
-//            gridPane.add(panel, 0, 1);
+//            GridPane gridPane = new GridPane();
+//            gridPane.setMinSize(screenWidth, screenHeight);
+//            gridPane.setPadding(new Insets(10, 10, 10, 10));
+//            gridPane.setVgap(5);
+//            gridPane.setHgap(5);
+//            gridPane.setAlignment(Pos.CENTER);
+//            gridPane.add(placementBox, 0, 0);
+//            gridPane.add(attackBox, 1, 0);
+////            gridPane.add(panel, 0, 1);
 
 
             hbox = new HBox(container1, shotContainer1);
             hbox.setMaxWidth(screenWidth);
             hbox.setMaxHeight(screenHeight - 100);
             hbox.setAlignment(Pos.CENTER_LEFT);
+            hbox.setSpacing(-700);
+
 
             VBox vbox = new VBox(hbox, panel);
-            vbox.setSpacing(0);
+            vbox.setSpacing(-100);
+            vbox.setAlignment(Pos.CENTER_LEFT);
 
             attackScene1 = new Scene(vbox, screenWidth, screenHeight);
             primaryStage.setScene(attackScene1);
