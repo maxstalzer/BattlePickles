@@ -1,6 +1,7 @@
 package Gui;
 
 import Base.*;
+import Base.Gurkins.*;
 import Base.Players.Player;
 import Controller.Controller;
 import Observers.GameObserver;
@@ -24,6 +25,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class GameView extends Application implements GameObserver {
     private Scene attackScene2; // Attack scene for player2
     private Scene waitScene; // Wait scene
 
-
+    private MediaPlayer gifPlayer; // Gif player
     private Container container1; // container holding player1s placed gurkins
     private Container container2; // container holding player2s placed gurkins
 
@@ -139,6 +141,8 @@ public class GameView extends Application implements GameObserver {
 
         primaryStage.setTitle("You don't know what you're getting yourself into");
         primaryStage.setScene(scene);
+        mainMenuMusic.setCycleCount(MediaPlayer.INDEFINITE);
+        mainMenuMusic.setVolume(0.3);
         mainMenuMusic.play();
         primaryStage.show();
 
@@ -198,11 +202,13 @@ public class GameView extends Application implements GameObserver {
         TextField p1NameField = new TextField();
         p1NameField.setText("Player 1");
         p1NameField.setFont(joystix);
-        p1NameField.setMaxWidth(100);
+        p1NameField.setMaxWidth(200);
+        p1NameField.setOnAction(e -> p1NameField.setText(""));
         TextField p2NameField = new TextField();
         p2NameField.setText("Player 2");
         p2NameField.setFont(joystix);
-        p2NameField.setMaxWidth(100);
+        p2NameField.setMaxWidth(200);
+        p2NameField.setOnAction(e -> p1NameField.setText(""));
 
         Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> controller.startLocalMultiplayerGame(p1NameField.getText(), p2NameField.getText()));
@@ -233,17 +239,21 @@ public class GameView extends Application implements GameObserver {
 
         TextField p1NameField = new TextField();
 
-        p1NameField.setMaxWidth(300);
+        p1NameField.setMaxWidth(200);
         p1NameField.setText("Player 1");
         p1NameField.setFont(joystix);
+        p1NameField.setOnAction(e -> p1NameField.setText(""));
 
         MenuButton menuButton = new MenuButton("");
         MenuItem Easy = new MenuItem("Easy");
-        Easy.setFont(joystix);
+        Easy.setStyle("-fx-font-family: myFont;");
+//        Easy.setFont
+        Easy.setStyle(joystix.getStyle());
         MenuItem Medium = new MenuItem("Medium");
-        Medium.setFont(joystix);
+        Medium.setStyle(joystix.getStyle());
+
         MenuItem Hard = new MenuItem("Hard");
-        Hard.setFont(joystix);
+        Hard.setStyle(joystix.getStyle());
 
         menuButton.getItems().addAll(Easy, Medium, Hard);
         menuButton.setText("Easy");
@@ -268,7 +278,6 @@ public class GameView extends Application implements GameObserver {
 
     public void showPlacement(String turn, Boolean multiplayer) { // Show placement scene
         if (turn.equals("1")) { // Shows the placement scene for player 1
-
             primaryStage.setScene(placementScene1);
         } else if (turn.equals("2") && multiplayer) {
             primaryStage.setScene(placementScene2);
@@ -276,7 +285,7 @@ public class GameView extends Application implements GameObserver {
 
     }
 
-    public void showGameplay(String turn, Boolean multiplayer, Player player) { // Show gameplay scene
+    public void showGameplay(String turn, Boolean multiplayer, Player currentplayer, Player opponent) { // Show gameplay scene
         HBox hbox;
         // Making the bottom stats panel
         Button saveButton = new Button("Save & Quit"); // Save and quit button
@@ -301,24 +310,36 @@ public class GameView extends Application implements GameObserver {
 
 
 
-        Label playerName = new Label();
+        Label playerName = new Label(); // shows the name of the current player in an HBox
         String displayName;
-        if (player.getName().equals("")) {
+        if (currentplayer.getName().equals("")) {
             displayName = "Player " + turn;
         } else {
-            displayName = player.getName();
+            displayName = currentplayer.getName();
         }
-        playerName.setText(displayName);
-        playerName.setFont(joystixSave);
 
+        playerName.setText(displayName);
+        playerName.setFont(joystix);
         HBox playerBox = new HBox();
         playerBox.getChildren().add(playerName);
         playerBox.setAlignment(Pos.CENTER);
-        playerBox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 10;");
+        playerBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10; -fx-background-insets: 5px");
+
+        // Showing the Current Player's stats
+        Label playerStats = new Label("Current Player's Stats");
+        playerStats.setFont(joystix);
+        Label playerShips = new Label("Undead Gurks: " + currentplayer.getRemaining_gurkins());
+        playerShips.setFont(joystixSave);
+        Label playerKills = new Label("Killed Gurks: " + (5 - opponent.getRemaining_gurkins()));
+        playerKills.setFont(joystixSave);
+
+        VBox playerStatsBox = new VBox(10, playerStats, playerShips, playerKills);
+        playerStatsBox.setAlignment(Pos.CENTER);
+        playerStatsBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;-fx-background-insets: 5px;");
 
 
 
-        VBox panel = new VBox(10, playerBox, saveButton, noSaveButton);
+        VBox panel = new VBox(10, playerBox,playerStatsBox, saveButton, noSaveButton);
         panel.setAlignment(Pos.TOP_CENTER);
         panel.setPadding(new Insets(10));
         panel.setMaxWidth(400);
@@ -336,14 +357,37 @@ public class GameView extends Application implements GameObserver {
             container1.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
             shotContainer1.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
 
-            hbox = new HBox(container1, shotContainer1);
+            // labeling the player's board
+            Label playerBoardLabel = new Label(displayName + "'s Board");
+            HBox playerBoardBox = new HBox(playerBoardLabel);
+            playerBoardBox.setMaxWidth(300);
+            playerBoardLabel.setFont(joystixSave);
+            playerBoardBox.setTranslateX(290);
+            playerBoardBox.setTranslateY(160);
+            playerBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
+            VBox placeBox = new VBox(playerBoardBox, container1);
+
+            // Labeling results board
+            Label resultsBoardLabel = new Label("Results from shots at:" + opponent.getName() + "'s Board");
+            HBox resultsBoardBox = new HBox(resultsBoardLabel);
+            resultsBoardBox.setMaxWidth(500);
+            resultsBoardLabel.setFont(joystixSave);
+            resultsBoardBox.setTranslateX(70);
+            resultsBoardBox.setTranslateY(150);
+            resultsBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
+            shotContainer1.setTranslateY(-30);
+            VBox shotBox = new VBox(resultsBoardBox, shotContainer1);
+            // shotBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10; -fx-background-insets: 5px;");
+
+            hbox = new HBox(placeBox, shotBox);
             hbox.setMaxWidth(screenWidth - 400);
             hbox.setMaxHeight(screenHeight);
             hbox.setAlignment(Pos.CENTER_LEFT);
             hbox.setSpacing(-500);
-//            hbox.setStyle("-fx-background-color: transparent;");
-//            hbox.setBackground(Background.EMPTY);
+
             hbox.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
+
+
 
             HBox outerBox = new HBox(hbox, panel);
             outerBox.setMaxWidth(screenWidth);
@@ -366,15 +410,51 @@ public class GameView extends Application implements GameObserver {
 
             shotContainer2.setScaleY(0.6);
             shotContainer2.setScaleX(0.6);
-            hbox = new HBox( container2, shotContainer2);
-            hbox.setPadding(new Insets(10));
 
-            VBox vbox = new VBox(hbox, panel);
-            vbox.setSpacing(10);
-            vbox.setPadding(new Insets(10));
+            container2.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
+            shotContainer2.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
+
+            // labeling the player's board
+            Label playerBoardLabel = new Label(displayName + "'s Board");
+            HBox playerBoardBox = new HBox(playerBoardLabel);
+            playerBoardBox.setMaxWidth(300);
+            playerBoardLabel.setFont(joystixSave);
+            playerBoardBox.setTranslateX(290);
+            playerBoardBox.setTranslateY(160);
+            playerBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
+            VBox placeBox = new VBox(playerBoardBox, container2);
+
+            // Labeling results board
+            Label resultsBoardLabel = new Label("Results from shots at:" + opponent.getName() + "'s Board");
+            HBox resultsBoardBox = new HBox(resultsBoardLabel);
+            resultsBoardBox.setMaxWidth(500);
+            resultsBoardLabel.setFont(joystixSave);
+            resultsBoardBox.setTranslateX(70);
+            resultsBoardBox.setTranslateY(150);
+            resultsBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
+            shotContainer2.setTranslateY(-30);
+            VBox shotBox = new VBox(resultsBoardBox, shotContainer2);
+
+            hbox = new HBox(placeBox, shotBox);
+            hbox.setMaxWidth(screenWidth - 400);
+            hbox.setMaxHeight(screenHeight);
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            hbox.setSpacing(-500);
+
+            hbox.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
+
+            HBox outerBox = new HBox(hbox, panel);
+            outerBox.setMaxWidth(screenWidth);
+            outerBox.setMaxHeight(screenHeight);
+            outerBox.setSpacing(100);
 
 
-            attackScene2 = new Scene(vbox, screenWidth, screenHeight);
+
+            Image image = new Image("cucuer_back.jpg");
+            BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+            BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+            outerBox.setBackground(new Background(backgroundImage));
+            attackScene2 = new Scene(outerBox, screenWidth, screenHeight);
             primaryStage.setScene(attackScene2);
         }
     }
@@ -504,6 +584,69 @@ public class GameView extends Application implements GameObserver {
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
+
+    }
+    private String getPickleGif(Gurkin gurk) {
+        if (gurk instanceof Gherkin) {
+            this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/BlenderPickle.mp3").toURI().toString()));
+            return "BlenderPickle.gif";
+        } else if (gurk instanceof Yardlong) {
+            this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/YardlongDead.mp3").toURI().toString()));
+                return "LateNightPickle.gif";
+        } else if (gurk instanceof Conichon) {
+            this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/BlenderPickle.mp3").toURI().toString()));
+            return "PickleCrush.gif";
+        } else if (gurk instanceof Zuchinni) {
+            this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/PickleEat.mp3").toURI().toString()));
+            return "PickleEat.gif";
+        } else {
+            this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/BlenderPickle.mp3").toURI().toString()));
+            return "PickleBomb.gif";
+        }
+    }
+
+    private String getPickleSound(Gurkin gurk) {
+        if (gurk instanceof Gherkin) {
+            return "BlenderPickle.gif";
+        } else if (gurk instanceof Yardlong) {
+            return "LateNightPickle.gif";
+        } else if (gurk instanceof Conichon) {
+            return "PickleCrush.gif";
+        } else if (gurk instanceof Zuchinni) {
+            return "PickleEat.gif";
+        } else {
+            return "PickleBomb.gif";
+        }
+    }
+
+    public void displaykillGIFView(Gurkin gurk, Player currentPlayer, Player opponentPlayer) {
+        VBox GIFbox = new VBox();
+        GIFbox.setAlignment(Pos.CENTER);
+        GIFbox.setSpacing(10);
+        GIFbox.setPadding(new Insets(20));
+
+        BackgroundSize backgroundSize = new BackgroundSize(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight(), false, false, false, true);
+        Image image = new Image(getPickleGif(gurk));
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        GIFbox.setBackground(new Background(backgroundImage));
+
+        Label Text = new Label("Oh no, " + currentPlayer.getName() + " has consumed " + opponentPlayer.getName() + "'s " + gurk.getClass().toString().substring(11));
+        Text.setFont(joystix);
+        Text.setTextFill(Color.WHITE);
+
+
+
+        Button Continue = new Button("Continue");
+        Continue.setFont(joystix);
+        Continue.setOnAction(event -> {
+            controller.triggerEndTurn();
+            mainMenuMusic.play();
+        } );
+
+        GIFbox.getChildren().addAll(Text, Continue);
+        primaryStage.setScene(new Scene(GIFbox, screenWidth, screenHeight));
+        mainMenuMusic.pause();
+        gifPlayer.play();
 
     }
 }

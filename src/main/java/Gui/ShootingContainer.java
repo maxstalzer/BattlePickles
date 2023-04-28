@@ -1,15 +1,23 @@
 package Gui;
 
 import Base.Coordinates;
+import Base.Gurkins.Gurkin;
 import Observers.PlayerAttackObserver;
 import Observers.ResultObserver;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.layout.Pane;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
+import javafx.scene.image.Image;
 import Controller.Controller;
 
 public class ShootingContainer extends Pane implements ResultObserver, PlayerAttackObserver {
+    private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 18);
 
     private Controller controller;
 
@@ -47,6 +55,10 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
         miss.relocate(coords.getX() * (gridsize), coords.getY() * gridsize);
         getChildren().add(miss);
         toFront();
+    }
+    @Override
+    public void displayKillGIF(Gurkin gurk) {
+        controller.displayKillGIFView(gurk);
     }
 
     @Override
