@@ -3,6 +3,7 @@ package Base;
 import Base.Players.AI;
 import Base.Players.Player;
 import Controller.Controller;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -16,20 +17,14 @@ import java.util.Set;
 public class Game implements GameObserver {
     @DatabaseField(columnName = "id", generatedId = true)
     private int id;
-
     @DatabaseField(columnName = "multiplayer")
     Boolean multiplayer; // true if multiplayer, false if singleplayer
-
-    /* @ForeignCollectionField(columnName = "Players", eager = true)
-    private Collection<Player> players = new ArrayList<>(); */
-
     @DatabaseField(columnName = "player1_id", foreign = true,foreignAutoRefresh = true)
     Player player1; // Player 1
     @DatabaseField(columnName = "player2_id", foreign = true,foreignAutoRefresh = true)
     Player player2; // Player 2
     @DatabaseField(columnName = "game_over")
     Boolean game_Over; // true if game is over
-
     @DatabaseField(columnName = "game_id")
     private String gameID; // Game ID
     @DatabaseField(columnName = "initial_turn")
@@ -59,11 +54,11 @@ public class Game implements GameObserver {
     public Player getPlayer1() {
         return player1;
     } // Getters
-
+    public void setPlayer1(Player p1) {this.player1 = p1;}
     public Player getPlayer2() {
         return player2;
     } // Getters
-
+    public void setPlayer2(Player p2) {this.player1 = p2;}
     public AI getAIPlayer() { // Returns AI player if singleplayer, null if multiplayer
         if (!multiplayer) {
             return (AI) player2;

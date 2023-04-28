@@ -8,8 +8,10 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Tile {
     @DatabaseField(canBeNull = false)
     private boolean gurkin; // If there is a gurkin on the tile
-    @DatabaseField(columnName = "gurkin_id", foreign = true,foreignAutoRefresh = true)
+    @DatabaseField(foreign = true,foreignAutoRefresh = true,foreignColumnName = "id")
     private Gurkin gurkinID; // The gurkin on the tile
+    @DatabaseField
+    private String gurkinChar;
     @DatabaseField(canBeNull = false)
     private boolean isHit = false; // If the tile has been hit
 
@@ -69,7 +71,7 @@ public class Tile {
     public boolean isHit() {
         return this.isHit;
     } // Check if the tile has been hit
-
+    public void setChar(Gurkin gurkin) {this.gurkinChar = Character.toString(gurkinID.toChar());}
     public Character toChar() { // Convert tile to char
         if (hasGurkin()) {
             return gurkinID.toChar();

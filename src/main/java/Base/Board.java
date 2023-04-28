@@ -15,7 +15,7 @@ import java.util.*;
 public class Board implements BoardObserver{ // Board class
     @DatabaseField(generatedId = true)
     private int id;
-    @ForeignCollectionField(columnName = "Tiles", eager = true)
+    @ForeignCollectionField(columnName = "Tiles")
     private Collection<Tile> tiles = new ArrayList<>(); // 10x10 array of tiles
 
     private Set<BoardObserver> observers = new HashSet<BoardObserver>(); // List of observers of the board
@@ -37,7 +37,7 @@ public class Board implements BoardObserver{ // Board class
     public void setId(int Id){
         this.id = id;
     }
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

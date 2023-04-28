@@ -588,13 +588,14 @@ public class StepsDefinition {
 //    }
     @Given("a database")
     public void a_database() throws Exception {
-        database = new Database("testDatabase");
+        database = new Database("tester");
     }
 
     @When("I save a game")
     public void i_save_a_game() throws Exception {
         game.getPlayer1().setName("testPlayer1");
         game.getPlayer2().setName("testPlayer2");
+        game.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).setGurkin(new Pickle());
         database.saveGame(game);
     }
 
@@ -603,19 +604,22 @@ public class StepsDefinition {
         String nameOf = "notTest";
         Database database2 = new Database();
         for (String name : database2.getDatabases()) {
-            if (name.equals("testDatabase")) {
+            if (name.equals("tester")) {
                 nameOf = name;
             }
         }
-        assertEquals("testDatabase",nameOf);
+        assertEquals("tester",nameOf);
     }
     @Then("I should be able to load the game from the database")
     public void i_should_be_able_to_load_the_game_from_the_database() throws Exception {
-        loadedGame = database.loadGame("testDatabase");
+        loadedGame = database.loadGame("tester");
+        loadedGame.getPlayer2().getGurkinBoard().getTile(new Coordinates(3,1)).setGurkin(new Yardlong());
+        database.updateGame(loadedGame);
         assertEquals(game.getMultiplayer(), loadedGame.getMultiplayer());
         assertEquals(game.getPlayer1().getName(), loadedGame.getPlayer1().getName());
         assertEquals(game.getPlayer2().getName(), loadedGame.getPlayer2().getName());
-        database.deleteDatabase("testDatabase");
+        assertEquals(game.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).getGurkin().getLives(), loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).getGurkin().getLives());
+
     }
 
     @When("my turn is over")
