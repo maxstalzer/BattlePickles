@@ -51,6 +51,8 @@ public class GameView extends Application implements GameObserver {
 
     private double screenHeight;
 
+    private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 24);
+
 
 
 
@@ -111,6 +113,7 @@ public class GameView extends Application implements GameObserver {
 
 
     public void startMainMenu() { // Start main menu
+
         BorderPane layout = new BorderPane();
         Scene scene = new Scene(layout, screenWidth, screenHeight);
 
@@ -121,8 +124,9 @@ public class GameView extends Application implements GameObserver {
         //ImageView imageView = new ImageView(image);
 
         Label label1 = new Label("BattlePickles ©");
+        label1.setFont(joystix);
         //label1.setFont(new Font("Arial Bold", 24));
-        label1.setStyle("-fx-font-family: Joystix ; -fx-font-size: 35;");
+//        label1.setStyle("-fx-font-family: Joystix ; -fx-font-size: 35;");
        // Label testControl = new Label("TRON");
         //testControl.setStyle("-fx-font-family: TRON; -fx-font-size: 120;");
 

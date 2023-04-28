@@ -20,6 +20,7 @@ public class Board implements BoardObserver{ // Board class
 
     private Set<BoardObserver> observers = new HashSet<BoardObserver>(); // List of observers of the board
 
+
     // Initialize board
     public Board() {
         for (int x = 0; x < 10; x++) {
