@@ -109,6 +109,7 @@ public class Game implements GameObserver {
     }
 
     public Player getOpponent() {
+        System.out.println(Turn.getTurn());
         if (Turn.getTurn().equals("1")) {
             return player2;
         }

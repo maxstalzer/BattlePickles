@@ -5,30 +5,17 @@ import Base.Direction;
 import Base.Game;
 import Base.Gurkins.*;
 import Base.Players.AI;
-import Base.Players.Player;
 import Base.Turn;
 import Gui.GameView;
-import Gui.GridTile;
-import Gui.GuiGurks;
 import Online.Database;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
 import java.util.List;
-
-import static Base.Direction.direction.Horizontal;
-import static Base.Direction.direction.Vertical;
 
 public class Controller {
     private Game game;
     private GameView gameView;
-
-    private Stage primaryStage;
-
-    public Gurkin Gurktype;
-
     private Database database;
-
 
     public enum gurkinID {
         Pickle,
@@ -76,9 +63,9 @@ public class Controller {
         game.addGameObserver(gameView);
 
         // register placement observers
-        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer());
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer1());
         game.getPlayer2().getGurkinBoard().registerBoardObserver(gameView.getContainer2());
-        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel());
+        game.getPlayer1().registerObserver(gameView.getContainer1().getSidepanel());
         game.getPlayer2().registerObserver(gameView.getContainer2().getSidepanel());
 
         // register attack observers
@@ -108,9 +95,9 @@ public class Controller {
         // Adding observers
         game.addGameObserver(gameView); // add game observer to game
         // register placement observers
-        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer()); // register the placement container1 as an observer to player 1s board
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer1()); // register the placement container1 as an observer to player 1s board
         game.getPlayer2().getGurkinBoard().registerBoardObserver(gameView.getContainer2()); // register the placement container2 as an observer to player 2s board
-        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel()); // register the sidepanel as an observer to player 1
+        game.getPlayer1().registerObserver(gameView.getContainer1().getSidepanel()); // register the sidepanel as an observer to player 1
         game.getPlayer2().registerObserver(gameView.getContainer2().getSidepanel()); // register the sidepanel as an observer to player 2
 
         // register attack observers
@@ -134,8 +121,8 @@ public class Controller {
         // Adding observers
         game.addGameObserver(gameView); // add game observer to game
         // placement observers
-        game.getPlayer1().registerObserver(gameView.getContainer().getSidepanel()); // register the sidepanel as an observer to player 1
-        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer()); // register the placement container1 as an observer to player 1s board
+        game.getPlayer1().registerObserver(gameView.getContainer1().getSidepanel()); // register the sidepanel as an observer to player 1
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer1()); // register the placement container1 as an observer to player 1s board
 
         //attack observers
         game.getPlayer1().getResultBoard().registerObserver(gameView.getP1AttackView()); // register shot board ovserver
@@ -192,13 +179,19 @@ public class Controller {
 
     }
     public gurkinID getChosenGurk() {
-        return gameView.getContainer().getSidepanel().getGurktypeField();
+        return gameView.getCurrentPlacementView(Turn.getTurn()).getSidepanel().getGurktypeField();
     }
 
-    public Direction.direction getChosenDir() {return gameView.getContainer().getSidepanel().getDir();}
+    public Direction.direction getChosenDir() {return gameView.getContainer1().getSidepanel().getDir();}
 
     public void redoPlacement() {
+        // resetting model and view
         game.getCurrentPlayer().resetPlacement();
+        gameView.getCurrentPlacementView(Turn.getTurn()).resetPlacement();
+
+        // add observers
+        game.getCurrentPlayer().getGurkinBoard().registerBoardObserver(gameView.getCurrentPlacementView(Turn.getTurn())); // register the placement container1 as an observer to player 1s board
+
         gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
     }
 
@@ -210,7 +203,7 @@ public class Controller {
         if (game.getMultiplayer()) {
             switch (Turn.getTurn()) {
                 case "1":
-                    gameView.getContainer().removeMouseClick();
+                    gameView.getContainer1().removeMouseClick();
                     Turn.changeTurn();
                     gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
                     break;

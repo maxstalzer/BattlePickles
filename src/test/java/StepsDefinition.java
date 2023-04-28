@@ -34,6 +34,8 @@ public class StepsDefinition {
 
     Game loadedGame;
 
+    Character c;
+
     @Given("a tile")
     public void a_tile() {
         t = new Tile();
@@ -634,5 +636,30 @@ public class StepsDefinition {
         Game gametest = database1.loadGame();
         assertEquals(game.getPlayer1().getName(),gametest.getPlayer1().getName());
         database1.deleteDatabase("yoyo");
+    }
+
+    @When("I get the char value")
+    public void i_get_the_char_value() {
+        c = g.toChar();
+    }
+    @Then("the char value should be y")
+    public void the_char_value_should_be_y() {
+        assertEquals('y', c.charValue());
+    }
+    @Then("the char value should be c")
+    public void the_char_value_should_be_c() {
+        assertEquals('c', c.charValue());
+    }
+    @Then("the char value should be g")
+    public void the_char_value_should_be_g() {
+        assertEquals('g', c.charValue());
+    }
+    @Then("the char value should be p")
+    public void the_char_value_should_be_p() {
+        assertEquals('p', c.charValue());
+    }
+    @Then("the char value should be z")
+    public void the_char_value_should_be_z() {
+        assertEquals('z', c.charValue());
     }
 }

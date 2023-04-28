@@ -14,9 +14,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.scene.media.AudioClip;
 
 import java.io.File;
 import java.util.List;
@@ -30,25 +31,30 @@ public class GameView extends Application implements GameObserver {
 
     private Scene placementScene2; // Placement scene for player2
 
-    private ShootingContainer shotContainer1;// Shot container
+    private ShootingContainer shotContainer1;// Shot container for player 1
 
-    private ShootingContainer shotContainer2;
+    private ShootingContainer shotContainer2; // Shot container for player 2
 
     private Scene attackScene1;// Attack scene for player1
     private Scene attackScene2; // Attack scene for player2
     private Scene waitScene; // Wait scene
 
-    public Container getContainer() {
+
+    private Container container1; // container holding player1s placed gurkins
+    private Container container2; // container holding player2s placed gurkins
+
+    private MediaPlayer mainMenuMusic;
+    private MediaPlayer finalSound;
+
+
+
+
+
+    public Container getContainer1() { // returns container of player1
         return container1;
     }
-    public Container getContainer2() { return container2; }
-
-    private Container container1;
-    private Container container2;
-
-    private final String winningScreenMusic = "NothingToSeeHere.mp3";
-
-
+    public Container getContainer2() { // returns container of player2
+        return container2; }
 
 
 
@@ -59,6 +65,8 @@ public class GameView extends Application implements GameObserver {
     public void start(Stage primaryStage) { // Start method
         this.controller = new Controller(this);
         this.primaryStage = primaryStage;
+        this.mainMenuMusic = new MediaPlayer(new Media(new File("src/main/resources/menu.mp3").toURI().toString()));
+        this.finalSound = new MediaPlayer(new Media(new File("src/main/resources/NothingToSeeHere.mp3").toURI().toString()));
         controller.showMainMenu(); // Show main menu
 
     }
@@ -82,8 +90,6 @@ public class GameView extends Application implements GameObserver {
         label1.setFont(new Font("Arial Bold", 24));
         layout.getChildren().addAll(label1);
         layout.setAlignment(Pos.CENTER);
-
-
     }
 
 
@@ -123,10 +129,7 @@ public class GameView extends Application implements GameObserver {
 
 
         VBox centerBox = new VBox(label1, startButton);
-        centerBox.setStyle("-fx-background-color: transparent;" +
-                "-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" +
-                "-fx-border-color: transparent, black;");
+        centerBox.setStyle("-fx-background-color: transparent;-fx-font-family: Joystix ;-fx-font-size: 24;-fx-border-color: transparent, black;");
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setSpacing(20); // Add spacing between elements
 
@@ -135,6 +138,7 @@ public class GameView extends Application implements GameObserver {
 
         primaryStage.setTitle("You don't know what you're getting yourself into");
         primaryStage.setScene(scene);
+        mainMenuMusic.play();
         primaryStage.show();
 
     }
@@ -142,9 +146,7 @@ public class GameView extends Application implements GameObserver {
     public void showGameMode() { // Show game mode menu
         VBox layout = new VBox();
         layout.setStyle(
-                "-fx-font-family: Joystix ; " +
-                "-fx-font-size: 18;" +
-                "-fx-border-color: transparent, black;");
+                "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
 
         Scene scene = new Scene(layout, 700, 700);
         Image image = new Image("Brine copy.gif");
@@ -185,19 +187,16 @@ public class GameView extends Application implements GameObserver {
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
 
         layout.setStyle(
-                "-fx-font-family: Joystix ; " +
-                        "-fx-font-size: 18;" +
-                        "-fx-border-color: transparent, black;");
+                "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
 
         Label label4 = new Label("Input player names");
-        label4.setStyle("-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" );
+        label4.setStyle("-fx-font-family: Joystix ;-fx-font-size: 24;" );
 
         TextField p1NameField = new TextField();
-        p1NameField.setStyle("-fx-font-family: Joystix ; + -fx-font-size: 18;");
+        p1NameField.setStyle("-fx-font-family: Joystix ; -fx-font-size: 18;");
         p1NameField.setMaxWidth(100);
         TextField p2NameField = new TextField();
-        p1NameField.setStyle("-fx-font-family: Joystix ; + -fx-font-size: 18;");
+        p1NameField.setStyle("-fx-font-family: Joystix ; -fx-font-size: 18;");
         p2NameField.setMaxWidth(100);
 
         Button startButton = new Button("Start Game");
@@ -216,9 +215,7 @@ public class GameView extends Application implements GameObserver {
     public void showSingleplayer() { // Show singleplayer menu
         VBox layout = new VBox();
         layout.setStyle(
-                "-fx-font-family: Joystix ; " +
-                        "-fx-font-size: 18;" +
-                        "-fx-border-color: transparent, black;");
+                "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
         Scene scene = new Scene(layout, 700, 700);
         Image image = new Image("Brine copy.gif");
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
@@ -226,10 +223,8 @@ public class GameView extends Application implements GameObserver {
 
         Label label3 = new Label("AI Difficulty");
         Label label5 = new Label("Player name");
-        label3.setStyle("-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" );
-        label5.setStyle("-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" );
+        label3.setStyle("-fx-font-family: Joystix ;-fx-font-size: 24;" );
+        label5.setStyle("-fx-font-family: Joystix ;-fx-font-size: 24;" );
 
         TextField p1NameField = new TextField();
         p1NameField.setMaxWidth(100);
@@ -319,6 +314,16 @@ public class GameView extends Application implements GameObserver {
         }
     }
 
+
+
+    public Container getCurrentPlacementView(String turn) {
+        if (turn.equals("1")) {
+            return container1;
+        } else {
+            return container2;
+        }
+    }
+
     public ShootingContainer getCurrentAttackView(String turn) {
         if (turn.equals("1")) {
             return shotContainer1;
@@ -339,26 +344,28 @@ public class GameView extends Application implements GameObserver {
     }
 
     public void showWinner(Player winner) {
+        mainMenuMusic.stop();
         VBox layout = new VBox();
         Scene scene = new Scene(layout, 700, 700);
-        Image image = new Image("Brine copy.gif");
-        layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
+        BackgroundImage image = new BackgroundImage(new Image("Brine copy.gif"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
+        layout.setBackground(new Background(image));
 
-        layout.setStyle("-fx-background-color: transparent;" +
-                "-fx-font-family: Joystix ; " +
-                "-fx-font-size: 24;" +
-                "-fx-border-color: transparent, black;");
+        finalSound.play();
+        layout.setStyle("-fx-background-color: transparent;-fx-font-family: Joystix ;-fx-font-size: 24;-fx-border-color: transparent, black;");
 
         Label label1 = new Label("Winner is " + winner.getName());
         label1.setFont(new Font("Arial Bold", 24));
 
         Button backButton = new Button("Go to main menu");
-        backButton.setOnAction(e -> controller.showMainMenu());
+        backButton.setOnAction(e -> {
+            finalSound.stop();
+            controller.showMainMenu();
+        });
 
         layout.getChildren().addAll(label1, backButton);
         layout.setAlignment(Pos.CENTER);
-        AudioClip sound = new AudioClip(new File(winningScreenMusic).toURI().toString());
-        sound.play();
+
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

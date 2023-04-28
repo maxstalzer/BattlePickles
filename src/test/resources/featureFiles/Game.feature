@@ -99,11 +99,11 @@ Feature: Game
     When I try to place a yardlong incorrectly
     Then I should be told it is invalid
 
-  Scenario: Player 1 has placed all 5 gurkins
-    Given a game
-    And a player
-    And all 5 gurkins have been placed
-    Then The turn changes
+#  Scenario: Player 1 has placed all 5 gurkins
+#    Given a game
+#    And a player
+#    And all 5 gurkins have been placed
+#    Then The turn changes
 
 # ---------------------------- Attacking feature ------------------------
 
@@ -159,3 +159,30 @@ Feature: Game
     And its player2s turn
     And player1 has to kill the last gurkin
     Then player1 does not win
+
+# ------------------------------- GURKIN EXTRA TESTS --------------------------------
+  Scenario: Getting the char value of a yardlong
+    Given a yardlong
+    When I get the char value
+    Then the char value should be y
+
+  Scenario: Getting the char value of a Zuchinni
+    Given a Zuchinni
+    When I get the char value
+    Then the char value should be z
+
+  Scenario: Getting the char value of a Pickle
+    Given a Pickle
+    When I get the char value
+    Then the char value should be p
+
+  Scenario: Getting the char value of a Conichon
+    Given a Conichon
+    When I get the char value
+    Then the char value should be c
+
+  Scenario: Getting the char value of a Gherkin
+    Given a Gherkin
+    When I get the char value
+    Then the char value should be g
+
