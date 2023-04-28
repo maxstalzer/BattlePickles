@@ -1,5 +1,6 @@
 package Gui;
 
+import Base.*;
 import Base.Players.Player;
 import Controller.Controller;
 import Observers.GameObserver;
@@ -52,6 +53,7 @@ public class GameView extends Application implements GameObserver {
 
     private double screenHeight;
 
+    private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 24);
 
 
 
@@ -91,12 +93,6 @@ public class GameView extends Application implements GameObserver {
         attackScene1 = new Scene(shotContainer1);
         shotContainer2 = new ShootingContainer(controller);
         attackScene2 = new Scene(shotContainer2);
-//        VBox layout = new VBox();
-//        waitScene = new Scene(layout, screenWidth, screenHeight);
-//        Label label1 = new Label("Waitig for other player");
-//        label1.setFont(new Font("Arial Bold", 24));
-//        layout.getChildren().addAll(label1);
-//        layout.setAlignment(Pos.CENTER);
     }
 
 
@@ -112,6 +108,7 @@ public class GameView extends Application implements GameObserver {
 
 
     public void startMainMenu() { // Start main menu
+
         BorderPane layout = new BorderPane();
         Scene scene = new Scene(layout, screenWidth, screenHeight);
 
@@ -122,12 +119,14 @@ public class GameView extends Application implements GameObserver {
         //ImageView imageView = new ImageView(image);
 
         Label label1 = new Label("BattlePickles ©");
+        label1.setFont(joystix);
         //label1.setFont(new Font("Arial Bold", 24));
-        label1.setStyle("-fx-font-family: Joystix ; -fx-font-size: 35;");
+//        label1.setStyle("-fx-font-family: Joystix ; -fx-font-size: 35;");
        // Label testControl = new Label("TRON");
         //testControl.setStyle("-fx-font-family: TRON; -fx-font-size: 120;");
 
         Button startButton = new Button("START");
+        startButton.setFont(joystix);
 
 
         startButton.setOnAction(e -> showGameMode());
@@ -136,7 +135,7 @@ public class GameView extends Application implements GameObserver {
 
 
         VBox centerBox = new VBox(label1, startButton);
-        centerBox.setStyle("-fx-background-color: transparent;-fx-font-family: Joystix ;-fx-font-size: 24;-fx-border-color: transparent, black;");
+//        centerBox.setStyle("-fx-background-color: transparent;-fx-font-family: Joystix ;-fx-font-size: 24;-fx-border-color: transparent, black;");
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setSpacing(20); // Add spacing between elements
 
@@ -152,15 +151,13 @@ public class GameView extends Application implements GameObserver {
 
     public void showGameMode() { // Show game mode menu
         VBox layout = new VBox();
-        layout.setStyle(
-                "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
 
         Scene scene = new Scene(layout, screenWidth, screenHeight);
         Image image = new Image("Brine copy.gif");
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
 
         Label label2 = new Label("Game Select");
-        label2.setStyle("-fx-font-family: Joystix ; -fx-font-size: 24;");
+        label2.setFont(joystix);
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showMainMenu());
@@ -194,24 +191,22 @@ public class GameView extends Application implements GameObserver {
         Image image = new Image("Brine copy.gif");
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
 
-        layout.setStyle(
-                "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
-
         Label label4 = new Label("Input player names");
-        label4.setStyle("-fx-font-family: Joystix ;-fx-font-size: 24;" );
+        label4.setFont(joystix);
 
         TextField p1NameField = new TextField();
-        p1NameField.setStyle("-fx-font-family: Joystix ; -fx-font-size: 18;");
+        p1NameField.setFont(joystix);
         p1NameField.setMaxWidth(100);
         TextField p2NameField = new TextField();
-        p1NameField.setStyle("-fx-font-family: Joystix ; -fx-font-size: 18;");
+        p2NameField.setFont(joystix);
         p2NameField.setMaxWidth(100);
 
         Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> controller.startLocalMultiplayerGame(p1NameField.getText(), p2NameField.getText()));
-
+        startButton.setFont(joystix);
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showGameMode());
+        backButton.setFont(joystix);
 
         layout.getChildren().addAll(label4, p1NameField, p2NameField, startButton, backButton);
         layout.setAlignment(Pos.CENTER);
@@ -221,8 +216,6 @@ public class GameView extends Application implements GameObserver {
 
     public void showSingleplayer() { // Show singleplayer menu
         VBox layout = new VBox();
-        layout.setStyle(
-                "-fx-font-family: Joystix ; -fx-font-size: 18;-fx-border-color: transparent, black;");
         Scene scene = new Scene(layout, screenWidth, screenHeight);
         Image image = new Image("Brine copy.gif");
         layout.setBackground(new Background(new BackgroundImage(image, null, null, null, null)));
@@ -230,11 +223,12 @@ public class GameView extends Application implements GameObserver {
 
         Label label3 = new Label("AI Difficulty");
         Label label5 = new Label("Player name");
-        label3.setStyle("-fx-font-family: Joystix ;-fx-font-size: 24;" );
-        label5.setStyle("-fx-font-family: Joystix ;-fx-font-size: 24;" );
+        label3.setFont(joystix);
+        label5.setFont(joystix);
 
         TextField p1NameField = new TextField();
         p1NameField.setMaxWidth(100);
+        p1NameField.setFont(joystix);
 
         MenuButton menuButton = new MenuButton("");
         menuButton.getItems().addAll(new MenuItem("Easy"), new MenuItem("Medium"), new MenuItem("Hard"));
@@ -243,12 +237,15 @@ public class GameView extends Application implements GameObserver {
         menuButton.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
             menuButton.setText(menuItem.getText());
         }));
+        menuButton.setFont(joystix);
 
         Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> controller.startSingleplayerGame(p1NameField.getText(), menuButton.getText()));
+        startButton.setFont(joystix);
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showGameMode());
+        backButton.setFont(joystix);
 
         layout.getChildren().addAll(label3, menuButton, label5, p1NameField, startButton, backButton);
         layout.setAlignment(Pos.CENTER);
@@ -278,6 +275,7 @@ public class GameView extends Application implements GameObserver {
                 throw new RuntimeException(ex);
             }
         });
+        saveButton.setFont(joystix);
 
         Button noSaveButton = new Button("Quit without saving"); // Quit without saving button
         noSaveButton.setOnAction(e -> {
@@ -287,6 +285,7 @@ public class GameView extends Application implements GameObserver {
                 throw new RuntimeException(ex);
             }
         });
+        noSaveButton.setFont(joystix);
         VBox panel = new VBox(10, saveButton, noSaveButton);
         panel.setAlignment(Pos.CENTER_RIGHT);
         panel.setPadding(new Insets(10));
@@ -356,10 +355,9 @@ public class GameView extends Application implements GameObserver {
         layout.setBackground(new Background(image));
 
         finalSound.play();
-        layout.setStyle("-fx-background-color: transparent;-fx-font-family: Joystix ;-fx-font-size: 24;-fx-border-color: transparent, black;");
 
         Label label1 = new Label("Winner is " + winner.getName());
-        label1.setFont(new Font("Arial Bold", 24));
+        label1.setFont(joystix);
         label1.setEffect(new DropShadow());
 
         Button backButton = new Button("Go to main menu");
@@ -367,6 +365,7 @@ public class GameView extends Application implements GameObserver {
             finalSound.stop();
             controller.showMainMenu();
         });
+        backButton.setFont(joystix);
 
         layout.getChildren().addAll(label1, backButton);
         layout.setAlignment(Pos.CENTER);
@@ -380,6 +379,7 @@ public class GameView extends Application implements GameObserver {
         Scene scene = new Scene(layout, screenWidth, screenHeight);
 
         Label label3 = new Label("Select Game to load");
+        label3.setFont(joystix);
 
         MenuButton menuButton = new MenuButton("");
         // Add all the names of the games in the database to the menu using a for loop
@@ -393,6 +393,7 @@ public class GameView extends Application implements GameObserver {
         menuButton.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
             menuButton.setText(menuItem.getText());
         }));
+        menuButton.setFont(joystix);
 
         Button startButton = new Button("Load Game");
         startButton.setOnAction(e -> {
@@ -402,9 +403,11 @@ public class GameView extends Application implements GameObserver {
                 throw new RuntimeException(ex);
             }
         });
+        startButton.setFont(joystix);
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showMainMenu());
+        backButton.setFont(joystix);
 
         layout.getChildren().addAll(label3, menuButton, startButton, backButton);
         layout.setAlignment(Pos.CENTER);
@@ -420,6 +423,7 @@ public class GameView extends Application implements GameObserver {
 
         TextField gameNameField = new TextField();
         gameNameField.setMaxWidth(100);
+        gameNameField.setFont(joystix);
 
         Button startButton = new Button("Save Game");
         startButton.setOnAction(e -> {
@@ -431,9 +435,11 @@ public class GameView extends Application implements GameObserver {
                 showSaveGame(exMessage);
             }
         });
+        startButton.setFont(joystix);
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> controller.showGameplay());
+        backButton.setFont(joystix);
 
         layout.getChildren().addAll(label3, gameNameField, startButton, backButton);
         layout.setAlignment(Pos.CENTER);
@@ -447,6 +453,7 @@ public class GameView extends Application implements GameObserver {
         Scene scene = new Scene(layout, screenWidth, screenHeight);
 
         Label label3 = new Label("Are you sure you want to place your ships here?");
+        label3.setFont(joystix);
 
         Button yesButton = new Button("Yes");
         yesButton.setOnAction(e -> {
@@ -456,9 +463,11 @@ public class GameView extends Application implements GameObserver {
                 throw new RuntimeException(ex);
             }
         });
+        yesButton.setFont(joystix);
 
         Button noButton = new Button("No");
         noButton.setOnAction(e -> controller.redoPlacement());
+        noButton.setFont(joystix);
 
         layout.getChildren().addAll(label3, yesButton, noButton);
         layout.setAlignment(Pos.CENTER);
