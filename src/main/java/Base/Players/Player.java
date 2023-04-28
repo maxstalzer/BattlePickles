@@ -104,8 +104,11 @@ public class  Player implements PlayerObserver, PlayerAttackObserver {
                     }
                 }
                 this.remaining_gurkins --;// decrement the number of gurkins remaining
+                displayKillGIF(gurk);
+            } else {
+                changeTurn();
             }
-            changeTurn();
+
         } else if (result.equals("miss")) { // if the shot was a miss
             this.shotResults.setMiss(coords);   // set the shot results to a miss
             changeTurn();
@@ -130,6 +133,12 @@ public class  Player implements PlayerObserver, PlayerAttackObserver {
             return true;
         }
         return false;
+    }
+    @Override
+    public void displayKillGIF(Gurkin gurk) {
+        for (PlayerAttackObserver observer : attackObservers) {
+            observer.displayKillGIF(gurk);
+        }
     }
 
 

@@ -47,9 +47,9 @@ public class Controller {
     }
 
     public void showLoadSavedGame() throws Exception {
-        database = new Database();
-        database.TestConnection("");
-        gameView.showLoadSavedGame(database.getDatabases());
+            database = new Database();
+            database.TestConnection("");
+            gameView.showLoadSavedGame(database.getDatabases());
     }
 
     public void loadGame(String gameName) throws Exception {
@@ -219,7 +219,7 @@ public class Controller {
     }
 
     public void showGameplay() {
-        gameView.showGameplay(Turn.getTurn(), game.getMultiplayer(), game.getCurrentPlayer());
+        gameView.showGameplay(Turn.getTurn(), game.getMultiplayer(), game.getCurrentPlayer(), game.getOpponent());
     }
 
 
@@ -264,7 +264,13 @@ public class Controller {
 
     }
 
+    public void triggerEndTurn() {
+        game.getCurrentPlayer().changeTurn();
+    }
 
+    public void displayKillGIFView(Gurkin gurk) {
+        gameView.displaykillGIFView(gurk, game.getCurrentPlayer(), game.getOpponent());
+    }
 
 
 }

@@ -33,7 +33,7 @@ public class GuiGurks extends Canvas {
     }
 
     private double scale =1;
-    private double gridsize = Screen.getPrimary().getBounds().getMaxY()/12;
+    private double gridsize = 956 /12;
 
     public GuiGurks(Coordinates coords, Gurkin gurktype,Direction.direction dir) { //Contructor for the Gurks.
 
@@ -99,7 +99,7 @@ public class GuiGurks extends Canvas {
             int size = gurktype.getSize();
             setWidth(gridsize*scale);
             setHeight(gridsize*size*scale);
-            Image image = new Image("pickle.png"); // makes an Image object which is passed to the drawImage function which draws the graphic on the canvas/GuiGurks Object
+            Image image = new Image("Pickle.png"); // makes an Image object which is passed to the drawImage function which draws the graphic on the canvas/GuiGurks Object
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         } else if (gurktype instanceof Yardlong) {
             int size = gurktype.getSize();
