@@ -2,7 +2,7 @@ package Gui;
 
 import Base.Direction;
 import Base.Gurkins.*;
-import Base.Players.PlayerObserver;
+import Observers.PlayerObserver;
 import Controller.Controller;
 import Controller.Controller.*;
 import javafx.geometry.Pos;

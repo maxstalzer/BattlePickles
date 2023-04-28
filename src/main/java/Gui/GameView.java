@@ -1,8 +1,8 @@
 package Gui;
 
-import Base.*;
 import Base.Players.Player;
 import Controller.Controller;
+import Observers.GameObserver;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
@@ -350,7 +351,7 @@ public class GameView extends Application implements GameObserver {
     public void showWinner(Player winner) {
         mainMenuMusic.stop();
         VBox layout = new VBox();
-        Scene scene = new Scene(layout, screenWidth, screenWidth);
+        Scene scene = new Scene(layout, screenWidth, screenHeight);
         BackgroundImage image = new BackgroundImage(new Image("Brine copy.gif"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
         layout.setBackground(new Background(image));
 
@@ -359,6 +360,7 @@ public class GameView extends Application implements GameObserver {
 
         Label label1 = new Label("Winner is " + winner.getName());
         label1.setFont(new Font("Arial Bold", 24));
+        label1.setEffect(new DropShadow());
 
         Button backButton = new Button("Go to main menu");
         backButton.setOnAction(e -> {

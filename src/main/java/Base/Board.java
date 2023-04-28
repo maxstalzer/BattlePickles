@@ -1,9 +1,8 @@
 package Base;
 
 import Base.Gurkins.*;
-import Base.Players.Player;
-import Controller.Controller;
 
+import Observers.BoardObserver;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -12,7 +11,7 @@ import java.util.*;
 
 
 @DatabaseTable(tableName = "Board")
-public class Board implements BoardObserver{ // Board class
+public class Board implements BoardObserver { // Board class
     @DatabaseField(generatedId = true)
     private int id;
     @ForeignCollectionField(columnName = "Tiles", eager = true)
