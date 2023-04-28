@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import java.util.ArrayList;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.text.Font;
 
 
 import static Base.Direction.direction.Horizontal;
@@ -23,6 +24,8 @@ import static Base.Direction.direction.Vertical;
 public class SidePanel extends VBox implements PlayerObserver {
     private Direction.direction dir;
     private gurkinID gurktypeField;
+    private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 18);
+
 
     private Container container;
 
@@ -52,7 +55,7 @@ public class SidePanel extends VBox implements PlayerObserver {
         setAlignment(Pos.CENTER);
         setSpacing(10);
         setPadding(new Insets(20));
-        setStyle("-fx-background-color: #ffffff; -fx-border-color: #168616; -fx-border-width: 5px; -fx-border-radius: 10px;");
+        setStyle("-fx-background-color: #7b647a; -fx-border-color: #168616; -fx-border-width: 5px; -fx-border-radius: 10px;");
         initSidePanel();
     }
 
@@ -133,14 +136,17 @@ public class SidePanel extends VBox implements PlayerObserver {
         popup.setPadding(new Insets(20));
         popup.setStyle("-fx-background-color: #ffffff; -fx-border-color: black; -fx-border-width: 5px; -fx-border-radius: 10px;");
         Label label = new Label("Are you sure you want to place your gurkins here?");
+        label.setFont(joystix);
         Button yes = new Button("Yes");
         yes.setOnAction(event -> {
             controller.endPlacement();
         } );
+        yes.setFont(joystix);
         Button no = new Button("No");
         no.setOnAction(event -> {
             controller.redoPlacement();
         });
+        no.setFont(joystix);
         popup.getChildren().addAll(label,yes,no);
         getChildren().add(popup);
     }

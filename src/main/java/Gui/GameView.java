@@ -290,21 +290,43 @@ public class GameView extends Application implements GameObserver {
         VBox panel = new VBox(10, saveButton, noSaveButton);
         panel.setAlignment(Pos.CENTER_RIGHT);
         panel.setPadding(new Insets(10));
+        panel.setMaxWidth(screenWidth);
+        panel.setMaxHeight(100);
 
         if (turn.equals("1") ) {
             container1.hideSidePanel();
+            VBox placementBox = new VBox (container1);
+            VBox attackBox = new VBox(shotContainer1);
+
+            attackBox.setPadding(new Insets(10));
+            placementBox.setPadding(new Insets(10));
+
             container1.setScaleX(0.6);
             container1.setScaleY(0.6);
 
             shotContainer1.setScaleY(0.6);
             shotContainer1.setScaleX(0.6);
+            GridPane gridPane = new GridPane();
+            gridPane.setMinSize(screenWidth, screenHeight);
+            gridPane.setPadding(new Insets(10, 10, 10, 10));
+            gridPane.setVgap(5);
+            gridPane.setHgap(5);
+            gridPane.setAlignment(Pos.CENTER);
+            gridPane.add(placementBox, 0, 0);
+            gridPane.add(attackBox, 1, 0);
+//            gridPane.add(panel, 0, 1);
 
-            hbox = new HBox(10, container1, shotContainer1);
+
+            hbox = new HBox(container1, shotContainer1);
+            hbox.setMaxWidth(screenWidth);
+            hbox.setMaxHeight(screenHeight - 100);
+            hbox.setAlignment(Pos.CENTER_LEFT);
+
             VBox vbox = new VBox(hbox, panel);
+            vbox.setSpacing(0);
 
             attackScene1 = new Scene(vbox, screenWidth, screenHeight);
             primaryStage.setScene(attackScene1);
-//            primaryStage.setFullScreen(true);
         } else if (turn.equals("2") && multiplayer) {
             container2.hideSidePanel();
 
@@ -313,8 +335,12 @@ public class GameView extends Application implements GameObserver {
 
             shotContainer2.setScaleY(0.6);
             shotContainer2.setScaleX(0.6);
-            hbox = new HBox(10, container2, shotContainer2);
+            hbox = new HBox( container2, shotContainer2);
+            hbox.setPadding(new Insets(10));
             VBox vbox = new VBox(hbox, panel);
+            vbox.setSpacing(10);
+            vbox.setPadding(new Insets(10));
+
 
             attackScene2 = new Scene(vbox, screenWidth, screenHeight);
             primaryStage.setScene(attackScene2);
