@@ -55,8 +55,8 @@ public class GameView extends Application implements GameObserver {
     private double screenHeight;
 
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 24);
-
     private Font joystixTitle = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 50);
+    private Font joystixSave = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 16);
 
     public Container getContainer1() { // returns container of player1
         return container1;
@@ -264,9 +264,8 @@ public class GameView extends Application implements GameObserver {
 
     }
 
-    public void showGameplay(String turn, Boolean multiplayer) { // Show gameplay scene
+    public void showGameplay(String turn, Boolean multiplayer, Player player) { // Show gameplay scene
         HBox hbox;
-
         // Making the bottom stats panel
         Button saveButton = new Button("Save & Quit"); // Save and quit button
         saveButton.setOnAction(e -> {
@@ -276,7 +275,7 @@ public class GameView extends Application implements GameObserver {
                 throw new RuntimeException(ex);
             }
         });
-        saveButton.setFont(joystix);
+        saveButton.setFont(joystixSave);
 
         Button noSaveButton = new Button("Quit without saving"); // Quit without saving button
         noSaveButton.setOnAction(e -> {
@@ -286,48 +285,48 @@ public class GameView extends Application implements GameObserver {
                 throw new RuntimeException(ex);
             }
         });
-        noSaveButton.setFont(joystix);
-        VBox panel = new VBox(10, saveButton, noSaveButton);
+        noSaveButton.setFont(joystixSave);
+
+        Label playerName = new Label();
+        playerName.setText(player.getName());
+
+        VBox panel = new VBox(10, playerName, saveButton, noSaveButton);
         panel.setAlignment(Pos.CENTER_RIGHT);
         panel.setPadding(new Insets(10));
-        panel.setMaxWidth(screenWidth);
-        panel.setMaxHeight(100);
+        panel.setMaxWidth(400);
+        panel.setMaxHeight(screenHeight);
 
         if (turn.equals("1") ) {
             container1.hideSidePanel();
-            VBox placementBox = new VBox (container1);
-            VBox attackBox = new VBox(shotContainer1);
-            attackBox.setPadding(new Insets(10));
-            placementBox.setPadding(new Insets(10));
 
             container1.setScaleX(0.6);
             container1.setScaleY(0.6);
 
             shotContainer1.setScaleY(0.6);
             shotContainer1.setScaleX(0.6);
-//            GridPane gridPane = new GridPane();
-//            gridPane.setMinSize(screenWidth, screenHeight);
-//            gridPane.setPadding(new Insets(10, 10, 10, 10));
-//            gridPane.setVgap(5);
-//            gridPane.setHgap(5);
-//            gridPane.setAlignment(Pos.CENTER);
-//            gridPane.add(placementBox, 0, 0);
-//            gridPane.add(attackBox, 1, 0);
-////            gridPane.add(panel, 0, 1);
 
 
             hbox = new HBox(container1, shotContainer1);
-            hbox.setMaxWidth(screenWidth);
-            hbox.setMaxHeight(screenHeight - 100);
+            hbox.setMaxWidth(screenWidth - 400);
+            hbox.setMaxHeight(screenHeight);
             hbox.setAlignment(Pos.CENTER_LEFT);
-            hbox.setSpacing(-700);
+            hbox.setSpacing(-500);
+            hbox.setStyle("-fx-background-color: transparent;");
+            hbox.setBackground(Background.EMPTY);
 
 
-            VBox vbox = new VBox(hbox, panel);
-            vbox.setSpacing(-100);
-            vbox.setAlignment(Pos.CENTER_LEFT);
+            HBox outerBox = new HBox(hbox, panel);
+            outerBox.setMaxWidth(screenWidth);
+            outerBox.setMaxHeight(screenHeight);
+            outerBox.setSpacing(40);
 
-            attackScene1 = new Scene(vbox, screenWidth, screenHeight);
+
+
+            Image image = new Image("Brine copy.gif");
+            BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+            BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+            outerBox.setBackground(new Background(backgroundImage));
+            attackScene1 = new Scene(outerBox, screenWidth, screenHeight);
             primaryStage.setScene(attackScene1);
         } else if (turn.equals("2") && multiplayer) {
             container2.hideSidePanel();
@@ -339,6 +338,7 @@ public class GameView extends Application implements GameObserver {
             shotContainer2.setScaleX(0.6);
             hbox = new HBox( container2, shotContainer2);
             hbox.setPadding(new Insets(10));
+
             VBox vbox = new VBox(hbox, panel);
             vbox.setSpacing(10);
             vbox.setPadding(new Insets(10));
