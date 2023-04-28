@@ -233,11 +233,19 @@ public class GameView extends Application implements GameObserver {
 
         TextField p1NameField = new TextField();
 
-        p1NameField.setMaxWidth(100);
+        p1NameField.setMaxWidth(300);
+        p1NameField.setText("Player 1");
         p1NameField.setFont(joystix);
 
         MenuButton menuButton = new MenuButton("");
-        menuButton.getItems().addAll(new MenuItem("Easy"), new MenuItem("Medium"), new MenuItem("Hard"));
+        MenuItem Easy = new MenuItem("Easy");
+        Easy.setFont(joystix);
+        MenuItem Medium = new MenuItem("Medium");
+        Medium.setFont(joystix);
+        MenuItem Hard = new MenuItem("Hard");
+        Hard.setFont(joystix);
+
+        menuButton.getItems().addAll(Easy, Medium, Hard);
         menuButton.setText("Easy");
         menuButton.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
             menuButton.setText(menuItem.getText());
@@ -402,13 +410,13 @@ public class GameView extends Application implements GameObserver {
         mainMenuMusic.stop();
         VBox layout = new VBox();
         Scene scene = new Scene(layout, screenWidth, screenWidth);
-        BackgroundImage image = new BackgroundImage(new Image(""), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
+        BackgroundImage image = new BackgroundImage(new Image("rick_rolled.gif"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
         layout.setBackground(new Background(image));
 
         finalSound.play();
 
         Label label1 = new Label("Winner is " + winner.getName());
-        label1.setFont(joystix);
+        label1.setFont(joystixTitle);
         label1.setEffect(new DropShadow());
 
         Button backButton = new Button("Go to main menu");

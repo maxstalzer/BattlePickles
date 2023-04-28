@@ -18,6 +18,8 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
         this.controller = controller;
 
         getChildren().add(new Sea()); //Here we add the sea as a child in the Pane ie. makes it contain an instance of the sea object
+
+
         setOnMouseClicked(new EventHandler<Event>() { //An event handler which activates when you click on the Container.
             @Override
             public void handle(Event event) {
@@ -55,6 +57,7 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
         toFront();
 
     }
+
 
     @Override
     public void changeTurn() {

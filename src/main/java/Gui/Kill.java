@@ -12,6 +12,7 @@ public class Kill extends Canvas{
         //Canvas canvas = new Canvas(gridsize,gridsize);
         Image image = new Image("KILL.png");
        // canvas.getGraphicsContext2D().drawImage(image,0,0,gridsize,gridsize);
+
         getGraphicsContext2D().drawImage(image,0,0,gridsize,gridsize);
     }
 }

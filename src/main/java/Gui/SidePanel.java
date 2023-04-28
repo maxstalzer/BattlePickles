@@ -105,7 +105,6 @@ public class SidePanel extends VBox implements PlayerObserver {
         });
 
 
-        // getChildren().add(menu);
     }
     public void addGurkToSidePanel(Gurkin gurk) {
         getChildren().add(new SidePanelGurks(gurk,controller,this));
