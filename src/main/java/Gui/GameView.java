@@ -10,11 +10,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -22,12 +18,15 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.*;
 
 public class GameView extends Application implements GameObserver {
 
@@ -149,7 +148,7 @@ public class GameView extends Application implements GameObserver {
     }
 
     public void showGameMode() { // Show game mode menu
-        VBox layout = new VBox();
+        VBox layout = new VBox(10);
 
         Scene scene = new Scene(layout, screenWidth, screenHeight);
         Image image = new Image("game_endcucucer.gif");
@@ -173,13 +172,27 @@ public class GameView extends Application implements GameObserver {
         multiplayerButton.setFont(joystix);
 
         Button LoadSaved = new Button("Load saved game");
-         LoadSaved.setOnAction(e -> {
-             try {
-                 controller.showLoadSavedGame();
-             } catch (Exception ex) {
-                 throw new RuntimeException(ex);
-             }
-         });
+        LoadSaved.setOnAction(e -> {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<?> future = executor.submit(() -> {
+                try {
+                    controller.showLoadSavedGame();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+            executor.shutdown();
+            try {
+                future.get(5, TimeUnit.SECONDS); // wait for 5 seconds
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+                future.cancel(true); // interrupt the task if it takes longer than 5 seconds
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Can not load saved game");
+                alert.setContentText("The operation took too long to complete.");
+                alert.showAndWait();
+            }
+        });
          LoadSaved.setFont(joystix);
 
         layout.getChildren().addAll(label2, AIButton, multiplayerButton, LoadSaved, backButton);
@@ -189,7 +202,7 @@ public class GameView extends Application implements GameObserver {
     }
 
     public void showMultiplayer() { // Show multiplayer menu
-        VBox layout = new VBox();
+        VBox layout = new VBox(10);
         Scene scene = new Scene(layout, screenWidth, screenHeight);
         Image image = new Image("game_endcucucer.gif");
         BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
@@ -224,7 +237,7 @@ public class GameView extends Application implements GameObserver {
     }
 
     public void showSingleplayer() { // Show singleplayer menu
-        VBox layout = new VBox();
+        VBox layout = new VBox(10);
         Scene scene = new Scene(layout, screenWidth, screenHeight);
         Image image = new Image("game_endcucucer.gif");
         BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
@@ -290,10 +303,26 @@ public class GameView extends Application implements GameObserver {
         // Making the bottom stats panel
         Button saveButton = new Button("Save & Quit"); // Save and quit button
         saveButton.setOnAction(e -> {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<?> future = executor.submit(() -> {
+                try {
+                    controller.saveGame();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+            executor.shutdown();
             try {
-                controller.saveGame();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                future.get(5, TimeUnit.SECONDS); // wait for 5 seconds
+                // the task completed successfully
+                Platform.exit(); // exit the application
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+                future.cancel(true); // interrupt the task if it takes longer than 5 seconds
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Can not save game");
+                alert.setContentText("The operation took too long to complete.");
+                alert.showAndWait();
             }
         });
         saveButton.setFont(joystixSave);

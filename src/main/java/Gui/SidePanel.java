@@ -27,7 +27,7 @@ import static Base.Direction.direction.Vertical;
 public class SidePanel extends VBox implements PlayerObserver {
     private Direction.direction dir = Horizontal;
     private gurkinID gurktypeField;
-    private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 18);
+    private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 12);
 
 
     private Container container;

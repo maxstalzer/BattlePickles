@@ -47,9 +47,9 @@ public class Controller {
     }
 
     public void showLoadSavedGame() throws Exception {
-        database = new Database();
-        database.TestConnection("");
-        gameView.showLoadSavedGame(database.getDatabases());
+            database = new Database();
+            database.TestConnection("");
+            gameView.showLoadSavedGame(database.getDatabases());
     }
 
     public void loadGame(String gameName) throws Exception {
