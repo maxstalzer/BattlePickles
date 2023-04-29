@@ -777,7 +777,7 @@ public class GameView extends Application implements GameObserver {
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
         GIFbox.setBackground(new Background(backgroundImage));
 
-        Label Text = new Label("Oh no, " + currentPlayer.getName() + " has consumed " + opponentPlayer.getName() + "'s " + gurk.getClass().toString().substring(11));
+        Label Text = new Label("Oh no, " + currentPlayer.getName() + " has consumed " + opponentPlayer.getName() + "'s " + gurk.getClass().toString().substring(19));
         if (gurk instanceof Terrain) {
             Text.setText("Congrats, " + currentPlayer.getName() + " you receive coordinates for hitting this terrain!");
         }

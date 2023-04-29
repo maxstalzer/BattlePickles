@@ -54,7 +54,7 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
 
         setSpacing(10); // sets the spacing between the elements in the vbox
         setAlignment(Pos.CENTER);
-        setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;-fx-background-insets: 5px;");
+        setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;");
         setMaxWidth(350);
         setMinWidth(350);
         setMinHeight(700);
