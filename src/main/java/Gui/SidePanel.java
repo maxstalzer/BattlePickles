@@ -33,7 +33,6 @@ public class SidePanel extends VBox implements PlayerObserver {
     private gurkinID gurktypeField;
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 12);
 
-
     private Container container;
 
     public void setGurktypeField(gurkinID gurktypeField) {
@@ -79,7 +78,12 @@ public class SidePanel extends VBox implements PlayerObserver {
     }
 
     private void initSidePanelTop() {
-        Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 12);
+        Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 16);
+        Font joystix2 = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 20);
+        Label title = new Label("Choose the position of your gurkins");
+        title.setFont(joystix2);
+        Label label2 = new Label("Click gurkin to choose, click tile to place");
+        label2.setFont(joystix);
         Label label1 = new javafx.scene.control.Label("Press D to change direction ©");
         label1.setFont(joystix);
         setAlignment(Pos.CENTER);
@@ -89,29 +93,30 @@ public class SidePanel extends VBox implements PlayerObserver {
         Quit.setOnAction(e -> controller.showMainMenu());
         getChildren().add(Quit);
 
-        getChildren().add(label1);
+        getChildren().addAll(title, label2, label1);
 
         String choice;
         if (dir == Vertical) {
-            choice = "Vertical";
+            choice = "Current direction: Vertical";
         }
         else {
-            choice = "Horizontal";
+            choice = "Current direction: Horizontal";
         }
 
         Label DirChoice = new Label(choice);
         DirChoice.setFont(joystix);
+        DirChoice.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-background-insets: 5px;");
         getChildren().add(DirChoice);
 
         setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.D) {
                 if (dir == Vertical) {
                     setDir(Horizontal);
-                    DirChoice.setText("Horizontal");
+                    DirChoice.setText("Current direction: Horizontal");
                 }
                 else {
                     setDir(Vertical);
-                    DirChoice.setText("Vertical");
+                    DirChoice.setText("Current direction: Vertical");
                 }
             }
         });

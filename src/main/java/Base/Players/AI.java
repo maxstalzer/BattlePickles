@@ -117,12 +117,6 @@ public class AI extends Player {
             }
         }
 
-//        // Choose the highest-weighted point that has not yet been attacked
-//        for (Coordinates candidate : candidates) {
-//            if (getShotResults()[candidate.getX()][candidate.getY()] == null) {
-//                return candidate;
-//            }
-//        }
         // randomly attack an element of that array
         Random rand = new Random();
         // Get a random element from filteredArray

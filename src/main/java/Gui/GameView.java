@@ -132,9 +132,6 @@ public class GameView extends Application implements GameObserver {
         //Creating an image
         Image image = new Image("game_endcucucer.gif");
 
-        //Setting the image view
-        //ImageView imageView = new ImageView(image);
-
         Label label1 = new Label("BattlePickles ©");
         label1.setFont(joystixTitle);
 
@@ -149,7 +146,16 @@ public class GameView extends Application implements GameObserver {
         }
         );
 
-        VBox centerBox = new VBox(label1, startButton);
+        Button exitButton = new Button("EXIT GAME");
+        exitButton.setFont(joystix);
+        exitButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            Platform.exit();
+        }
+        );
+
+        VBox centerBox = new VBox(label1, startButton, exitButton);
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setSpacing(20); // Add spacing between elements
 
@@ -236,7 +242,7 @@ public class GameView extends Application implements GameObserver {
     }
 
     public void showMultiplayer() { // Show multiplayer menu
-        VBox layout = new VBox(10);
+        VBox layout = new VBox(15);
         Scene scene = new Scene(layout, screenWidth, screenHeight);
         Image image = new Image("game_endcucucer.gif");
         BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
@@ -275,7 +281,8 @@ public class GameView extends Application implements GameObserver {
             }
         });
         isTerrainEnabled = false;
-
+        Label terrainLabel = new Label("Would you like to Enable Terrain?");
+        terrainLabel.setFont(joystix);
         Button terrainToggleButton = new Button("Toggle Terrain");
         terrainToggleButton.setFont(joystix);
         terrainToggleButton.setOnAction(e -> {
@@ -306,7 +313,7 @@ public class GameView extends Application implements GameObserver {
         });
         backButton.setFont(joystix);
 
-        layout.getChildren().addAll(label4, p1NameField, p2NameField, terrainToggleButton, startButton, backButton);
+        layout.getChildren().addAll(label4, p1NameField, p2NameField, terrainLabel, terrainToggleButton, startButton, backButton);
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
@@ -365,7 +372,8 @@ public class GameView extends Application implements GameObserver {
         menuButton.setFont(joystix);
 
         isTerrainEnabled = false;
-
+        Label terrainLabel = new Label("Would you like to Enable Terrain?");
+        terrainLabel.setFont(joystix);
         Button terrainToggleButton = new Button("Toggle Terrain");
         terrainToggleButton.setFont(joystix);
         terrainToggleButton.setOnAction(e -> {
@@ -396,7 +404,7 @@ public class GameView extends Application implements GameObserver {
         });
         backButton.setFont(joystix);
 
-        layout.getChildren().addAll(label3, menuButton, label5, p1NameField, terrainToggleButton, startButton, backButton);
+        layout.getChildren().addAll(label3, menuButton, label5, p1NameField, terrainLabel,terrainToggleButton, startButton, backButton);
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
@@ -482,7 +490,7 @@ public class GameView extends Application implements GameObserver {
         VBox panel = new VBox(10, playerBox,playerStatsBox, saveButton, noSaveButton);
         panel.setAlignment(Pos.TOP_CENTER);
         panel.setPadding(new Insets(10));
-        panel.setMaxWidth(400);
+        panel.setMaxWidth(300);
         panel.setMaxHeight(screenHeight);
 
         if (turn.equals("1") ) {
@@ -504,10 +512,11 @@ public class GameView extends Application implements GameObserver {
             playerBoardBox.setAlignment(Pos.CENTER);
             playerBoardBox.setMaxWidth(455);
             playerBoardLabel.setFont(joystixSave);
-            playerBoardBox.setTranslateX(65);
+            playerBoardBox.setTranslateX(70);
             playerBoardBox.setTranslateY(150);
             playerBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
             VBox placeBox = new VBox(playerBoardBox, container1);
+            placeBox.setMaxHeight(screenHeight);
 
             // Labeling results board
             Label resultsBoardLabel = new Label("Results from shots at:" + opponent.getName());
@@ -561,10 +570,11 @@ public class GameView extends Application implements GameObserver {
             playerBoardBox.setAlignment(Pos.CENTER);
             playerBoardBox.setMaxWidth(455);
             playerBoardLabel.setFont(joystixSave);
-            playerBoardBox.setTranslateX(65);
+            playerBoardBox.setTranslateX(70);
             playerBoardBox.setTranslateY(150);
             playerBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
             VBox placeBox = new VBox(playerBoardBox, container2);
+            placeBox.setMaxHeight(screenHeight);
 
             // Labeling results board
             Label resultsBoardLabel = new Label("Results from shots at:" + opponent.getName());
@@ -785,7 +795,7 @@ public class GameView extends Application implements GameObserver {
             Text.setText("Congrats, " + currentPlayer.getName() + " you receive coordinates for hitting this terrain!");
         }
         Text.setFont(joystix);
-        Text.setTextFill(Color.WHITE);
+        Text.setStyle("-fx-text-fill: green");
 
 
 

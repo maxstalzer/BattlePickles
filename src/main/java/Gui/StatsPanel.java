@@ -52,11 +52,11 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
         this.player = player;
         this.knownLocations = new ArrayList<>();
 
-        setSpacing(10); // sets the spacing between the elements in the vbox
+        setSpacing(15); // sets the spacing between the elements in the vbox
         setAlignment(Pos.CENTER);
         setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;");
         setMaxWidth(350);
-        setMinWidth(350);
+        setMinWidth(300);
         setMinHeight(700);
 
         Label playerStats = new Label("Player Stats");
@@ -80,8 +80,9 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
 
         getChildren().addAll(playerStats, playerGurks, playerKills, playerHit, playerMiss, playerTotal, playerHitPercentage, playerMissPercentage);
 
-        knownLocationsBox = new VBox(5);
+        knownLocationsBox = new VBox(10);
         knownLocationsBox.setAlignment(Pos.CENTER);
+        knownLocationsBox.setStyle("-fx-background-color: rgb(255,255,255); -fx-border-color: black; -fx-border-radius: 10;");
         updateknownLocations();
 
 
@@ -163,7 +164,7 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
             knownLocationsLabel.setFont(joystix);
             knownLocationsBox.getChildren().add(knownLocationsLabel);
             for (Coordinates coords : knownLocations) {
-                Label coordsLabel = new Label(coords.getX() + ", " + coords.getY());
+                Label coordsLabel = new Label((coords.getX()+1)+ ", " + (coords.getY()+1));
                 coordsLabel.setFont(joystixSmall);
                 knownLocationsBox.getChildren().add(coordsLabel);
             }
