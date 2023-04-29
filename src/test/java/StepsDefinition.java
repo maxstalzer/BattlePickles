@@ -615,20 +615,15 @@ public class StepsDefinition {
     @Then("I should be able to load the game from the database")
     public void i_should_be_able_to_load_the_game_from_the_database() throws Exception {
         Game loadedGame = database.loadGame("tester");
-        System.out.println("----------TesterBeforeBefore: " + loadedGame.getPlayer1().getGurkinBoard().getPickle());
-        System.out.println("---------TesterBefore: " + loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).getGurkin().getLives());
-        System.out.println("---------TesterName: " + loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).getGurkin());
-        System.out.println("---------TesterAfter: " + loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).getGurkin().getLives());
         loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).hitTile();
         Gurkin tester1 = new Pickle();
         loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(4,4)).setGurkin(tester1);
-        System.out.println("---------Tester12: " + loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(4,4)).getGurkin());
         database.updateGame(loadedGame);
         assertEquals(game.getMultiplayer(), loadedGame.getMultiplayer());
         assertEquals(game.getPlayer1().getName(), loadedGame.getPlayer1().getName());
         assertEquals(game.getPlayer2().getName(), loadedGame.getPlayer2().getName());
         assertEquals(game.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).getGurkin().getLives(), loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).getGurkin().getLives());
-
+        database.deleteDatabase("tester");
     }
 
     @When("my turn is over")
