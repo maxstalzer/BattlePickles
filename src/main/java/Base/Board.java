@@ -95,11 +95,12 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
                     }
                 }
                 increaseHitTiles(1);
-               return "hit";
+                return "hit";
             } else {
                 increaseMissTiles(1);
                 return "miss";
             }
+            
         } else {
             return "noob";
         }

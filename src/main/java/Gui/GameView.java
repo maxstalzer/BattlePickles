@@ -766,7 +766,7 @@ public class GameView extends Application implements GameObserver {
         } else if (gurk instanceof Zuchinni) {
             this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/PickleEat.mp3").toURI().toString()));
             return "PickleEat.gif";
-        } else if (gurk instanceof Gherkin) {
+        } else if (gurk instanceof Pickle) {
             this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/PickleBomb.mp3").toURI().toString()));
             return "PickleBomb.gif";
         } else {

@@ -202,7 +202,14 @@ public class Controller {
         return gameView.getCurrentPlacementView(Turn.getTurn()).getSidepanel().getGurktypeField();
     }
 
-    public Direction.direction getChosenDir() {return gameView.getContainer1().getSidepanel().getDir();}
+    public Direction.direction getChosenDir() {
+        if (Turn.getTurn().equals("1")) {
+            return gameView.getContainer1().getSidepanel().getDir();
+        }
+        else {
+            return gameView.getContainer2().getSidepanel().getDir();
+        }
+    }
 
     public void redoPlacement() {
         // resetting model and view
@@ -211,9 +218,6 @@ public class Controller {
 
         // add observers
         game.getCurrentPlayer().getGurkinBoard().registerBoardObserver(gameView.getCurrentPlacementView(Turn.getTurn())); // register the placement container1 as an observer to player 1s board
-//        if (terrain) {
-//            game.initTerrain();
-//        }
 
         gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
     }
@@ -260,16 +264,14 @@ public class Controller {
     public void changeTurnView() {
         if (Turn.getTurn().equals("2") && !game.getMultiplayer()) {
            Coordinates aishot = game.getAIPlayer().generateAttack();
-            System.out.println(aishot.getX() + aishot.getY() + "AI shot");
            makeShot(aishot);
            showGameplay();
+//            gameView.confirmAttackView(Turn.getTurn(), game.getCurrentPlayer().getName());
         } else if (game.getMultiplayer()) {
             gameView.confirmAttackView(Turn.getTurn(), game.getCurrentPlayer().getName());
         } else {
             showGameplay();
         }
-
-
     }
 
 
@@ -318,5 +320,8 @@ public class Controller {
         }
     }
 
+    public Gurkin getGurkin(Coordinates cords) {
+        return game.getOpponent().getGurkinBoard().getTile(cords).getGurkin();
+    }
 
 }

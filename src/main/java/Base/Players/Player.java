@@ -103,15 +103,16 @@ public class  Player implements PlayerObserver, PlayerAttackObserver {
                         this.shotResults.setKill(new Coordinates(coords.getX(), coords.getY() - i));
                     }
                 }
-                this.remaining_gurkins --;// decrement the number of gurkins remaining
+                if (!(gurk instanceof Terrain)) this.remaining_gurkins --;// decrement the number of gurkins remaining
                 displayKillGIF(gurk);
             } else {
                 changeTurn();
             }
 
         } else if (result.equals("miss")) { // if the shot was a miss
-            this.shotResults.setMiss(coords);   // set the shot results to a miss
-            changeTurn();
+            this.shotResults.setMiss(coords);// set the shot results to a miss
+            changeTurn(); // tells the view to carry out change turn stuff
+
         }
     }
 

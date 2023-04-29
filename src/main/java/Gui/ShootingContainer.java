@@ -11,13 +11,19 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.scene.image.Image;
 import Controller.Controller;
 
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+
 public class ShootingContainer extends Pane implements ResultObserver, PlayerAttackObserver {
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 18);
+    private MediaPlayer hitSound;
 
     private Controller controller;
 
@@ -42,11 +48,14 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
     }
 
     @Override
-    public void setHit(Coordinates coords) {
-        Hit hit = new Hit(coords);
+    public void setHit(Coordinates coords) { // adds the hit image when the gurkin is hit
+        Hit hit = new Hit(coords,controller);
         hit.relocate(coords.getX() * (gridsize), coords.getY() * gridsize);
         getChildren().add(hit);
         toFront();
+
+        hitSound = new MediaPlayer(new Media(new File("src/main/resources/Hit.mp3").toURI().toString()));
+        hitSound.play();
     }
 
     @Override
@@ -55,6 +64,9 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
         miss.relocate(coords.getX() * (gridsize), coords.getY() * gridsize);
         getChildren().add(miss);
         toFront();
+        hitSound = new MediaPlayer(new Media(new File("src/main/resources/Miss.mp3").toURI().toString()));
+        hitSound.play();
+
     }
     @Override
     public void displayKillGIF(Gurkin gurk) {
@@ -63,7 +75,7 @@ public class ShootingContainer extends Pane implements ResultObserver, PlayerAtt
 
     @Override
     public void setKill(Coordinates coords) {
-        Kill kill = new Kill(coords);
+        Kill kill = new Kill(coords,controller);
         kill.relocate(coords.getX() * (gridsize), coords.getY() * gridsize);
         getChildren().add(kill);
         toFront();

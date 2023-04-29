@@ -102,14 +102,19 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
 
     private void updateTiles() {
         playerHit.setText("Hit tiles:  " + hitTiles);
+        System.out.println("updating hits" + hitTiles);
         playerMiss.setText("Miss tiles:  " + missTiles);
+        System.out.println("updating misses" + missTiles);
         playerTotal.setText("Total shots:  " + totalShots);
+        System.out.println("updating shots" + totalShots);
     }
 
     private void updateStats() {
         updateShipCounts();
         updateTiles();
         updatePercentage();
+        getChildren().removeAll();
+        getChildren().addAll(playerGurks, playerKills, playerHit, playerMiss, playerTotal, playerHitPercentage, playerMissPercentage);
         updateknownLocations();
     }
 
@@ -117,57 +122,66 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
 
     @Override
     public void sendCoords(Coordinates coords) {
+        System.out.println("Coords received");
         knownLocations.add(coords);
         updateknownLocations();
     }
 
     @Override
     public void increaseHitTiles(int hits) {
+        System.out.println("hits increased");
         this.hitTiles = hits;
+        updateStats();
     }
 
     @Override
     public void increaseMissTiles(int misses) {
+        System.out.println("Misses increased");
         this.missTiles = misses;
+        updateStats();
     }
 
     @Override
     public void increaseTotalShots(int shots) {
+        System.out.println("Shots increased");
         this.totalShots = shots;
         updateStats();
     }
 
     private void updateknownLocations() {
         System.out.println("updating known locations");
-        if (knownLocations.isEmpty()) {
-            System.out.println("hiding known locations");
-            getChildren().remove(knownLocationsBox);
-        } else if (!knownLocationsBox.getChildren().isEmpty()) {
-            System.out.println("reseting known locations");
-            knownLocationsBox.getChildren().clear();
-            Label knownLocationsLabel = new Label("Known locations");
-            knownLocationsLabel.setFont(joystix);
-            knownLocationsBox.getChildren().add(knownLocationsLabel);
-            for (Coordinates coords : knownLocations) {
-                Label coordsLabel = new Label(coords.getX() + ", " + coords.getY());
-                coordsLabel.setFont(joystixSmall);
-                knownLocationsBox.getChildren().add(coordsLabel);
-            }
-        } else {
-            System.out.println("adding known locations");
-            Label knownLocationsLabel = new Label("Known locations");
-            knownLocationsLabel.setFont(joystix);
-            knownLocationsBox.getChildren().add(knownLocationsLabel);
-            for (Coordinates coords : knownLocations) {
-                Label coordsLabel = new Label(coords.getX() + ", " + coords.getY());
-                coordsLabel.setFont(joystixSmall);
-                knownLocationsBox.getChildren().add(coordsLabel);
-            }
-            getChildren().add(knownLocationsBox);
+//        if (knownLocations.isEmpty()) {
+//        } else if (!knownLocationsBox.getChildren().isEmpty()) {
+//            System.out.println("reseting known locations");
+//            knownLocationsBox.getChildren().clear();
+//            Label knownLocationsLabel = new Label("Known locations");
+//            knownLocationsLabel.setFont(joystix);
+//            knownLocationsBox.getChildren().add(knownLocationsLabel);
+//            for (Coordinates coords : knownLocations) {
+//                Label coordsLabel = new Label(coords.getX() + ", " + coords.getY());
+//                coordsLabel.setFont(joystixSmall);
+//                knownLocationsBox.getChildren().add(coordsLabel);
+//            }
+//        } else {
+//            System.out.println("adding known locations");
+//            Label knownLocationsLabel = new Label("Known locations");
+//            knownLocationsLabel.setFont(joystix);
+//            knownLocationsBox.getChildren().add(knownLocationsLabel);
+//            for (Coordinates coords : knownLocations) {
+//                Label coordsLabel = new Label(coords.getX() + ", " + coords.getY());
+//                coordsLabel.setFont(joystixSmall);
+//                knownLocationsBox.getChildren().add(coordsLabel);
+//            }
+//            getChildren().add(knownLocationsBox);
+//        }
+
+        if (!knownLocations.isEmpty()) {
+
         }
     }
     @Override
     public void removeCoords(Coordinates coords) {
+        System.out.println("removing coords");
         for (Coordinates c : knownLocations) {
             if (c.getX() == coords.getX() && c.getY() == coords.getY()) {
                 knownLocations.remove(c);

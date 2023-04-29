@@ -21,22 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Container extends Pane implements BoardObserver{ //This is the container that contains the Sea class
-    Coordinates Gurks;
     private MediaPlayer placingSound;
 
     private List<GuiGurks> placedGurks;
-    double gridsize = 956 /12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
+    private double gridsize = 956 /12; // this defines the variable gridsize which is the size of a single grid on the sea. This is set to 1/12 of the monitor and is used widely in the other classes
 
-    public Coordinates getGurks() {
-        return Gurks;
-    }
 
     private void removeGurkin (GuiGurks gurk) {
         getChildren().remove(gurk);
-    }
-
-    public void setGurks(Coordinates gurks) {
-        Gurks = gurks;
     }
 
     public SidePanel getSidepanel() {
@@ -83,12 +75,6 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
 
         });
     }
-    public Coordinates getPosition() {
-        return this.Gurks;
-    }
-    public void setGurkplace(Coordinates coords) {
-        this.Gurks = coords;
-    }
 
 
 
@@ -111,7 +97,7 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
 
     @Override
     public void tileHit(Coordinates coords) {
-        Hit hit = new Hit(coords);
+        Hit hit = new Hit(coords,controller);
         hit.relocate(coords.getX()*(gridsize),coords.getY()*gridsize);
         getChildren().add(hit);
         toFront();
