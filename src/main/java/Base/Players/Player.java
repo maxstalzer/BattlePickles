@@ -3,6 +3,8 @@ package Base.Players;
 
 import Base.*;
 import Base.Gurkins.*;
+import Observers.PlayerAttackObserver;
+import Observers.PlayerObserver;
 import com.j256.ormlite.field.DatabaseField;
 
 import java.util.ArrayList;
@@ -11,9 +13,13 @@ import java.util.Set;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "Player")
+<<<<<<< HEAD
 public class  Player implements PlayerObserver, PlayerAttackObserver{
     @DatabaseField(generatedId = true)
     private int id;
+=======
+public class  Player implements PlayerObserver, PlayerAttackObserver {
+>>>>>>> Controller
     @DatabaseField
     String name; // The name of the player
     @DatabaseField
@@ -91,21 +97,24 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
                 for (int i = 0; i < gurk.getSize(); i++) {
                     if ((new Coordinates(coords.getX() + i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() + i, coords.getY())).check(gurk)) {
                         this.shotResults.setKill(new Coordinates(coords.getX() + i, coords.getY())); // set the shot results to a kill
-                    } else if ((new Coordinates(coords.getX() , coords.getY() + i).validCoords()) && board.getTile(new Coordinates(coords.getX() , coords.getY() + i)).check(gurk)) {
+                    } if ((new Coordinates(coords.getX() , coords.getY() + i).validCoords()) && board.getTile(new Coordinates(coords.getX() , coords.getY() + i)).check(gurk)) {
                         this.shotResults.setKill(new Coordinates(coords.getX() , coords.getY() + i));
-                    } else if ((new Coordinates(coords.getX() - i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() - i, coords.getY())).check(gurk)) {
+                    } if ((new Coordinates(coords.getX() - i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() - i, coords.getY())).check(gurk)) {
                         this.shotResults.setKill(new Coordinates(coords.getX() - i, coords.getY()));
-
-                    } else if ((new Coordinates(coords.getX(), coords.getY() - i).validCoords()) &&board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).check(gurk)) {
+                    } if ((new Coordinates(coords.getX(), coords.getY() - i).validCoords()) && board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).check(gurk)) {
                         this.shotResults.setKill(new Coordinates(coords.getX(), coords.getY() - i));
                     }
                 }
-                this.remaining_gurkins --;// decrement the number of gurkins remaining
+                if (!(gurk instanceof Terrain)) this.remaining_gurkins --;// decrement the number of gurkins remaining
+                displayKillGIF(gurk);
+            } else {
+                changeTurn();
             }
-            changeTurn();
+
         } else if (result.equals("miss")) { // if the shot was a miss
-            this.shotResults.setMiss(coords);   // set the shot results to a miss
-            changeTurn();
+            this.shotResults.setMiss(coords);// set the shot results to a miss
+            changeTurn(); // tells the view to carry out change turn stuff
+
         }
     }
 
@@ -127,6 +136,12 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
             return true;
         }
         return false;
+    }
+    @Override
+    public void displayKillGIF(Gurkin gurk) {
+        for (PlayerAttackObserver observer : attackObservers) {
+            observer.displayKillGIF(gurk);
+        }
     }
 
 
@@ -151,15 +166,15 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
         return valid;
     }
 
-    public Player deepClone() { // deep clones the player
-        Player copy = new Player();
-        copy.name = name;
-        copy.remaining_gurkins = remaining_gurkins;
-        copy.gurkinBoard = gurkinBoard.deepClone();
-        copy.shotResults = shotResults;
-        copy.turnID = turnID;
-        return copy;
-    }
+//    public Player deepClone() { // deep clones the player
+//        Player copy = new Player();
+//        copy.name = name;
+//        copy.remaining_gurkins = remaining_gurkins;
+//        copy.gurkinBoard = gurkinBoard.deepClone();
+//        copy.shotResults = shotResults;
+//        copy.turnID = turnID;
+//        return copy;
+//    }
 
     @Override
     public void updateSidePanel(ArrayList<Gurkin> gurks) {

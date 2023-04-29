@@ -1,13 +1,14 @@
 @font-face {
-    font-family:myFont ;
-    src:url("joystix monospace.otf");
+    font-family: joystix;
+    src: local("/src/main/resources/joystix monospace.otf");
 }
-.button{
+
+.button {
     -fx-border-color: transparent;
     -fx-border-width: 0;
     -fx-background-radius: 0;
     -fx-background-color: transparent;
-    -fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 1em; /* 12 */
     -fx-text-fill: #828282;
 }
@@ -22,4 +23,8 @@
 .button:pressed {
     -fx-background-color: black;
     -fx-text-fill: white;
+}
+
+.menu-item {
+    -fx-font-family: joystix;
 }

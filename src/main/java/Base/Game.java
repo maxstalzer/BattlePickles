@@ -3,13 +3,11 @@ package Base;
 import Base.Players.AI;
 import Base.Players.Player;
 import Controller.Controller;
+import Observers.GameObserver;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,11 +28,12 @@ public class Game implements GameObserver {
     @DatabaseField(columnName = "initial_turn")
     private String initial_turn; // Initial// turn
 
-    private Controller controller; // Controller
-
     private Set<GameObserver> gameObserverSet = new HashSet<GameObserver>();
 
-    public Game(Boolean multiplayer, Controller controller) { // Constructor
+
+
+
+    public Game(Boolean multiplayer) { // Constructor
         this.multiplayer = multiplayer;
         Turn.init_turn();
         if (multiplayer) {
@@ -48,7 +47,6 @@ public class Game implements GameObserver {
 
         int gameID = (int) (Math.random() * 1000000); // Generate random game ID
         this.gameID = Integer.toString(gameID);
-        this.controller = controller;
     }
     public void setId(int id) {this.id = id;}
     public void setMultiplayer(Boolean b) {this.multiplayer = b;}
@@ -80,14 +78,14 @@ public class Game implements GameObserver {
         return (player.getRemaining_gurkins() == 5);
     } // Check if player has finished placing gurkins
 
-    public Game deepClone() {   // Deep clone of game
-        Game copy = new Game(multiplayer, controller);
-        copy.player1 = player1.deepClone();
-        copy.player2 = player2.deepClone();
-        copy.game_Over = game_Over;
-        copy.initial_turn = Turn.getTurn();
-        return copy;
-    }
+//    public Game deepClone() {   // Deep clone of game
+//        Game copy = new Game(multiplayer, controller);
+//        copy.player1 = player1.deepClone();
+//        copy.player2 = player2.deepClone();
+//        copy.game_Over = game_Over;
+//        copy.initial_turn = Turn.getTurn();
+//        return copy;
+//    }
 
     public void loadGame(String gameID) { // Load game from file
 //        functionality to come
@@ -162,6 +160,11 @@ public class Game implements GameObserver {
 
         Turn.setTurn(initial_turn);
 
+    }
+
+    public void initTerrain() {
+        player1.getGurkinBoard().initTerrain();
+        player2.getGurkinBoard().initTerrain();
     }
 
 }

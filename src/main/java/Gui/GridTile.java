@@ -10,13 +10,19 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 
+import java.io.File;
+
 public class GridTile extends TilePane { //This class is the tiles in the grid
-    double gridsize = Screen.getPrimary().getBounds().getMaxY()/12; //the size of each grid
+    double gridsize = 956 /12; //the size of each grid
     boolean isHit=false; //not implemented
     boolean hasGurk =false; //not implemented might not have to be
+
+    private MediaPlayer hoverSound; //mediaplayer object used to play the sound
 
     public boolean isHit() {//not implemented
         return isHit;
@@ -43,10 +49,16 @@ public class GridTile extends TilePane { //This class is the tiles in the grid
         this.coords=coords;
         this.setPrefHeight(gridsize); //sets the size of the gridtiles
         this.setPrefWidth(gridsize);
+
         setOnMouseEntered(new EventHandler<Event>() { //sets the opacity/Transparency to half when you mouse hovers over a gridtile
             @Override
             public void handle(Event event) {
+
                 setOpacity(0.5);
+                hoverSound  = new MediaPlayer(new Media(new File("src/main/resources/Hover.mp3").toURI().toString()));//makes a mediaplayer object which is used to play the sound
+                hoverSound.setVolume(0.5);
+                hoverSound.play(); //plays the sound
+
             }
         });
         setOnMouseExited(new EventHandler<Event>() {
@@ -55,11 +67,5 @@ public class GridTile extends TilePane { //This class is the tiles in the grid
                 setOpacity(1);
             }
         });
-    }
-
-    public void resize() {
-        gridsize = Screen.getPrimary().getBounds().getMaxY()/24;
-        this.setPrefHeight(gridsize);
-        this.setPrefWidth(gridsize);
     }
 }

@@ -6,6 +6,7 @@ import Base.Direction;
 import Base.Gurkins.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class AI extends Player {
@@ -82,6 +83,7 @@ public class AI extends Player {
     }
     // Generates an attack based on the weights of the attackWeights array
     private Coordinates generateMediumAttack() {
+        System.out.println(Arrays.deepToString(attackWeights));
         // Create a list of candidate attack coordinates
         ArrayList<Coordinates> candidates = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -94,19 +96,32 @@ public class AI extends Player {
 
         // Sort the candidates by weight in descending order
         candidates.sort((c1, c2) -> Double.compare(attackWeights[c2.getX()][c2.getY()], attackWeights[c1.getX()][c1.getY()]));
+        // filter out the ones that have already been hit
+        candidates.removeIf(n -> getShotResults()[n.getX()][n.getY()] != null);
 
-        // Choose the highest-weighted point that has not yet been attacked
-        for (Coordinates candidate : candidates) {
-            if (getShotResults()[candidate.getX()][candidate.getY()] == null) {
-                return candidate;
+        // finding the maximum weight in the attackweights matrix
+        int maxX = candidates.get(0).getX();
+        int maxY = candidates.get(0).getY();
+        double maxWeight = attackWeights[maxX][maxY];
+
+        // removing all values below the max weight
+        ArrayList<Coordinates> filteredArray = new ArrayList<>();
+        int x;
+        int y;
+
+        for (int i = 0; i < candidates.size(); i++) {
+            x = candidates.get(i).getX();
+            y = candidates.get(i).getY();
+            if (attackWeights[x][y] == maxWeight) {
+                filteredArray.add(candidates.get(i));
             }
         }
 
-        // If all candidates have been attacked, choose a random point
+        // randomly attack an element of that array
         Random rand = new Random();
-        int rX = rand.nextInt(10);
-        int rY = rand.nextInt(10);
-        return new Coordinates(rX, rY);
+        // Get a random element from filteredArray
+        Coordinates targetCoord = filteredArray.get(rand.nextInt(filteredArray.size()));
+        return targetCoord;
     }
 
 
@@ -156,7 +171,8 @@ public class AI extends Player {
                                 minWeight = attackWeights[i][j + 1];
                             }
                         }
-                    } else if (getShotResults()[i][j].equals('o')) {
+                    }
+                     else if (getShotResults()[i][j].equals('o')) {
                         if (i > 0) {
                             attackWeights[i - 1][j] -= 1;
                             if (attackWeights[i - 1][j] > maxWeight) {
@@ -177,6 +193,32 @@ public class AI extends Player {
                             }
                         }
                     }
+                }
+            }
+        }
+        double maxVal = -1000;
+        double minVal = 1000;
+
+
+        for (int y = 0; y < 10 ; y++) {
+            for (int x = 0; x < 10; x++) {
+                if (attackWeights[x][y] > maxVal) {
+                    maxVal = attackWeights[x][y];
+                } if (attackWeights[x][y] < minVal) {
+                    minVal = attackWeights[x][y];
+                }
+            }
+        }
+        System.out.println(maxVal);
+        System.out.println(minVal);
+
+        // normalise the weights to between 0 and 1
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (maxVal == minVal) {
+                    attackWeights[i][j] = 0.5;
+                } else {
+                    attackWeights[i][j] = (attackWeights[i][j] - minVal) / (maxVal - minVal);
                 }
             }
         }
