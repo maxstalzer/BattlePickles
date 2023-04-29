@@ -540,7 +540,6 @@ public class GameView extends Application implements GameObserver {
             resultsBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
 
             VBox shotBox = new VBox(resultsBoardBox, shotContainer2);
-//            shotContainer2.setTranslateY(7.678);
 
             hbox = new HBox(placeBox, shotBox);
             hbox.setMaxWidth(screenWidth - 400);
@@ -763,6 +762,66 @@ public class GameView extends Application implements GameObserver {
         gifPlayer.play();
 
     }
+
+    public void showConfirmPlace(String turn, String playerName) {
+        VBox layout = new VBox(30); // Main layout
+        layout.setAlignment(Pos.CENTER);
+
+        Label turnLabel = new Label("Turn of player " + turn); // Label to show whose turn it is
+        turnLabel.setFont(joystixTitle);
+        turnLabel.setAlignment(Pos.CENTER);
+
+        Label playerMessage = new Label(playerName + ", please place your gurkins"); // Label to show whose turn it is
+        playerMessage.setFont(joystix);
+        playerMessage.setAlignment(Pos.CENTER);
+
+        Button confirmButton = new Button("Continue"); // Button to confirm placement
+        confirmButton.setFont(joystix);
+        confirmButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showPlacement();
+        });
+
+        layout.getChildren().addAll(turnLabel, playerMessage, confirmButton); // Add all elements to layout
+        Image image = new Image("pickle_fight.png");
+        BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        layout.setBackground(new Background(backgroundImage));
+
+        primaryStage.setScene(new Scene(layout, screenWidth, screenHeight));
+
+    }
+
+    public void confirmAttackView(String turn, String playerName) {
+        VBox layout = new VBox(30); // Main layout
+        layout.setAlignment(Pos.CENTER);
+
+        Label turnLabel = new Label("Turn of player " + turn); // Label to show whose turn it is
+        turnLabel.setFont(joystixTitle);
+        turnLabel.setAlignment(Pos.CENTER);
+
+        Label playerMessage = new Label(playerName + ", please prepare to attack"); // Label to show whose turn it is
+        playerMessage.setFont(joystix);
+        playerMessage.setAlignment(Pos.CENTER);
+
+        Button confirmButton = new Button("Continue"); // Button to confirm placement
+        confirmButton.setFont(joystix);
+        confirmButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showGameplay();
+        });
+
+        layout.getChildren().addAll(turnLabel, playerMessage, confirmButton); // Add all elements to layout
+        Image image = new Image("pickle_fight.png");
+        BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        layout.setBackground(new Background(backgroundImage));
+        primaryStage.setScene(new Scene(layout, screenWidth, screenHeight));
+
+    }
+
 }
 
 

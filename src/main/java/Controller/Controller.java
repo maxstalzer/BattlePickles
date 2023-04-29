@@ -107,7 +107,7 @@ public class Controller {
         game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
 
 
-        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer()); // show the placement scene for player 1
+        gameView.showConfirmPlace(Turn.getTurn(), game.getCurrentPlayer().getName()); // show the confirm placement scene
     }
 
     // Creates a new singleplayer game with the given difficulty
@@ -139,9 +139,7 @@ public class Controller {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Hard, game.getPlayer1());
         }
 
-
-        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
-
+        showPlacement(); // show the placement scene for player 1
     }
 
     public Gurkin gurkTranslate (gurkinID gurkinID) {
@@ -206,12 +204,12 @@ public class Controller {
                 case "1":
                     gameView.getContainer1().removeMouseClick();
                     Turn.changeTurn();
-                    gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
+                    gameView.showConfirmPlace(Turn.getTurn(), game.getCurrentPlayer().getName());
                     break;
                 case "2":
                     gameView.getContainer2().removeMouseClick();
                     Turn.changeTurn();
-                    showGameplay();
+                    gameView.confirmAttackView(Turn.getTurn(), game.getCurrentPlayer().getName());
             }
         } else {
             showGameplay();
@@ -233,8 +231,13 @@ public class Controller {
            Coordinates aishot = game.getAIPlayer().generateAttack();
             System.out.println(aishot.getX() + aishot.getY() + "AI shot");
            makeShot(aishot);
+           showGameplay();
+        } else if (game.getMultiplayer()) {
+            gameView.confirmAttackView(Turn.getTurn(), game.getCurrentPlayer().getName());
+        } else {
+            showGameplay();
         }
-        showGameplay();
+
 
     }
 
@@ -272,5 +275,7 @@ public class Controller {
         gameView.displaykillGIFView(gurk, game.getCurrentPlayer(), game.getOpponent());
     }
 
-
+    public void showPlacement() {
+        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
+    }
 }

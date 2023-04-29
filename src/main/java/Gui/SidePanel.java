@@ -14,9 +14,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
 
@@ -25,6 +28,7 @@ import static Base.Direction.direction.Horizontal;
 import static Base.Direction.direction.Vertical;
 
 public class SidePanel extends VBox implements PlayerObserver {
+    private MediaPlayer buttonClick;
     private Direction.direction dir = Horizontal;
     private gurkinID gurktypeField;
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 12);
@@ -138,12 +142,15 @@ public class SidePanel extends VBox implements PlayerObserver {
         label.setFont(joystix);
         Button yes = new Button("Yes");
         yes.setOnAction(event -> {
-            System.out.println("Removing popup");
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             controller.endPlacement();
         } );
         yes.setFont(joystix);
         Button no = new Button("No");
         no.setOnAction(event -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             controller.redoPlacement();
         });
         no.setFont(joystix);
