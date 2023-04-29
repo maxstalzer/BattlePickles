@@ -15,7 +15,7 @@ public class Kill extends Canvas{
         setHeight(gridsize);
         //Canvas canvas = new Canvas(gridsize,gridsize);
         if (controller.getGurkin(coords) instanceof Terrain) {
-            Image image = new Image("Terrain.png");
+            Image image = new Image("DeadTerrain.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize,gridsize);
         } else {
             Image image = new Image("killme.png");
