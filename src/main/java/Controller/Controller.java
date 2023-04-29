@@ -15,8 +15,18 @@ import java.util.List;
 
 public class Controller {
     private Game game;
+
+    private static Controller controllerInstance = null;
+    public static Controller getControllerInstance(GameView gameView) {
+        if (controllerInstance == null) {
+            controllerInstance = new Controller(gameView);
+        }
+        return controllerInstance;
+    }
+
     private GameView gameView;
     private Database database;
+
 
     public enum gurkinID {
         Pickle,
@@ -28,7 +38,7 @@ public class Controller {
     }
     private Boolean terrain;
 
-    public Controller(GameView gameView) {
+    private Controller(GameView gameView) {
         this.gameView = gameView;
     }
 
@@ -74,6 +84,8 @@ public class Controller {
         // register attack observers
         game.getPlayer1().registerAttackObserver(gameView.getP1AttackView());
         game.getPlayer2().registerAttackObserver(gameView.getP2AttackView());
+        game.getPlayer1().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel2());
+        game.getPlayer2().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel1());
         initLoadedGame();
     }
 
@@ -86,7 +98,7 @@ public class Controller {
 
 
     public void startLocalMultiplayerGame(String player1Name, String player2Name, Boolean terrain) { // Start a new local multiplayer game
-        game = new Game(true, this); // new multiplayer game
+        game = new Game(true); // new multiplayer game
 
         // init views
         gameView.initPlacementViews(); //Initialising the placement views of the players
@@ -124,7 +136,7 @@ public class Controller {
 
     // Creates a new singleplayer game with the given difficulty
     public void startSingleplayerGame(String playerName, String difficulty, Boolean terrain) {
-        game = new Game(false, this);// new singleplayer game
+        game = new Game(false);// new singleplayer game
         game.getPlayer1().setName(playerName); // init player name
 
         gameView.initPlacementViews(); // init the placement views
@@ -141,6 +153,8 @@ public class Controller {
         game.getPlayer1().registerAttackObserver(gameView.getP1AttackView()); // regiseter attackview observers
         game.getPlayer2().getResultBoard().registerObserver(gameView.getP2AttackView()); // register shot board ovserver
         game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
+        game.getPlayer1().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel2());
+        game.getPlayer2().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel1());
 
 
         // Setting AI difficulty
@@ -202,7 +216,14 @@ public class Controller {
         return gameView.getCurrentPlacementView(Turn.getTurn()).getSidepanel().getGurktypeField();
     }
 
-    public Direction.direction getChosenDir() {return gameView.getContainer1().getSidepanel().getDir();}
+    public Direction.direction getChosenDir() {
+        if (Turn.getTurn().equals("1")) {
+            return gameView.getContainer1().getSidepanel().getDir();
+        }
+        else {
+            return gameView.getContainer2().getSidepanel().getDir();
+        }
+    }
 
     public void redoPlacement() {
         // resetting model and view
@@ -211,9 +232,6 @@ public class Controller {
 
         // add observers
         game.getCurrentPlayer().getGurkinBoard().registerBoardObserver(gameView.getCurrentPlacementView(Turn.getTurn())); // register the placement container1 as an observer to player 1s board
-//        if (terrain) {
-//            game.initTerrain();
-//        }
 
         gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
     }
@@ -260,16 +278,14 @@ public class Controller {
     public void changeTurnView() {
         if (Turn.getTurn().equals("2") && !game.getMultiplayer()) {
            Coordinates aishot = game.getAIPlayer().generateAttack();
-            System.out.println(aishot.getX() + aishot.getY() + "AI shot");
            makeShot(aishot);
            showGameplay();
+//            gameView.confirmAttackView(Turn.getTurn(), game.getCurrentPlayer().getName());
         } else if (game.getMultiplayer()) {
             gameView.confirmAttackView(Turn.getTurn(), game.getCurrentPlayer().getName());
         } else {
             showGameplay();
         }
-
-
     }
 
 
@@ -318,5 +334,8 @@ public class Controller {
         }
     }
 
+    public Gurkin getGurkin(Coordinates cords) {
+        return game.getOpponent().getGurkinBoard().getTile(cords).getGurkin();
+    }
 
 }

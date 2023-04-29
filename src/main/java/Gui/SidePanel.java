@@ -79,13 +79,13 @@ public class SidePanel extends VBox implements PlayerObserver {
     }
 
     private void initSidePanelTop() {
+        Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 12);
         Label label1 = new javafx.scene.control.Label("Press D to change direction ©");
-        label1.setStyle(
-                "-fx-font-family: Joystix ;-fx-font-size: 18;-fx-border-color: transparent, black;");
+        label1.setFont(joystix);
         setAlignment(Pos.CENTER);
 
         Button Quit = new Button("Quit");
-        Quit.setStyle( "-fx-font-family: Joystix ; -fx-font-size: 18;");
+        Quit.setFont(joystix);
         Quit.setOnAction(e -> controller.showMainMenu());
         getChildren().add(Quit);
 
@@ -100,9 +100,7 @@ public class SidePanel extends VBox implements PlayerObserver {
         }
 
         Label DirChoice = new Label(choice);
-        DirChoice.setStyle(
-                "-fx-font-family: Joystix ;-fx-font-size: 18;-fx-border-color: transparent, black;");
-
+        DirChoice.setFont(joystix);
         getChildren().add(DirChoice);
 
         setOnKeyPressed(event -> {
@@ -145,7 +143,7 @@ public class SidePanel extends VBox implements PlayerObserver {
         popup.setAlignment(Pos.CENTER);
         popup.setSpacing(10);
         popup.setPadding(new Insets(20));
-        popup.setStyle("-fx-background-color: #ffffff; -fx-border-color: black; -fx-border-width: 5px; -fx-border-radius: 10px; -fx-background-insets: 5px;");
+        popup.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-width: 5px; -fx-border-radius: 10px; -fx-background-insets: 5px;");
         Label label = new Label("Are you sure you want to place your gurkins here?");
         label.setFont(joystix);
         Button yes = new Button("Yes");
@@ -155,7 +153,7 @@ public class SidePanel extends VBox implements PlayerObserver {
             controller.endPlacement();
         } );
         yes.setFont(joystix);
-        Button no = new Button("No");
+        Button no = new Button("Redo");
         no.setOnAction(event -> {
             buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
             buttonClick.play();

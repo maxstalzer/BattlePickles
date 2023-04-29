@@ -59,6 +59,8 @@ public class GameView extends Application implements GameObserver {
     private double screenWidth;
     private double screenHeight;
 
+
+
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 24);
     private Font joystixTitle = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 50);
     private Font joystixSave = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 16);
@@ -74,12 +76,13 @@ public class GameView extends Application implements GameObserver {
 
 
 
-    public GameView() { // Constructor
+    public GameView() {
+        // Constructor
     }
 
     @Override
     public void start(Stage primaryStage) { // Start method
-        this.controller = new Controller(this);
+        this.controller = Controller.getControllerInstance(this);
         this.primaryStage = primaryStage;
         this.mainMenuMusic = new MediaPlayer(new Media(new File("src/main/resources/menu.mp3").toURI().toString()));
         this.finalSound = new MediaPlayer(new Media(new File("src/main/resources/NothingToSeeHere.mp3").toURI().toString()));
@@ -469,17 +472,7 @@ public class GameView extends Application implements GameObserver {
 
 
         // Showing the Current Player's stats
-        Label playerStats = new Label("Current Stats");
-        playerStats.setFont(joystix);
-        Label playerShips = new Label("Undead Gurks: " + currentplayer.getRemaining_gurkins());
-        playerShips.setFont(joystixSave);
-        Label playerKills = new Label("Killed Gurks: " + (5 - opponent.getRemaining_gurkins()));
-        playerKills.setFont(joystixSave);
-
-        VBox playerStatsBox = new VBox(10, playerStats, playerShips, playerKills);
-        playerStatsBox.setAlignment(Pos.CENTER);
-        playerStatsBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;-fx-background-insets: 5px;");
-
+        VBox playerStatsBox;
         if (turn.equals("1")) {
             playerStatsBox = getStatsPanel1();
         } else {
@@ -766,7 +759,7 @@ public class GameView extends Application implements GameObserver {
         } else if (gurk instanceof Zuchinni) {
             this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/PickleEat.mp3").toURI().toString()));
             return "PickleEat.gif";
-        } else if (gurk instanceof Gherkin) {
+        } else if (gurk instanceof Pickle) {
             this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/PickleBomb.mp3").toURI().toString()));
             return "PickleBomb.gif";
         } else {
@@ -787,7 +780,7 @@ public class GameView extends Application implements GameObserver {
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
         GIFbox.setBackground(new Background(backgroundImage));
 
-        Label Text = new Label("Oh no, " + currentPlayer.getName() + " has consumed " + opponentPlayer.getName() + "'s " + gurk.getClass().toString().substring(11));
+        Label Text = new Label("Oh no, " + currentPlayer.getName() + " has consumed " + opponentPlayer.getName() + "'s " + gurk.getClass().toString().substring(19));
         if (gurk instanceof Terrain) {
             Text.setText("Congrats, " + currentPlayer.getName() + " you receive coordinates for hitting this terrain!");
         }
@@ -874,9 +867,11 @@ public class GameView extends Application implements GameObserver {
 
 
     public StatsPanel getStatsPanel1() {
+        statsPanel1.updateStats();
         return statsPanel1;
     }
     public StatsPanel getStatsPanel2() {
+        statsPanel2.updateStats();
         return statsPanel2;
     }
 

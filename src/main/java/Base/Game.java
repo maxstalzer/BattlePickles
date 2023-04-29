@@ -33,11 +33,12 @@ public class Game implements GameObserver {
     @DatabaseField(columnName = "initial_turn")
     private String initial_turn; // Initial// turn
 
-    private Controller controller; // Controller
-
     private Set<GameObserver> gameObserverSet = new HashSet<GameObserver>();
 
-    public Game(Boolean multiplayer, Controller controller) { // Constructor
+
+
+
+    public Game(Boolean multiplayer) { // Constructor
         this.multiplayer = multiplayer;
         Turn.init_turn();
         if (multiplayer) {
@@ -51,7 +52,6 @@ public class Game implements GameObserver {
 
         int gameID = (int) (Math.random() * 1000000); // Generate random game ID
         this.gameID = Integer.toString(gameID);
-        this.controller = controller;
     }
 
     public Player getPlayer1() {

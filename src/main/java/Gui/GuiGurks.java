@@ -58,7 +58,7 @@ public class GuiGurks extends Canvas {
 
     }
 
-    Gurkin gurktype;
+    private Gurkin gurktype;
     public GuiGurks(Coordinates coords, Controller.gurkinID gurkinID, Direction.direction dir) { //Contructor for the Gurks.
 
 

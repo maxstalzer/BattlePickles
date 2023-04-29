@@ -95,11 +95,12 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
                     }
                 }
                 increaseHitTiles(1);
-               return "hit";
+                return "hit";
             } else {
                 increaseMissTiles(1);
                 return "miss";
             }
+            
         } else {
             return "noob";
         }
@@ -331,7 +332,6 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
     public void sendCoords(Coordinates coors) {
         foundCoords.add(coors);
-        System.out.println(foundCoords);
         for (BoardStatsObserver observer : statsObservers) {
             observer.sendCoords(coors);
         }
@@ -341,7 +341,6 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     public void removeCoords(Coordinates coords) {
         for (int i = 0; i < foundCoords.size(); i++) {
             if (foundCoords.get(i).getX() == coords.getX() && foundCoords.get(i).getY() == coords.getY()) {
-                System.out.println("removing coords");
                 for (BoardStatsObserver observer : statsObservers) {
                     observer.removeCoords(coords);
                 }

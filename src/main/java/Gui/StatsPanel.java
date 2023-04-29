@@ -17,6 +17,7 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
     private int missTiles;
     private int totalShots;
     private int hitPercentage;
+    private int missPercentage;
     private Controller controller;
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 18);
     private Font joystixTitle = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 50);
@@ -53,7 +54,7 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
 
         setSpacing(10); // sets the spacing between the elements in the vbox
         setAlignment(Pos.CENTER);
-        setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;-fx-background-insets: 5px;");
+        setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;");
         setMaxWidth(350);
         setMinWidth(350);
         setMinHeight(700);
@@ -74,7 +75,7 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
         playerTotal.setFont(joystixSmall);
         playerHitPercentage = new Label("Hit percentage:  " + hitPercentage + "%");
         playerHitPercentage.setFont(joystixSmall);
-        playerMissPercentage = new Label("Miss percentage:  0%");
+        playerMissPercentage = new Label("Miss percentage:  " + missPercentage + "%");
         playerMissPercentage.setFont(joystixSmall);
 
         getChildren().addAll(playerStats, playerGurks, playerKills, playerHit, playerMiss, playerTotal, playerHitPercentage, playerMissPercentage);
@@ -87,6 +88,7 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
     }
 
     private void updateShipCounts() {
+        System.out.println("updating ship counts");
         gurkinsLeft = controller.getGurkinCount(player)[0];
         gurkinsKilled = controller.getGurkinCount(player)[1];
         playerGurks.setText("Gurkins left:  " +  gurkinsLeft);
@@ -95,21 +97,33 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
     }
 
     private void updatePercentage() {
+        System.out.println("updating percentages");
         hitPercentage = (int) ((hitTiles / (double) totalShots) * 100);
+        missPercentage = (int) ((missTiles / (double) totalShots) * 100);
         playerHitPercentage.setText("Hit percentage:  " + hitPercentage + "%");
-        playerMissPercentage.setText("Miss percentage:  " + (100 - hitPercentage) + "%");
+        playerMissPercentage.setText("Miss percentage:  " + missPercentage + "%");
     }
 
     private void updateTiles() {
+        System.out.println("updating tiles");
         playerHit.setText("Hit tiles:  " + hitTiles);
+        System.out.println("updating hits" + hitTiles);
         playerMiss.setText("Miss tiles:  " + missTiles);
+        System.out.println("updating misses" + missTiles);
         playerTotal.setText("Total shots:  " + totalShots);
+        System.out.println("updating shots" + totalShots);
     }
 
-    private void updateStats() {
+    public void updateStats() {
+        System.out.println("updating stats");
         updateShipCounts();
         updateTiles();
         updatePercentage();
+        getChildren().clear();
+        Label playerStats = new Label("Player Stats");
+        playerStats.setFont(joystix);
+        getChildren().add(playerStats);
+        getChildren().addAll(playerGurks, playerKills, playerHit, playerMiss, playerTotal, playerHitPercentage, playerMissPercentage);
         updateknownLocations();
     }
 
@@ -117,44 +131,34 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
 
     @Override
     public void sendCoords(Coordinates coords) {
+        System.out.println("Coords received");
         knownLocations.add(coords);
-        updateknownLocations();
     }
 
     @Override
     public void increaseHitTiles(int hits) {
-        this.hitTiles = hits;
+        System.out.println("hits increased");
+        this.hitTiles += hits;
+        updateStats();
     }
 
     @Override
     public void increaseMissTiles(int misses) {
-        this.missTiles = misses;
+        System.out.println("Misses increased");
+        this.missTiles += misses;
+        updateStats();
     }
 
     @Override
     public void increaseTotalShots(int shots) {
-        this.totalShots = shots;
+        System.out.println("Shots increased");
+        this.totalShots += shots;
         updateStats();
     }
 
     private void updateknownLocations() {
-        System.out.println("updating known locations");
-        if (knownLocations.isEmpty()) {
-            System.out.println("hiding known locations");
-            getChildren().remove(knownLocationsBox);
-        } else if (!knownLocationsBox.getChildren().isEmpty()) {
-            System.out.println("reseting known locations");
+        if (!knownLocations.isEmpty()) {
             knownLocationsBox.getChildren().clear();
-            Label knownLocationsLabel = new Label("Known locations");
-            knownLocationsLabel.setFont(joystix);
-            knownLocationsBox.getChildren().add(knownLocationsLabel);
-            for (Coordinates coords : knownLocations) {
-                Label coordsLabel = new Label(coords.getX() + ", " + coords.getY());
-                coordsLabel.setFont(joystixSmall);
-                knownLocationsBox.getChildren().add(coordsLabel);
-            }
-        } else {
-            System.out.println("adding known locations");
             Label knownLocationsLabel = new Label("Known locations");
             knownLocationsLabel.setFont(joystix);
             knownLocationsBox.getChildren().add(knownLocationsLabel);
@@ -174,6 +178,5 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
                 break;
             }
         }
-        updateknownLocations();
     }
 }
