@@ -91,7 +91,15 @@ public class SidePanel extends VBox implements PlayerObserver {
 
         getChildren().add(label1);
 
-        Label DirChoice = new Label("Horizontal");
+        String choice;
+        if (dir == Vertical) {
+            choice = "Vertical";
+        }
+        else {
+            choice = "Horizontal";
+        }
+
+        Label DirChoice = new Label(choice);
         DirChoice.setStyle(
                 "-fx-font-family: Joystix ;-fx-font-size: 18;-fx-border-color: transparent, black;");
 

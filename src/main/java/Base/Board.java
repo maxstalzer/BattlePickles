@@ -6,18 +6,26 @@ import Observers.BoardObserver;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+import Observers.BoardStatsObserver;
 
 import java.util.*;
 
 
 @DatabaseTable(tableName = "Board")
-public class Board implements BoardObserver { // Board class
+public class Board implements BoardObserver, BoardStatsObserver { // Board class
     @DatabaseField(generatedId = true)
     private int id;
     @ForeignCollectionField(columnName = "Tiles", eager = true)
     private Collection<Tile> tiles = new ArrayList<>(); // 10x10 array of tiles
 
     private Set<BoardObserver> observers = new HashSet<BoardObserver>(); // List of observers of the board
+    private Set<BoardStatsObserver> statsObservers = new HashSet<BoardStatsObserver>(); // List of observers of the board's stats
+
+    private int hitTiles; // Number of hit tiles on board
+    private int missedTiles; // Number of missed tiles on board
+    private int totalShots; // Total number of shots taken at this board
+
+    private ArrayList<Coordinates> foundCoords;
 
 
     // Initialize board
@@ -30,6 +38,11 @@ public class Board implements BoardObserver { // Board class
                 tiles.add(tile);
             }
         }
+        this.hitTiles = 0;
+        this.missedTiles = 0;
+        this.totalShots = 0;
+        this.foundCoords = new ArrayList<>();
+
     }
 
 
@@ -62,16 +75,44 @@ public class Board implements BoardObserver { // Board class
         if (!getTile(a).isHit()) {
             getTile(a).hitTile();
             tileHit(a);
+            increaseTotalShots(1);
+            removeCoords(a);
             if (getTile(a).hasGurkin()) {
                 getTile(a).getGurkin().decrementLives();
+                if (getTile(a).getGurkin() instanceof Terrain) { // If the gurkin is a terrain gurkin, it is destroyed
+                    Boolean found = false;
+                    for (int y = 0; y < 10; y++) {
+                        for (int x = 0; x < 10; x++) {  // finds another unhit gurkin and sends coordinates to the stats observer
+                            if (getTile(new Coordinates(x,y)).hasGurkin() && !getTile(new Coordinates(x,y)).isHit() && notKnown(new Coordinates(x,y))) {
+                                found = true;
+                                sendCoords(new Coordinates(x,y));
+                                break;
+                            }
+                        }
+                        if (found) {
+                            break;
+                        }
+                    }
+                }
+                increaseHitTiles(1);
                return "hit";
             } else {
+                increaseMissTiles(1);
                 return "miss";
             }
         } else {
             return "noob";
         }
 
+    }
+
+    private Boolean notKnown(Coordinates coords) {
+        for (Coordinates c : foundCoords) {
+            if (c.getX() == coords.getX() && c.getY() == coords.getY()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -238,26 +279,76 @@ public class Board implements BoardObserver { // Board class
             }
         }
     }
-//    public void initTerrain() {
-//        // randomly place terrain object on board tiles
-//        Random rand = new Random();
-//        int numTerrain = rand.nextInt(5) + 1;
-//        for (int i = 0; i < numTerrain; i++) {
-//            int x = rand.nextInt(10);
-//            int y = rand.nextInt(10);
-//            Coordinates coors = new Coordinates(x, y);
-//            if (getTile(coors).hasGurkin()) {
-//                i--;
-//            } else {
-//                placeTerrain(coors);
-//            }
-//        }
-//    }
-//
-//    public void placeTerrain(Coordinates coors) {
-//        getTile(coors).setGurkin(new Terrain());
-//        notifyPlacedGurkin(new Terrain() , Direction.direction.Horizontal, coors);
-//    }
+    public void initTerrain() {
+        // randomly place terrain object on board tiles
+        Random rand = new Random();
+        int numTerrain = rand.nextInt(5) + 1;
+        for (int i = 0; i < numTerrain; i++) {
+            int x = rand.nextInt(10);
+            int y = rand.nextInt(10);
+            Coordinates coors = new Coordinates(x, y);
+            if (getTile(coors).hasGurkin()) {
+                i--;
+            } else {
+                placeTerrain(coors);
+            }
+        }
+    }
+
+    public void placeTerrain(Coordinates coors) {
+        getTile(coors).setGurkin(new Terrain());
+        notifyPlacedGurkin(new Terrain() , Direction.direction.Horizontal, coors);
+    }
+
+    @Override
+    public void increaseHitTiles(int hit) {
+        hitTiles += hit;
+        for (BoardStatsObserver o : statsObservers) {
+            o.increaseHitTiles(hit);
+        }
+    }
+
+    @Override
+    public void increaseMissTiles(int miss) {
+        missedTiles += miss;
+        for (BoardStatsObserver o : statsObservers) {
+            o.increaseMissTiles(miss);
+        }
+    }
+
+    @Override
+    public void increaseTotalShots(int shots) {
+        totalShots += shots;
+        for (BoardStatsObserver o : statsObservers) {
+            o.increaseTotalShots(shots);
+        }
+    }
+
+
+    public void registerStatsObserver(BoardStatsObserver o) {
+        statsObservers.add(o);
+    }
+
+    public void sendCoords(Coordinates coors) {
+        foundCoords.add(coors);
+        System.out.println(foundCoords);
+        for (BoardStatsObserver observer : statsObservers) {
+            observer.sendCoords(coors);
+        }
+    }
+
+    @Override
+    public void removeCoords(Coordinates coords) {
+        for (int i = 0; i < foundCoords.size(); i++) {
+            if (foundCoords.get(i).getX() == coords.getX() && foundCoords.get(i).getY() == coords.getY()) {
+                System.out.println("removing coords");
+                for (BoardStatsObserver observer : statsObservers) {
+                    observer.removeCoords(coords);
+                }
+            }
+
+        }
+    }
 }
 
 
