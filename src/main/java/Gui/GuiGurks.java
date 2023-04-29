@@ -70,8 +70,10 @@ public class GuiGurks extends Canvas {
             gurktype  = new Conichon();
         } else if (gurkinID == Controller.gurkinID.Yardlong) {
             gurktype = new Yardlong();
-        } else {
+        } else if (gurkinID == Controller.gurkinID.Zuchinni){
             gurktype = new Zuchinni();
+        } else {
+            gurktype = new Terrain();
         }
 
         setImage(gurktype); // Calls the method defined below
@@ -124,6 +126,12 @@ public class GuiGurks extends Canvas {
             setWidth(gridsize);
             setHeight(gridsize*size*scale);
             Image image = new Image("Conichon.png");
+            getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
+        } else if (gurktype instanceof Terrain) {
+            int size = gurktype.getSize();
+            setWidth(gridsize);
+            setHeight(gridsize*size*scale);
+            Image image = new Image("Terrain.png");
             getGraphicsContext2D().drawImage(image,0,0,gridsize*scale,gridsize*size*scale);
         }
     }

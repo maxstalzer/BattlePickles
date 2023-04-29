@@ -37,8 +37,9 @@ public class Coordinates {
         return true;
     }
 
-    public void updateCoords(int x, int y) { // Update coordinates
-        this.X = x;
-        this.Y = y;
-    }
+//    public void updateCoords(int x, int y) { // Update coordinates
+//        this.X = x;
+//        this.Y = y;
+//    }
+
 }
