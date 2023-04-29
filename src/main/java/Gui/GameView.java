@@ -59,6 +59,8 @@ public class GameView extends Application implements GameObserver {
     private double screenWidth;
     private double screenHeight;
 
+
+
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 24);
     private Font joystixTitle = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 50);
     private Font joystixSave = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 16);
@@ -74,12 +76,13 @@ public class GameView extends Application implements GameObserver {
 
 
 
-    public GameView() { // Constructor
+    public GameView() {
+        // Constructor
     }
 
     @Override
     public void start(Stage primaryStage) { // Start method
-        this.controller = new Controller(this);
+        this.controller = Controller.getControllerInstance(this);
         this.primaryStage = primaryStage;
         this.mainMenuMusic = new MediaPlayer(new Media(new File("src/main/resources/menu.mp3").toURI().toString()));
         this.finalSound = new MediaPlayer(new Media(new File("src/main/resources/NothingToSeeHere.mp3").toURI().toString()));

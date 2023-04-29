@@ -15,8 +15,18 @@ import java.util.List;
 
 public class Controller {
     private Game game;
+
+    private static Controller controllerInstance = null;
+    public static Controller getControllerInstance(GameView gameView) {
+        if (controllerInstance == null) {
+            controllerInstance = new Controller(gameView);
+        }
+        return controllerInstance;
+    }
+
     private GameView gameView;
     private Database database;
+
 
     public enum gurkinID {
         Pickle,
@@ -28,7 +38,7 @@ public class Controller {
     }
     private Boolean terrain;
 
-    public Controller(GameView gameView) {
+    private Controller(GameView gameView) {
         this.gameView = gameView;
     }
 
@@ -88,7 +98,7 @@ public class Controller {
 
 
     public void startLocalMultiplayerGame(String player1Name, String player2Name, Boolean terrain) { // Start a new local multiplayer game
-        game = new Game(true, this); // new multiplayer game
+        game = new Game(true); // new multiplayer game
 
         // init views
         gameView.initPlacementViews(); //Initialising the placement views of the players
@@ -126,7 +136,7 @@ public class Controller {
 
     // Creates a new singleplayer game with the given difficulty
     public void startSingleplayerGame(String playerName, String difficulty, Boolean terrain) {
-        game = new Game(false, this);// new singleplayer game
+        game = new Game(false);// new singleplayer game
         game.getPlayer1().setName(playerName); // init player name
 
         gameView.initPlacementViews(); // init the placement views
