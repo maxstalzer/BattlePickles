@@ -94,12 +94,11 @@ public class  Player implements PlayerObserver, PlayerAttackObserver {
                 for (int i = 0; i < gurk.getSize(); i++) {
                     if ((new Coordinates(coords.getX() + i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() + i, coords.getY())).check(gurk)) {
                         this.shotResults.setKill(new Coordinates(coords.getX() + i, coords.getY())); // set the shot results to a kill
-                    } else if ((new Coordinates(coords.getX() , coords.getY() + i).validCoords()) && board.getTile(new Coordinates(coords.getX() , coords.getY() + i)).check(gurk)) {
+                    } if ((new Coordinates(coords.getX() , coords.getY() + i).validCoords()) && board.getTile(new Coordinates(coords.getX() , coords.getY() + i)).check(gurk)) {
                         this.shotResults.setKill(new Coordinates(coords.getX() , coords.getY() + i));
-                    } else if ((new Coordinates(coords.getX() - i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() - i, coords.getY())).check(gurk)) {
+                    } if ((new Coordinates(coords.getX() - i, coords.getY()).validCoords()) && board.getTile(new Coordinates(coords.getX() - i, coords.getY())).check(gurk)) {
                         this.shotResults.setKill(new Coordinates(coords.getX() - i, coords.getY()));
-
-                    } else if ((new Coordinates(coords.getX(), coords.getY() - i).validCoords()) &&board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).check(gurk)) {
+                    } if ((new Coordinates(coords.getX(), coords.getY() - i).validCoords()) && board.getTile(new Coordinates(coords.getX(), coords.getY() - i)).check(gurk)) {
                         this.shotResults.setKill(new Coordinates(coords.getX(), coords.getY() - i));
                     }
                 }

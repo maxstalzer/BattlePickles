@@ -180,6 +180,16 @@ public class AI extends Player {
                 }
             }
         }
+        // normalise the weights to between 0 and 1
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (maxWeight == minWeight) {
+                    attackWeights[i][j] = 0.5;
+                } else {
+                    attackWeights[i][j] = (attackWeights[i][j] - minWeight) / (maxWeight - minWeight);
+                }
+            }
+        }
     }
 
     private Coordinates generateHardAttack() {

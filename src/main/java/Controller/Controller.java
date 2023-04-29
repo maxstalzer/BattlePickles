@@ -74,6 +74,8 @@ public class Controller {
         // register attack observers
         game.getPlayer1().registerAttackObserver(gameView.getP1AttackView());
         game.getPlayer2().registerAttackObserver(gameView.getP2AttackView());
+        game.getPlayer1().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel2());
+        game.getPlayer2().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel1());
         initLoadedGame();
     }
 
@@ -141,6 +143,8 @@ public class Controller {
         game.getPlayer1().registerAttackObserver(gameView.getP1AttackView()); // regiseter attackview observers
         game.getPlayer2().getResultBoard().registerObserver(gameView.getP2AttackView()); // register shot board ovserver
         game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
+        game.getPlayer1().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel2());
+        game.getPlayer2().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel1());
 
 
         // Setting AI difficulty

@@ -469,17 +469,7 @@ public class GameView extends Application implements GameObserver {
 
 
         // Showing the Current Player's stats
-        Label playerStats = new Label("Current Stats");
-        playerStats.setFont(joystix);
-        Label playerShips = new Label("Undead Gurks: " + currentplayer.getRemaining_gurkins());
-        playerShips.setFont(joystixSave);
-        Label playerKills = new Label("Killed Gurks: " + (5 - opponent.getRemaining_gurkins()));
-        playerKills.setFont(joystixSave);
-
-        VBox playerStatsBox = new VBox(10, playerStats, playerShips, playerKills);
-        playerStatsBox.setAlignment(Pos.CENTER);
-        playerStatsBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;-fx-background-insets: 5px;");
-
+        VBox playerStatsBox;
         if (turn.equals("1")) {
             playerStatsBox = getStatsPanel1();
         } else {
@@ -874,9 +864,11 @@ public class GameView extends Application implements GameObserver {
 
 
     public StatsPanel getStatsPanel1() {
+        statsPanel1.updateStats();
         return statsPanel1;
     }
     public StatsPanel getStatsPanel2() {
+        statsPanel2.updateStats();
         return statsPanel2;
     }
 
