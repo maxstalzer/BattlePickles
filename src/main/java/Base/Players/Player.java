@@ -13,13 +13,10 @@ import java.util.Set;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "Player")
-<<<<<<< HEAD
 public class  Player implements PlayerObserver, PlayerAttackObserver{
     @DatabaseField(generatedId = true)
     private int id;
-=======
-public class  Player implements PlayerObserver, PlayerAttackObserver {
->>>>>>> Controller
+
     @DatabaseField
     String name; // The name of the player
     @DatabaseField
