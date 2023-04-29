@@ -50,7 +50,14 @@ public class Game implements GameObserver {
         this.gameID = Integer.toString(gameID);
         this.controller = controller;
     }
-
+    public void setId(int id) {this.id = id;}
+    public void setMultiplayer(Boolean b) {this.multiplayer = b;}
+    public void setGame_Over(Boolean b) {this.game_Over = b;}
+    public Boolean getGame_Over() {return game_Over;}
+    public void setGameID(String num) {this.gameID = num;}
+    public String getGameID() {return gameID;}
+    public String getInitial_turn() {return initial_turn;}
+    public void setterInitial_turn(String s) {initial_turn = s;}
     public Player getPlayer1() {
         return player1;
     } // Getters
@@ -58,7 +65,7 @@ public class Game implements GameObserver {
     public Player getPlayer2() {
         return player2;
     } // Getters
-    public void setPlayer2(Player p2) {this.player1 = p2;}
+    public void setPlayer2(Player p2) {this.player2 = p2;}
     public AI getAIPlayer() { // Returns AI player if singleplayer, null if multiplayer
         if (!multiplayer) {
             return (AI) player2;

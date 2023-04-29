@@ -204,6 +204,9 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
     public int getId () {
         return this.id;
     }
+    public void setId(int id) {this.id = id;}
+
+    public Boolean getCurrentPlayer() {return CurrentPlayer;}
 
 }
 

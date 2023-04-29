@@ -1,5 +1,6 @@
 package Base.Gurkins;
 
+import Base.Board;
 import Base.Tile;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -8,7 +9,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@DatabaseTable(tableName = "Gurkin")
+
 public abstract class Gurkin {
     @DatabaseField(generatedId = true)
     private int id;
@@ -16,7 +17,7 @@ public abstract class Gurkin {
     private int size;
     @DatabaseField
     private int lives;
-    @ForeignCollectionField(eager = true)
+    private Board board;
     private Collection<Tile> tiles;
 
 //  Constructor for the class
@@ -27,13 +28,22 @@ public abstract class Gurkin {
 
     public Gurkin() {}
 
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getSize() {
         return this.size;
     }
+    public void setSize(int size) {this.size = size;}
 
     public int getLives() {
         return lives;
     }
+    public void setLives(int lives) {this.lives = lives;}
 
     public void decrementLives() {
         this.lives --;
@@ -45,5 +55,9 @@ public abstract class Gurkin {
 
 //  Method to return the string representation of each gurkin
      public abstract Character toChar();
+    public void setBoard(Board board) {this.board = board;}
+    public void addTile(Tile tile) {this.tiles.add(tile);}
+
+
 
 }
