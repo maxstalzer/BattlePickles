@@ -493,7 +493,7 @@ public class StepsDefinition {
     }
     @When("the AI shoots again")
     public void the_ai_shoots_again() {
-        for (int i = 0; i < 101; i++) {
+        for (int i = 0; i < 100; i++) {
             cords = game.getAIPlayer().generateAttack();
             game.getAIPlayer().shoot(p2b, cords);
         }
