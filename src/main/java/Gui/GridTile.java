@@ -56,6 +56,7 @@ public class GridTile extends TilePane { //This class is the tiles in the grid
 
                 setOpacity(0.5);
                 hoverSound  = new MediaPlayer(new Media(new File("src/main/resources/Hover.mp3").toURI().toString()));//makes a mediaplayer object which is used to play the sound
+                hoverSound.setVolume(0.5);
                 hoverSound.play(); //plays the sound
 
             }

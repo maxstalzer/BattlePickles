@@ -160,4 +160,9 @@ public class Game implements GameObserver {
 
     }
 
+    public void initTerrain() {
+        player1.getGurkinBoard().initTerrain();
+        player2.getGurkinBoard().initTerrain();
+    }
+
 }

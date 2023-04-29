@@ -7,6 +7,7 @@ import Base.Gurkins.*;
 import Base.Players.AI;
 import Base.Turn;
 import Gui.GameView;
+import Gui.StatsPanel;
 import Online.Database;
 import javafx.stage.Stage;
 
@@ -22,8 +23,10 @@ public class Controller {
         Yardlong,
         Conichon,
         Zuchinni,
-        Gherkin
+        Gherkin,
+        Terrain
     }
+    private Boolean terrain;
 
     public Controller(GameView gameView) {
         this.gameView = gameView;
@@ -82,7 +85,7 @@ public class Controller {
     }
 
 
-    public void startLocalMultiplayerGame(String player1Name, String player2Name) { // Start a new local multiplayer game
+    public void startLocalMultiplayerGame(String player1Name, String player2Name, Boolean terrain) { // Start a new local multiplayer game
         game = new Game(true, this); // new multiplayer game
 
         // init views
@@ -105,13 +108,22 @@ public class Controller {
         game.getPlayer1().registerAttackObserver(gameView.getP1AttackView()); // regiseter attackview observers
         game.getPlayer2().getResultBoard().registerObserver(gameView.getP2AttackView()); // register shot board ovserver
         game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
+        game.getPlayer1().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel2());
+        game.getPlayer2().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel1());
+
+        if (terrain) {
+            this.terrain = true;
+//            game.initTerrain();
+        } else {
+            this.terrain = false;
+        }
 
 
-        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer()); // show the placement scene for player 1
+        gameView.showConfirmPlace(Turn.getTurn(), game.getCurrentPlayer().getName()); // show the confirm placement scene
     }
 
     // Creates a new singleplayer game with the given difficulty
-    public void startSingleplayerGame(String playerName, String difficulty) {
+    public void startSingleplayerGame(String playerName, String difficulty, Boolean terrain) {
         game = new Game(false, this);// new singleplayer game
         game.getPlayer1().setName(playerName); // init player name
 
@@ -130,6 +142,7 @@ public class Controller {
         game.getPlayer2().getResultBoard().registerObserver(gameView.getP2AttackView()); // register shot board ovserver
         game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
 
+
         // Setting AI difficulty
         if (difficulty == "Easy") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
@@ -138,10 +151,13 @@ public class Controller {
         } else if (difficulty == "Hard") {
             game.getAIPlayer().setDifficulty(AI.Difficulty.Hard, game.getPlayer1());
         }
+        if (terrain) {
+            this.terrain = true;
+        } else {
+            this.terrain = false;
+        }
 
-
-        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
-
+        showPlacement(); // show the placement scene for player 1
     }
 
     public Gurkin gurkTranslate (gurkinID gurkinID) {
@@ -153,8 +169,10 @@ public class Controller {
             return new Zuchinni();
         } else if (gurkinID.equals(Controller.gurkinID.Conichon)) {
             return new Conichon();
-        } else {
+        } else if (gurkinID.equals(Controller.gurkinID.Gherkin)) {
             return new Gherkin();
+        } else {
+            return new Terrain();
         }
 
     }
@@ -168,8 +186,10 @@ public class Controller {
             return gurkinID.Zuchinni;
         } else if (gurkin instanceof Conichon) {
             return gurkinID.Conichon;
-        } else {
+        } else if (gurkin instanceof Gherkin){
             return gurkinID.Gherkin;
+        } else {
+            return gurkinID.Terrain;
         }
 
     }
@@ -191,6 +211,9 @@ public class Controller {
 
         // add observers
         game.getCurrentPlayer().getGurkinBoard().registerBoardObserver(gameView.getCurrentPlacementView(Turn.getTurn())); // register the placement container1 as an observer to player 1s board
+//        if (terrain) {
+//            game.initTerrain();
+//        }
 
         gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
     }
@@ -206,14 +229,20 @@ public class Controller {
                 case "1":
                     gameView.getContainer1().removeMouseClick();
                     Turn.changeTurn();
-                    gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
+                    gameView.showConfirmPlace(Turn.getTurn(), game.getCurrentPlayer().getName());
                     break;
                 case "2":
                     gameView.getContainer2().removeMouseClick();
                     Turn.changeTurn();
-                    showGameplay();
+                    if (terrain) {
+                        game.initTerrain();
+                    }
+                    gameView.confirmAttackView(Turn.getTurn(), game.getCurrentPlayer().getName());
             }
         } else {
+            if (terrain) {
+                game.initTerrain();
+            }
             showGameplay();
         }
     }
@@ -233,8 +262,13 @@ public class Controller {
            Coordinates aishot = game.getAIPlayer().generateAttack();
             System.out.println(aishot.getX() + aishot.getY() + "AI shot");
            makeShot(aishot);
+           showGameplay();
+        } else if (game.getMultiplayer()) {
+            gameView.confirmAttackView(Turn.getTurn(), game.getCurrentPlayer().getName());
+        } else {
+            showGameplay();
         }
-        showGameplay();
+
 
     }
 
@@ -270,6 +304,18 @@ public class Controller {
 
     public void displayKillGIFView(Gurkin gurk) {
         gameView.displaykillGIFView(gurk, game.getCurrentPlayer(), game.getOpponent());
+    }
+
+    public void showPlacement() {
+        gameView.showPlacement(Turn.getTurn(), game.getMultiplayer());
+    }
+
+    public int[] getGurkinCount(int player) {
+        if (player == 1) {
+            return new int[]{game.getPlayer2().getRemaining_gurkins(), 5 - game.getPlayer1().getRemaining_gurkins()};
+        } else {
+            return new int[]{game.getPlayer1().getRemaining_gurkins(), 5 - game.getPlayer1().getRemaining_gurkins()};
+        }
     }
 
 

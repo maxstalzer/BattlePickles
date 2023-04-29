@@ -43,6 +43,10 @@ public class GameView extends Application implements GameObserver {
 
     private Scene attackScene1;// Attack scene for player1
     private Scene attackScene2; // Attack scene for player2
+
+    private StatsPanel statsPanel1; // Stats panel for player1
+    private StatsPanel statsPanel2; // Stats panel for player2
+
     private Scene waitScene; // Wait scene
 
     private MediaPlayer gifPlayer; // Gif player
@@ -51,15 +55,16 @@ public class GameView extends Application implements GameObserver {
 
     private MediaPlayer mainMenuMusic;
     private MediaPlayer finalSound;
-
+    private MediaPlayer buttonClick;
     private double screenWidth;
-
     private double screenHeight;
 
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 24);
     private Font joystixTitle = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 50);
     private Font joystixSave = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 16);
-    private Font joystixSub = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 18);
+
+    private Boolean isTerrainEnabled;
+
 
     public Container getContainer1() { // returns container of player1
         return container1;
@@ -94,10 +99,14 @@ public class GameView extends Application implements GameObserver {
 
     public void initAttackViews() { // Initialize attack views
 
-        shotContainer1 = new ShootingContainer(controller);
-        attackScene1 = new Scene(shotContainer1);
-        shotContainer2 = new ShootingContainer(controller);
-        attackScene2 = new Scene(shotContainer2);
+        shotContainer1 = new ShootingContainer(controller); // container holding player1s shots
+        attackScene1 = new Scene(shotContainer1); // scene holding player1s shots
+        shotContainer2 = new ShootingContainer(controller); // container holding player2s shots
+        attackScene2 = new Scene(shotContainer2); // scene holding player2s shots
+
+        statsPanel1 = new StatsPanel(controller, 1); // stats panel for player1
+        statsPanel2 = new StatsPanel(controller, 2); // stats panel for player2
+
     }
 
 
@@ -129,7 +138,13 @@ public class GameView extends Application implements GameObserver {
         Button startButton = new Button("START");
         startButton.setFont(joystix);
 
-        startButton.setOnAction(e -> showGameMode());
+        startButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            showGameMode();
+
+        }
+        );
 
         VBox centerBox = new VBox(label1, startButton);
         centerBox.setAlignment(Pos.CENTER);
@@ -162,19 +177,33 @@ public class GameView extends Application implements GameObserver {
         label2.setFont(joystixTitle);
 
         Button backButton = new Button("Back");
-        backButton.setOnAction(e -> controller.showMainMenu());
+        backButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showMainMenu();
+        });
         backButton.setFont(joystix);
 
         Button AIButton = new Button("Singleplayer");
-        AIButton.setOnAction(e -> controller.showSingleplayer());
+        AIButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showSingleplayer();
+        });
         AIButton.setFont(joystix);
 
         Button multiplayerButton = new Button("Multiplayer");
-        multiplayerButton.setOnAction(e -> controller.showMultiplayer());
+        multiplayerButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showMultiplayer();
+        });
         multiplayerButton.setFont(joystix);
 
         Button LoadSaved = new Button("Load saved game");
         LoadSaved.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<?> future = executor.submit(() -> {
                 try {
@@ -218,21 +247,63 @@ public class GameView extends Application implements GameObserver {
         p1NameField.setText("Player 1");
         p1NameField.setFont(joystix);
         p1NameField.setMaxWidth(200);
-        p1NameField.setOnAction(e -> p1NameField.setText(""));
+        p1NameField.setOnMouseClicked(e -> {
+            if (p1NameField.getText().equals("Player 1")) {
+                p1NameField.setText("");
+            }
+        });
+        p1NameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue && p1NameField.getText().isEmpty()){
+                p1NameField.setText("Player 1");
+            }
+        });
         TextField p2NameField = new TextField();
         p2NameField.setText("Player 2");
         p2NameField.setFont(joystix);
         p2NameField.setMaxWidth(200);
-        p2NameField.setOnAction(e -> p1NameField.setText(""));
+        p2NameField.setOnMouseClicked(e -> {
+            if (p2NameField.getText().equals("Player 2")) {
+                p2NameField.setText("");
+            }
+        });
+        p2NameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue && p2NameField.getText().isEmpty()){
+                p2NameField.setText("Player 2");
+            }
+        });
+        isTerrainEnabled = false;
+
+        Button terrainToggleButton = new Button("Toggle Terrain");
+        terrainToggleButton.setFont(joystix);
+        terrainToggleButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            if (isTerrainEnabled) {
+                isTerrainEnabled = false;
+                terrainToggleButton.setText("Terrain Disabled");
+            } else {
+                isTerrainEnabled = true;
+                terrainToggleButton.setText("Terrain Enabled");
+            }
+        });
+
 
         Button startButton = new Button("Start Game");
-        startButton.setOnAction(e -> controller.startLocalMultiplayerGame(p1NameField.getText(), p2NameField.getText()));
+        startButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.startLocalMultiplayerGame(p1NameField.getText(), p2NameField.getText(), isTerrainEnabled);
+        });
         startButton.setFont(joystix);
         Button backButton = new Button("Back");
-        backButton.setOnAction(e -> controller.showGameMode());
+        backButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showGameMode();
+        });
         backButton.setFont(joystix);
 
-        layout.getChildren().addAll(label4, p1NameField, p2NameField, startButton, backButton);
+        layout.getChildren().addAll(label4, p1NameField, p2NameField, terrainToggleButton, startButton, backButton);
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
@@ -257,7 +328,16 @@ public class GameView extends Application implements GameObserver {
         p1NameField.setMaxWidth(200);
         p1NameField.setText("Player 1");
         p1NameField.setFont(joystix);
-        p1NameField.setOnAction(e -> p1NameField.setText(""));
+        p1NameField.setOnMouseClicked(e -> {
+            if (p1NameField.getText().equals("Player 1")) {
+                p1NameField.setText("");
+            }
+        });
+        p1NameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue && p1NameField.getText().isEmpty()){
+                p1NameField.setText("Player 1");
+            }
+        });
 
 
         MenuButton menuButton = new MenuButton("");
@@ -275,19 +355,45 @@ public class GameView extends Application implements GameObserver {
         menuButton.getItems().addAll(Easy, Medium, Hard);
         menuButton.setText("Easy");
         menuButton.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             menuButton.setText(menuItem.getText());
         }));
         menuButton.setFont(joystix);
 
+        isTerrainEnabled = false;
+
+        Button terrainToggleButton = new Button("Toggle Terrain");
+        terrainToggleButton.setFont(joystix);
+        terrainToggleButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            if (isTerrainEnabled) {
+                isTerrainEnabled = false;
+                terrainToggleButton.setText("Terrain Disabled");
+            } else {
+                isTerrainEnabled = true;
+                terrainToggleButton.setText("Terrain Enabled");
+            }
+        });
+
         Button startButton = new Button("Start Game");
-        startButton.setOnAction(e -> controller.startSingleplayerGame(p1NameField.getText(), menuButton.getText()));
+        startButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.startSingleplayerGame(p1NameField.getText(), menuButton.getText(), isTerrainEnabled);
+        });
         startButton.setFont(joystix);
 
         Button backButton = new Button("Back");
-        backButton.setOnAction(e -> controller.showGameMode());
+        backButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showGameMode();
+        });
         backButton.setFont(joystix);
 
-        layout.getChildren().addAll(label3, menuButton, label5, p1NameField, startButton, backButton);
+        layout.getChildren().addAll(label3, menuButton, label5, p1NameField, terrainToggleButton, startButton, backButton);
         layout.setAlignment(Pos.CENTER);
 
         primaryStage.setScene(scene);
@@ -307,6 +413,8 @@ public class GameView extends Application implements GameObserver {
         // Making the Stats Panel
         Button saveButton = new Button("Save & Quit"); // Save and quit button
         saveButton.setOnAction(e -> { // Save and quit button action, throws exception if it takes too long
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<?> future = executor.submit(() -> {
                 try {
@@ -334,6 +442,8 @@ public class GameView extends Application implements GameObserver {
 
         Button noSaveButton = new Button("Quit without saving"); // Quit without saving button
         noSaveButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             try {
                 controller.showMainMenu();
             } catch (Exception ex) {
@@ -370,7 +480,11 @@ public class GameView extends Application implements GameObserver {
         playerStatsBox.setAlignment(Pos.CENTER);
         playerStatsBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 10;-fx-background-insets: 5px;");
 
-
+        if (turn.equals("1")) {
+            playerStatsBox = getStatsPanel1();
+        } else {
+            playerStatsBox = getStatsPanel2();
+        }
         // Putting the side panel together
         VBox panel = new VBox(10, playerBox,playerStatsBox, saveButton, noSaveButton);
         panel.setAlignment(Pos.TOP_CENTER);
@@ -470,7 +584,6 @@ public class GameView extends Application implements GameObserver {
             resultsBoardBox.setStyle("-fx-background-color: rgba(81, 162, 0, 0.8); -fx-border-color: black; -fx-border-radius: 5; -fx-background-insets: 2px;");
 
             VBox shotBox = new VBox(resultsBoardBox, shotContainer2);
-//            shotContainer2.setTranslateY(7.678);
 
             hbox = new HBox(placeBox, shotBox);
             hbox.setMaxWidth(screenWidth - 400);
@@ -525,6 +638,7 @@ public class GameView extends Application implements GameObserver {
 
     public void showWinner(Player winner) {
         mainMenuMusic.stop();
+        gifPlayer.stop();
         VBox layout = new VBox();
         Scene scene = new Scene(layout, screenWidth, screenWidth);
         BackgroundImage image = new BackgroundImage(new Image("rick_rolled.gif"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(layout.getWidth(), layout.getHeight(), false, false, false, false));
@@ -538,6 +652,8 @@ public class GameView extends Application implements GameObserver {
 
         Button backButton = new Button("Go to main menu");
         backButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             finalSound.stop();
             controller.showMainMenu();
         });
@@ -567,12 +683,16 @@ public class GameView extends Application implements GameObserver {
         menuButton.setText("Choose Game Save");
 
         menuButton.getItems().forEach(menuItem -> menuItem.setOnAction(event -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             menuButton.setText(menuItem.getText());
         }));
         menuButton.setFont(joystix);
 
         Button startButton = new Button("Load Game");
         startButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             try {
                 controller.loadGame(menuButton.getText());
             } catch (Exception ex) {
@@ -582,7 +702,11 @@ public class GameView extends Application implements GameObserver {
         startButton.setFont(joystix);
 
         Button backButton = new Button("Back");
-        backButton.setOnAction(e -> controller.showMainMenu());
+        backButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showMainMenu();
+        });
         backButton.setFont(joystix);
 
         layout.getChildren().addAll(label3, menuButton, startButton, backButton);
@@ -603,6 +727,8 @@ public class GameView extends Application implements GameObserver {
 
         Button startButton = new Button("Save Game");
         startButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             try {
                 controller.saveNewGame(gameNameField.getText());
                 controller.showMainMenu();
@@ -614,7 +740,11 @@ public class GameView extends Application implements GameObserver {
         startButton.setFont(joystix);
 
         Button backButton = new Button("Back");
-        backButton.setOnAction(e -> controller.showGameplay());
+        backButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showGameplay();
+        });
         backButton.setFont(joystix);
 
         layout.getChildren().addAll(label3, gameNameField, startButton, backButton);
@@ -636,25 +766,15 @@ public class GameView extends Application implements GameObserver {
         } else if (gurk instanceof Zuchinni) {
             this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/PickleEat.mp3").toURI().toString()));
             return "PickleEat.gif";
-        } else {
+        } else if (gurk instanceof Gherkin) {
             this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/PickleBomb.mp3").toURI().toString()));
             return "PickleBomb.gif";
+        } else {
+            this.gifPlayer  = new MediaPlayer(new Media(new File("src/main/resources/Terrain.mp3").toURI().toString()));
+            return "Terrain.gif";
         }
     }
 
-    private String getPickleSound(Gurkin gurk) {
-        if (gurk instanceof Gherkin) {
-            return "BlenderPickle.gif";
-        } else if (gurk instanceof Yardlong) {
-            return "LateNightPickle.gif";
-        } else if (gurk instanceof Conichon) {
-            return "PickleCrush.gif";
-        } else if (gurk instanceof Zuchinni) {
-            return "PickleEat.gif";
-        } else {
-            return "PickleBomb.gif";
-        }
-    }
 
     public void displaykillGIFView(Gurkin gurk, Player currentPlayer, Player opponentPlayer) {
         VBox GIFbox = new VBox();
@@ -668,6 +788,9 @@ public class GameView extends Application implements GameObserver {
         GIFbox.setBackground(new Background(backgroundImage));
 
         Label Text = new Label("Oh no, " + currentPlayer.getName() + " has consumed " + opponentPlayer.getName() + "'s " + gurk.getClass().toString().substring(11));
+        if (gurk instanceof Terrain) {
+            Text.setText("Congrats, " + currentPlayer.getName() + " you receive coordinates for hitting this terrain!");
+        }
         Text.setFont(joystix);
         Text.setTextFill(Color.WHITE);
 
@@ -676,6 +799,8 @@ public class GameView extends Application implements GameObserver {
         Button Continue = new Button("Continue");
         Continue.setFont(joystix);
         Continue.setOnAction(event -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
             gifPlayer.stop();
             controller.triggerEndTurn();
             mainMenuMusic.play();
@@ -687,6 +812,74 @@ public class GameView extends Application implements GameObserver {
         gifPlayer.play();
 
     }
+
+    public void showConfirmPlace(String turn, String playerName) {
+        VBox layout = new VBox(30); // Main layout
+        layout.setAlignment(Pos.CENTER);
+
+        Label turnLabel = new Label("Turn of player " + turn); // Label to show whose turn it is
+        turnLabel.setFont(joystixTitle);
+        turnLabel.setAlignment(Pos.CENTER);
+
+        Label playerMessage = new Label(playerName + ", please place your gurkins"); // Label to show whose turn it is
+        playerMessage.setFont(joystix);
+        playerMessage.setAlignment(Pos.CENTER);
+
+        Button confirmButton = new Button("Continue"); // Button to confirm placement
+        confirmButton.setFont(joystix);
+        confirmButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showPlacement();
+        });
+
+        layout.getChildren().addAll(turnLabel, playerMessage, confirmButton); // Add all elements to layout
+        Image image = new Image("pickle_fight.png");
+        BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        layout.setBackground(new Background(backgroundImage));
+
+        primaryStage.setScene(new Scene(layout, screenWidth, screenHeight));
+
+    }
+
+    public void confirmAttackView(String turn, String playerName) {
+        VBox layout = new VBox(30); // Main layout
+        layout.setAlignment(Pos.CENTER);
+
+        Label turnLabel = new Label("Turn of player " + turn); // Label to show whose turn it is
+        turnLabel.setFont(joystixTitle);
+        turnLabel.setAlignment(Pos.CENTER);
+
+        Label playerMessage = new Label(playerName + ", please prepare to attack"); // Label to show whose turn it is
+        playerMessage.setFont(joystix);
+        playerMessage.setAlignment(Pos.CENTER);
+
+        Button confirmButton = new Button("Continue"); // Button to confirm placement
+        confirmButton.setFont(joystix);
+        confirmButton.setOnAction(e -> {
+            buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
+            buttonClick.play();
+            controller.showGameplay();
+        });
+
+        layout.getChildren().addAll(turnLabel, playerMessage, confirmButton); // Add all elements to layout
+        Image image = new Image("pickle_fight.png");
+        BackgroundSize backgroundSize = new BackgroundSize(screenHeight, screenWidth, false, false, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        layout.setBackground(new Background(backgroundImage));
+        primaryStage.setScene(new Scene(layout, screenWidth, screenHeight));
+
+    }
+
+
+    public StatsPanel getStatsPanel1() {
+        return statsPanel1;
+    }
+    public StatsPanel getStatsPanel2() {
+        return statsPanel2;
+    }
+
 }
 
 

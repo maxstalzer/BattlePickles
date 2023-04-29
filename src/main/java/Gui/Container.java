@@ -95,14 +95,18 @@ public class Container extends Pane implements BoardObserver{ //This is the cont
     @Override
     public void placeGurkin(Coordinates coords, Direction.direction direction, Gurkin gurkin) {
         Controller.gurkinID gurktype = controller.gurkTranslate(gurkin);
+        System.out.println(gurktype);
         GuiGurks gurk = new GuiGurks(coords,gurktype,direction); // create an instance of the type GuiGurk at the target coordinates. Here we need to have a way of specifying the two other arguments; gurktype and direction, respectively
         gurk.relocate(coords.getX()*(gridsize),coords.getY()*gridsize); //This places the gurk on the target coordinates
         getChildren().add(gurk); //this adds the gurk as a child on this object, ie the Container
         toFront(); //Moves it to the front, so that it displays over the grid color
-        placedGurks.add(gurk);
-        sidepanel.clearGurktypeField();
-        this.placingSound  = new MediaPlayer(new Media(new File("src/main/resources/Squish Sound Effect.mp3").toURI().toString()));
-        placingSound.play();
+        if (! (gurkin instanceof Terrain)) {
+            placedGurks.add(gurk);
+            sidepanel.clearGurktypeField();
+            this.placingSound  = new MediaPlayer(new Media(new File("src/main/resources/Squish Sound Effect.mp3").toURI().toString()));
+            placingSound.play();
+        }
+
     }
 
     @Override
