@@ -81,6 +81,10 @@ public class Tile {
     public void setBoard(Board b) {
         this.board = b;
     }
+
+    public Board getBoard() {
+        return this.board;
+    }
     public int getBoardId() {
         return board.getId();
     }
