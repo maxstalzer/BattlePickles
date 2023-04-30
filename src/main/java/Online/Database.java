@@ -30,9 +30,12 @@ public class Database {
 
     // The constructer takes a string input and creates a database with the input as its name. After that it creates
     // the necessary tables for storing the game
+    //jdbc:mysql://172.20.10.3:3306/
+    String jdbcurl = "jdbc:mysql://10.154.244.25/";
+
     public Database(String databaseName) throws  Exception {
 
-        String databaseUrl = "jdbc:mysql://172.20.10.3:3306/";
+        String databaseUrl = jdbcurl;
 
         Connection connection = DriverManager.getConnection(databaseUrl, username, password);
 
@@ -41,7 +44,7 @@ public class Database {
         createDatabaseStatement.executeUpdate(createDatabaseQuery);
         connection.close();
 
-        databaseURL = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+        databaseURL = String.format(jdbcurl + "%s",databaseName);
         this.databaseName = databaseName;
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
 
@@ -188,7 +191,7 @@ public class Database {
     public Game loadGame(String databaseName) throws Exception {
         this.databaseName = databaseName;
 
-        this.databaseURL =  String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+        this.databaseURL =  String.format(jdbcurl + "%s",databaseName);
 
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
 
@@ -805,7 +808,7 @@ public class Database {
     public void TestConnection() {
 
         // The URL of the database on your friend's computer
-        String databaseUrl = "jdbc:mysql://172.20.10.3:3306/";
+        String databaseUrl = "jdbcurl";
 
         // Create a connection source with the specified URL, username, and password
         JdbcConnectionSource connectionSource = null;
@@ -846,7 +849,7 @@ public class Database {
     public void TestConnection(String databaseName) {
 
         // The URL of the database on your friend's computer
-        String databaseUrl = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+        String databaseUrl = String.format(jdbcurl + "%s",databaseName);
 
         // The username and password for the database
         String username = "sigurd";
@@ -891,7 +894,7 @@ public class Database {
 
     // This method returns a list of all the databases that has been created on the server
     public List<String> getDatabases() throws Exception {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://172.20.10.3:3306/", username, password);
+        Connection connection = DriverManager.getConnection(jdbcurl, username, password);
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SHOW DATABASES");
 
@@ -909,7 +912,7 @@ public class Database {
 
     // This method deletes a database from the server that matches the input string
     public void deleteDatabase (String databaseName) throws Exception {
-        String databaseUrl = "jdbc:mysql://172.20.10.3:3306/";
+        String databaseUrl = jdbcurl;
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, username, password);
 
         try {

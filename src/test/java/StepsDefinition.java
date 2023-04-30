@@ -633,7 +633,7 @@ public class StepsDefinition {
         Database database1 = new Database("yoyo");
         database1.saveGame(game);
         Game gametest = database1.loadGame();
-        assertEquals(game.getPlayer1().getName(),gametest.getPlayer1().getName());
+        assertEquals(game,gametest);
         database1.deleteDatabase("yoyo");
     }
 
