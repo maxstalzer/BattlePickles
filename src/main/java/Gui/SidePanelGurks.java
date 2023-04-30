@@ -1,21 +1,16 @@
 package Gui;
 
-import Base.Coordinates;
-import Base.Direction;
-import Base.Gurkins.*;
+import Base.*;
 import Controller.Controller;
 import Controller.Controller.*;
-import io.cucumber.java.ast.Ya;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 
 import static Base.Direction.direction.Horizontal;
-import static Base.Direction.direction.Vertical;
 
 public class SidePanelGurks extends GuiGurks {
 
@@ -29,7 +24,7 @@ public class SidePanelGurks extends GuiGurks {
     }
 
     gurkinID gurktypeField;
-    public SidePanelGurks( Gurkin gurktype,Controller controller,SidePanel sidePanel) {
+    public SidePanelGurks(Gurkin gurktype, Controller controller, SidePanel sidePanel) {
         super(new Coordinates(0,0), gurktype, Horizontal);
         setWidth((getWidth()*0.5));
         setHeight((getHeight()*0.5));

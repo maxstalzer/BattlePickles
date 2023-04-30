@@ -2,8 +2,7 @@ package Observers;
 
 import Base.Coordinates;
 import Base.Direction;
-import Base.Gurkins.Gurkin;
-import Controller.*;
+import Base.Gurkin;
 
 public interface BoardObserver {
     public void tileHit(Coordinates coords);

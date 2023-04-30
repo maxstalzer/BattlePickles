@@ -1,8 +1,6 @@
-package Base.Players;
+package Base;
 
 
-import Base.*;
-import Base.Gurkins.*;
 import Observers.PlayerAttackObserver;
 import Observers.PlayerObserver;
 import com.j256.ormlite.field.DatabaseField;

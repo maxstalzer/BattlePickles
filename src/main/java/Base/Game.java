@@ -1,10 +1,6 @@
 package Base;
 
-import Base.Players.AI;
-import Base.Players.Player;
-import Controller.Controller;
 import Observers.GameObserver;
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 

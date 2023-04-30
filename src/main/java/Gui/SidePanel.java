@@ -1,14 +1,11 @@
 package Gui;
 
-import Base.Direction;
-import Base.Gurkins.*;
+import Base.*;
 import Observers.PlayerObserver;
 import Controller.Controller;
 import Controller.Controller.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
@@ -17,7 +14,6 @@ import javafx.scene.control.Button;
 import java.io.File;
 import java.util.ArrayList;
 
-import javafx.scene.control.MenuItem;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;

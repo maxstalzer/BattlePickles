@@ -273,6 +273,12 @@ Feature: Game
     When I reset the placement
     Then the board should be reset
 
+  Scenario: Saving a collection of Results
+    Given Collection of a Result
+    When I have information about a shotResult from my database
+    Then i need to be able to get the id, Character, x coordinate, y coordinante and which shotResult class it is associated with
+    And set all this information into a new Result and add it to a new collection of Results.
+
 
 
 

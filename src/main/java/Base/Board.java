@@ -1,14 +1,11 @@
 package Base;
 
-import Base.Gurkins.*;
-
 import Observers.BoardObserver;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 import Observers.BoardStatsObserver;
 
-import java.nio.charset.CoderResult;
 import java.util.*;
 
 
@@ -331,6 +328,7 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
                 placeTerrain(coors);}}}
 
     public void placeTerrain(Coordinates coors) {
+        System.out.println("terrain placed at " + coors.getX() + ", " + coors.getY() + "\n");
         getTile(coors).setGurkin(new Terrain());
         notifyPlacedGurkin(new Terrain() , Direction.direction.Horizontal, coors);}
 

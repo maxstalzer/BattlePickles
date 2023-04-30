@@ -1,25 +1,18 @@
 package Gui;
 
 import Base.Coordinates;
-import Base.Gurkins.Gurkin;
+import Base.Gurkin;
 import Observers.PlayerAttackObserver;
 import Observers.ResultObserver;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
-import javafx.stage.Screen;
-import javafx.scene.image.Image;
 import Controller.Controller;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 
 public class ShootingContainer extends Pane implements ResultObserver, PlayerAttackObserver {
     private Font joystix = Font.loadFont(getClass().getResourceAsStream("/joystix monospace.otf"), 18);

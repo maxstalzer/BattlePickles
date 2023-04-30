@@ -1,6 +1,5 @@
-package Base.Players;
+package Base;
 
-import Base.Coordinates;
 import Observers.ResultObserver;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;

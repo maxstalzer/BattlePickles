@@ -1,19 +1,17 @@
 package Gui;
 
+import Base.Gurkin;
+import Base.Terrain;
 import Observers.BoardObserver;
 import Base.Coordinates;
 import Base.Direction;
-import Base.Gurkins.*;
 import Controller.Controller;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.Screen;
 
 
 import java.io.File;

@@ -1,11 +1,7 @@
 import Base.*;
-import Base.Gurkins.*;
-import Base.Players.AI;
-import Base.Players.Player;
-import Online.Database;
-import Controller.Controller;
-import Gui.GameView;
-import io.cucumber.java.an.E;
+import Base.AI;
+import Base.Player;
+import Base.Database;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -37,6 +33,8 @@ public class StepsDefinition {
     Game loadedGame;
 
     Character c;
+
+    ShotResults shotResults;
 
     @Given("a tile")
     public void a_tile() {
@@ -210,6 +208,7 @@ public class StepsDefinition {
     @When("I create a singleplayer game")
     public void i_create_a_singleplayer_game() {
        game = new Game(false);
+       game.getAIPlayer().setDifficulty(String.valueOf(AI.Difficulty.Hard));
     }
     @Then("I should create a new Player and AI")
     public void i_should_create_a_new_player_and_ai() {
@@ -454,6 +453,7 @@ public class StepsDefinition {
     @Given("a singleplayer game")
     public void a_singleplayer_game() {
         game = new Game(false);
+        game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
     }
     @When("I set the difficulty of the AI to easy")
     public void i_set_the_difficulty_of_the_ai_to_easy() {
@@ -523,73 +523,6 @@ public class StepsDefinition {
         assertTrue(game.getAIPlayer().checkWin());
     }
 
-//    Database database;
-//
-//    @When("I create a database")
-//    public void i_create_a_database() throws Exception {
-//         database = new Database("newDatabase");
-//    }
-//
-//    @Then("I should make sure it doesn't exist already")
-//    public void i_should_make_sure_it_doesn_t_exist_already() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I try to create a database that already exists")
-//    public void i_try_to_create_a_database_that_already_exists() {
-//        //write code here that turns blablabla
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("I should receive an error database already exists")
-//    public void i_should_receive_an_error_database_already_exists() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I connect to a database")
-//    public void i_connect_to_a_database() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("I should know that the i have access")
-//    public void i_should_know_that_the_i_have_access() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I try to connect to a non-existent database")
-//    public void i_try_to_connect_to_a_non_existent_database() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("I should receive an error database doesnt exist")
-//    public void i_should_receive_an_error_database_doesnt_exist() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I update my player data to the database")
-//    public void i_update_my_player_data_to_the_database() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("the database should be updated")
-//    public void the_database_should_be_updated() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I try to retrieve data from the database")
-//    public void i_try_to_retrieve_data_from_the_database() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("my local data should be updated")
-//    public void my_local_data_should_be_updated() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
     @Given("a database")
     public void a_database() throws Exception {
         database = new Database("tester");
@@ -598,7 +531,6 @@ public class StepsDefinition {
     @When("I save a game")
     public void i_save_a_game() throws Exception {
         game.getPlayer1().setName("testPlayer1");
-        game.getPlayer2().setName("testPlayer2");
         game.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).setGurkin(new Pickle());
         database.saveGame(game);
     }
@@ -634,7 +566,7 @@ public class StepsDefinition {
     public void i_should_be_able_to_upload_my_game_to_the_database() throws Exception {
         Database database1 = new Database("yoyo");
         database1.saveGame(game);
-        Game gametest = database1.loadGame();
+        Game gametest = database1.loadGame("yoyo");
         assertEquals(game,gametest);
         database1.deleteDatabase("yoyo");
     }
@@ -666,6 +598,7 @@ public class StepsDefinition {
 
     @When("I initialise the terrain")
     public void i_initialise_the_terrain() {
+        game = new Game(false);
         game.initTerrain();
     }
     @Then("the terrain should be initialised")
@@ -677,6 +610,8 @@ public class StepsDefinition {
             for (int x = 0; x < 10; x++) {
                 Board p1Board = game.getPlayer1().getGurkinBoard();
                 Board p2Board = game.getPlayer2().getGurkinBoard();
+                System.out.println(p1Board.getTile(new Coordinates(x,y)).getGurkin());
+                System.out.println(p2Board.getTile(new Coordinates(x,y)).getGurkin());
                 if (p1Board.getTile(new Coordinates(x,y)).getGurkin() != null && p1Board.getTile(new Coordinates(x,y)).getGurkin() instanceof Terrain) {
                     hasTerrain1 = true;
                 }
@@ -893,7 +828,89 @@ public class StepsDefinition {
 
 
 
+    @When("I delete the database {string}")
+    public void i_delete_the_database(String string) throws Exception {
+        database.deleteDatabase("tester");
+    }
 
+    @Then("the database {string} should not exist")
+    public void the_database_should_not_exist(String string) throws Exception{
+        assertFalse(database.getDatabases().stream().anyMatch(str -> str.equals("tester")));
+        //assertFalse(database.TestConnection("tester"));
+    }
+
+    @Given("Collection of a Result")
+    public void collection_of_a_result() {
+        shotResults = new ShotResults();
+        shotResults.setHit(new Coordinates(1,1));
+        shotResults.setHit(new Coordinates(2,2));
+        shotResults.setKill(new Coordinates(3,3));
+        shotResults.setMiss(new Coordinates(4,4));
+        shotResults.toShotCollection();
+        ShotResults shotResults1 = shotResults;
+        shotResults1.transformation();
+        assertEquals(shotResults.getShotBoard(),shotResults1.getShotBoard());
+    }
+
+    @When("I have information about a shotResult from my database")
+    public void i_have_information_about_a_shot_result_from_my_database() {
+        ShotResults shotResults2 = new ShotResults();
+        shotResults2.setHit(new Coordinates(1,1));
+        shotResults2.setHit(new Coordinates(2,2));
+        shotResults2.setKill(new Coordinates(3,3));
+        shotResults2.setMiss(new Coordinates(4,4));
+        shotResults2.toShotCollection();
+    }
+    @Then("i need to be able to get the id, Character, x coordinate, y coordinante and which shotResult class it is associated with")
+    public void i_need_to_be_able_to_get_the_id_character_x_coordinate_y_coordinante_and_which_shot_result_class_it_is_associated_with() {
+        ShotResults shotResults1 = new ShotResults();
+        for (Result result : shotResults.getShotCollection()) {
+            Result result1 = new Result();
+            result1.setId(result.getId());
+            result1.setX(result.getX());
+            result1.setY(result.getY());
+            result1.setCharacter(result.getCharacter());
+            result1.setShotResults(result.getShotResults());
+            shotResults1.addShotBoardCollection(result1);
+            assertEquals(result1.getId(), result.getId());
+            assertEquals(result1.getX(), result.getX());
+            assertEquals(result1.getY(), result.getY());
+            assertEquals(result1.getCharacter(), result.getCharacter());
+            assertEquals(result1.getShotResults(), result.getShotResults());
+
+        }
+    }
+    @Then("set all this information into a new Result and add it to a new collection of Results.")
+    public void set_all_this_information_into_a_new_result_and_add_it_to_a_new_collection_of_results() {
+        ShotResults shotResults1 = new ShotResults();
+        for (Result result : shotResults.getShotCollection()) {
+            Result result1 = new Result();
+            result1.setId(result.getId());
+            result1.setX(result.getX());
+            result1.setY(result.getY());
+            result1.setCharacter(result.getCharacter());
+            result1.setShotResults(result.getShotResults());
+            shotResults1.addShotBoardCollection(result1);
+        }
+        shotResults.transformation();
+        shotResults1.transformation();
+        assertEquals(shotResults.getShotBoard(), shotResults1.getShotBoard());
+    }
+
+    @Given("an existing database")
+    public void an_existing_database() throws Exception{
+        database = new Database("existing_database");
+    }
+    @When("I update a game")
+    public void i_update_a_game() throws Exception {
+        game.getPlayer1().setName("Akira is a beast");
+        database.updateGame(game);
+    }
+    @Then("The game should be the same as the one i save")
+    public void the_game_should_be_the_same_as_the_one_i_save() throws Exception {
+        Game loadedGame = database.loadGame("existing_database");
+        assertEquals(game.getPlayer1().getName(), loadedGame.getPlayer1().getName());
+    }
 
 
 }

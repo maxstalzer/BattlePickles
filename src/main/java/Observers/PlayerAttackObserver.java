@@ -1,6 +1,6 @@
 package Observers;
 
-import Base.Gurkins.*;
+import Base.Gurkin;
 
 public interface PlayerAttackObserver {
     public void changeTurn();

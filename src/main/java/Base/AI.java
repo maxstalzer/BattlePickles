@@ -1,12 +1,6 @@
-package Base.Players;
-
-import Base.Board;
-import Base.Coordinates;
-import Base.Direction;
-import Base.Gurkins.*;
+package Base;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class AI extends Player {

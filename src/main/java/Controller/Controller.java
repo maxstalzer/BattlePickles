@@ -1,16 +1,10 @@
 package Controller;
 
-import Base.Coordinates;
-import Base.Direction;
-import Base.Game;
-import Base.Gurkins.*;
-import Base.Players.AI;
-import Base.Players.ShotResults;
-import Base.Turn;
+import Base.*;
+import Base.AI;
+import Base.ShotResults;
 import Gui.GameView;
-import Gui.StatsPanel;
-import Online.Database;
-import javafx.stage.Stage;
+import Base.Database;
 
 import java.util.List;
 

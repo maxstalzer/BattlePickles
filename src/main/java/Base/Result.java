@@ -1,4 +1,4 @@
-package Base.Players;
+package Base;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
