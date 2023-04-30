@@ -105,12 +105,14 @@ public class Controller {
         Character[][] shotBoard = resultsboard.getShotBoard();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j< 10; j++) {
-                if (shotBoard[j][i] == 'k') {
-                    resultsboard.notifyKill(new Coordinates(j, i));
-                } else if (shotBoard[j][i] == 'x') {
-                    resultsboard.notifyHit(new Coordinates(j, i));
-                } else if (shotBoard[j][i] == 'o') {
-                    resultsboard.notifyMiss(new Coordinates(j, i));
+                if (shotBoard[j][i] != null) {
+                    if (shotBoard[j][i] == 'k') {
+                        resultsboard.notifyKill(new Coordinates(j, i));
+                    } else if (shotBoard[j][i] == 'x') {
+                        resultsboard.notifyHit(new Coordinates(j, i));
+                    } else if (shotBoard[j][i] == 'o') {
+                        resultsboard.notifyMiss(new Coordinates(j, i));
+                    }
                 }
             }
         }
