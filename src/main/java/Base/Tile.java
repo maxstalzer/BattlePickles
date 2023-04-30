@@ -49,6 +49,10 @@ public class Tile {
     public void setBoard(Board b) {
         this.board = b;
     }
+
+    public Board getBoard() {
+        return this.board;
+    }
     public int getBoardId() {
         return board.getId();
     }
@@ -70,23 +74,11 @@ public class Tile {
         return this.isHit;
     } // Check if the tile has been hit
 
-    public Character toChar() { // Convert tile to char
-        if (hasGurkin()) {
-            return gurkinID.toChar();
-        }
-        return ' ';
-    }
 
     public Boolean check(Gurkin gurk) {
         if (!hasGurkin()) return false;
         return gurkinID.equals(gurk);
     }
 
-    public Tile deepClone() {
-        Tile clone = new Tile();
-        clone.gurkin = this.gurkin;
-        clone.gurkinID = this.gurkinID;
-        clone.isHit = this.isHit;
-        return clone;
-    }
+
 }

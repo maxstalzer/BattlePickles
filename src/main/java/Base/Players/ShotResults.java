@@ -41,37 +41,16 @@ public class ShotResults implements ResultObserver {
 
     public void notifyHit(Coordinates coords) {
         for (ResultObserver observer : observers) {
-            observer.setHit(coords);
-        }
-    }
+            observer.setHit(coords);}}
     public void notifyMiss(Coordinates coords) {
         for (ResultObserver observer : observers) {
-            observer.setMiss(coords);
-        }
-    }
+            observer.setMiss(coords);}}
 
     public void notifyKill(Coordinates coords) {
         for (ResultObserver observer : observers) {
-            observer.setKill(coords);
-        }
-    }
+            observer.setKill(coords);}}
 
     public void registerObserver(ResultObserver observer) {
         observers.add(observer);
     }
-
-    public void prepareResultsView() {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j< 10; j++) {
-                if (shotBoard[j][i] == 'k') {
-                    notifyKill(new Coordinates(j, i));
-                } else if (shotBoard[j][i] == 'x') {
-                    notifyHit(new Coordinates(j, i));
-                } else if (shotBoard[j][i] == 'o') {
-                    notifyMiss(new Coordinates(j, i));
-                }
-            }
-        }
-    }
-
 }

@@ -41,3 +41,4 @@ Feature: Singleplayer
     Then there should be no gurkins left
     And all tiles should be hit
     And the AI should have won the game
+

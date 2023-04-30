@@ -19,5 +19,6 @@ public class Turn { // Turn class
     } // Getters
 
     public static void setTurn(String initialTurn) {
+        turn = initialTurn;
     }
 }

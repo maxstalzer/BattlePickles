@@ -21,7 +21,6 @@ public abstract class Gurkin {
     }
 
     public Gurkin() {}
-    public int getId() {return this.id;}
 
     public int getSize() {
         return this.size;

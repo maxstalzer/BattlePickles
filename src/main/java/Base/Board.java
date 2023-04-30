@@ -25,6 +25,10 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     private int missedTiles; // Number of missed tiles on board
     private int totalShots; // Total number of shots taken at this board
 
+    private Gurkin[] gurkins;
+    private Coordinates[] startCoors;
+    private Direction.direction[] startDirs;
+
     private ArrayList<Coordinates> foundCoords;
 
 
@@ -57,11 +61,8 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     public Tile getTile(Coordinates a) {
         for (Tile tile : tiles) {
             if (tile.getX() == a.getX() && tile.getY() == a.getY()) {
-                return tile;
-            }
-        }
-        return null;
-    }
+                return tile;}}
+        return null;}
 
     public Collection<Tile> getTiles () {return tiles;}
 
@@ -86,42 +87,30 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
                             if (getTile(new Coordinates(x,y)).hasGurkin() && !getTile(new Coordinates(x,y)).isHit() && notKnown(new Coordinates(x,y))) {
                                 found = true;
                                 sendCoords(new Coordinates(x,y));
-                                break;
-                            }
-                        }
+                                break;}}
                         if (found) {
-                            break;
-                        }
-                    }
-                }
+                            break;}}}
                 increaseHitTiles(1);
-                return "hit";
-            } else {
+                return "hit";} else {
                 increaseMissTiles(1);
-                return "miss";
-            }
+                return "miss";}
             
         } else {
-            return "noob";
-        }
+            return "noob";}
 
     }
 
     private Boolean notKnown(Coordinates coords) {
         for (Coordinates c : foundCoords) {
             if (c.getX() == coords.getX() && c.getY() == coords.getY()) {
-                return false;
-            }
-        }
-        return true;
-    }
+                return false;}}
+        return true;}
 
     @Override
     public void placeGurkin(Coordinates startCoor, Direction.direction dir, Gurkin g) { // Place a gurkin on the board
         for (int i = 0; i < g.getSize(); i++) {
             if (dir.equals(Direction.direction.Horizontal)) {
-                getTile(new Coordinates(startCoor.getX() + i, startCoor.getY())).setGurkin(g);
-            } else {
+                getTile(new Coordinates(startCoor.getX() + i, startCoor.getY())).setGurkin(g);} else {
                 getTile(new Coordinates(startCoor.getX(), startCoor.getY() + i)).setGurkin(g);
             }
         }
@@ -157,11 +146,11 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
         observers.add(observer);
     }
 
-    public void prepareViewGurkin() {
-        Gurkin[] gurkins = new Gurkin[5];
-        Coordinates[] startCoors = new Coordinates[5];
-        Direction.direction[] startDirs = new Direction.direction[5];
 
+    public void prepareViewGurkin() {
+        this.gurkins = new Gurkin[5];
+        this.startCoors = new Coordinates[5];
+        this.startDirs = new Direction.direction[5];
 
         List<Tile> conichonList = new ArrayList<>();
         List<Tile> gherkinList = new ArrayList<>();
@@ -170,11 +159,26 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
         List<Tile> zuchinniList = new ArrayList<>();
 
         for (Tile tile : tiles) {
-            if (tile.hasGurkin() && (tile.getGurkin() instanceof Conichon)) {conichonList.add(tile);}
-            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Gherkin)) {gherkinList.add(tile);}
-            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Pickle)) {pickleList.add(tile);}
-            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Yardlong)) {yardlongList.add(tile);}
-            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Zuchinni)) {zuchinniList.add(tile);}
+            if (tile.hasGurkin() && (tile.getGurkin() instanceof Conichon)) {
+                conichonList.add(tile);
+                gurkins[0] = tile.getGurkin();
+            }
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Gherkin)) {
+                gherkinList.add(tile);
+                gurkins[1] = tile.getGurkin();
+            }
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Pickle)) {
+                pickleList.add(tile);
+                gurkins[2] = tile.getGurkin();
+            }
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Yardlong)) {
+                yardlongList.add(tile);
+                gurkins[3] = tile.getGurkin();
+            }
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Zuchinni)) {
+                zuchinniList.add(tile);
+                gurkins[4] = tile.getGurkin();
+            }
         }
         Tile lowest;
 
@@ -202,18 +206,14 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
             lowest = gherkinList.get(0);
             for (Tile tile : gherkinList) {
                 if (tile.getY() < lowest.getY()) {
-                    lowest = tile;
-                }
-            }
+                    lowest = tile;}}
             startCoors[1] = new Coordinates(lowest.getX(), lowest.getY());
         } else {
             startDirs[1] = Direction.direction.Horizontal;
             lowest = gherkinList.get(0);
             for (Tile tile : gherkinList) {
                 if (tile.getX() < lowest.getX()) {
-                    lowest = tile;
-                }
-            }
+                    lowest = tile;}}
             startCoors[1] = new Coordinates(lowest.getX(), lowest.getY());
         }
         if (pickleList.get(0).getX() == pickleList.get(1).getX()) {
@@ -221,18 +221,14 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
             lowest = pickleList.get(0);
             for (Tile tile : pickleList) {
                 if (tile.getY() < lowest.getY()) {
-                    lowest = tile;
-                }
-            }
+                    lowest = tile;}}
             startCoors[2] = new Coordinates(lowest.getX(), lowest.getY());
         } else {
             startDirs[2] = Direction.direction.Horizontal;
             lowest = pickleList.get(0);
             for (Tile tile : pickleList) {
                 if (tile.getX() < lowest.getX()) {
-                    lowest = tile;
-                }
-            }
+                    lowest = tile;}}
             startCoors[2] = new Coordinates(lowest.getX(), lowest.getY());
         }
         if (yardlongList.get(0).getX() == yardlongList.get(1).getX()) {
@@ -240,18 +236,14 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
             lowest = yardlongList.get(0);
             for (Tile tile : yardlongList) {
                 if (tile.getY() < lowest.getY()) {
-                    lowest = tile;
-                }
-            }
+                    lowest = tile;}}
             startCoors[3] = new Coordinates(lowest.getX(), lowest.getY());
         } else {
             startDirs[3] = Direction.direction.Horizontal;
             lowest = yardlongList.get(0);
             for (Tile tile : yardlongList) {
                 if (tile.getX() < lowest.getX()) {
-                    lowest = tile;
-                }
-            }
+                    lowest = tile;}}
             startCoors[3] = new Coordinates(lowest.getX(), lowest.getY());
 
         }
@@ -260,26 +252,19 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
             lowest = zuchinniList.get(0);
             for (Tile tile : zuchinniList) {
                 if (tile.getY() < lowest.getY()) {
-                    lowest = tile;
-                }
-            }
+                    lowest = tile;}}
             startCoors[4] = new Coordinates(lowest.getX(), lowest.getY());
         } else {
             startDirs[4] = Direction.direction.Horizontal;
             lowest = zuchinniList.get(0);
             for (Tile tile : zuchinniList) {
                 if (tile.getX() < lowest.getX()) {
-                    lowest = tile;
-                }
-            }
+                    lowest = tile;}}
             startCoors[4] = new Coordinates(lowest.getX(), lowest.getY());
         }
         for (int i = 0; i < 5; i++) {
             for (BoardObserver observer : observers) {
-                observer.placeGurkin(startCoors[i], startDirs[i], gurkins[i]);
-            }
-        }
-    }
+                observer.placeGurkin(startCoors[i], startDirs[i], gurkins[i]);}}}
     public void initTerrain() {
         // randomly place terrain object on board tiles
         Random rand = new Random();
@@ -291,23 +276,17 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
             if (getTile(coors).hasGurkin()) {
                 i--;
             } else {
-                placeTerrain(coors);
-            }
-        }
-    }
+                placeTerrain(coors);}}}
 
     public void placeTerrain(Coordinates coors) {
         getTile(coors).setGurkin(new Terrain());
-        notifyPlacedGurkin(new Terrain() , Direction.direction.Horizontal, coors);
-    }
+        notifyPlacedGurkin(new Terrain() , Direction.direction.Horizontal, coors);}
 
     @Override
     public void increaseHitTiles(int hit) {
         hitTiles += hit;
         for (BoardStatsObserver o : statsObservers) {
-            o.increaseHitTiles(hit);
-        }
-    }
+            o.increaseHitTiles(hit);}}
 
     @Override
     public void increaseMissTiles(int miss) {
@@ -321,11 +300,7 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     public void increaseTotalShots(int shots) {
         totalShots += shots;
         for (BoardStatsObserver o : statsObservers) {
-            o.increaseTotalShots(shots);
-        }
-    }
-
-
+            o.increaseTotalShots(shots);}}
     public void registerStatsObserver(BoardStatsObserver o) {
         statsObservers.add(o);
     }
@@ -333,21 +308,24 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     public void sendCoords(Coordinates coors) {
         foundCoords.add(coors);
         for (BoardStatsObserver observer : statsObservers) {
-            observer.sendCoords(coors);
-        }
-    }
+            observer.sendCoords(coors);}}
 
     @Override
     public void removeCoords(Coordinates coords) {
         for (int i = 0; i < foundCoords.size(); i++) {
             if (foundCoords.get(i).getX() == coords.getX() && foundCoords.get(i).getY() == coords.getY()) {
                 for (BoardStatsObserver observer : statsObservers) {
-                    observer.removeCoords(coords);
-                }
-            }
+                    observer.removeCoords(coords);}}}}
 
-        }
+    public Gurkin[] getplacedGurkins() {
+        return gurkins;
+    }
+
+    public Coordinates[] getStartCoors() {
+        return startCoors;
+    }
+
+    public Direction.direction[] getStartDirs() {
+        return startDirs;
     }
 }
-
-
