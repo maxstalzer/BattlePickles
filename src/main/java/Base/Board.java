@@ -307,7 +307,13 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
         for (int i = 0; i < 5; i++) {
             for (BoardObserver observer : observers) {
-                observer.placeGurkin(startCoors[i], startDirs[i], gurkins[i]);}}}
+                observer.placeGurkin(startCoors[i], startDirs[i], gurkins[i]);}}
+        for (Tile tile: tiles) {
+            if (tile.isHit()) {
+                notifyTileHit(new Coordinates(tile.getX(), tile.getY()));
+            }
+        }
+    }
     public void initTerrain() {
         // randomly place terrain object on board tiles
         Random rand = new Random();

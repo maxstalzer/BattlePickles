@@ -94,11 +94,11 @@ public class Controller {
     public void initLoadedGame() {
 
         // init Attack views and placement views
+        Turn.setTurn(game.getInitial_turn());
         game.getPlayer1().getGurkinBoard().prepareViewGurkin();
         game.getPlayer2().getGurkinBoard().prepareViewGurkin();
         prepareResultsView(game.getPlayer1().getResultBoard());
         prepareResultsView(game.getPlayer2().getResultBoard());
-        Turn.setTurn(game.getInitial_turn());
         showGameplay();
     }
     public void prepareResultsView(ShotResults resultsboard) {
