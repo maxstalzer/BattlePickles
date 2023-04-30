@@ -1,4 +1,4 @@
-package Base.Gurkins;
+package Base;
 
 public class Terrain extends Gurkin {
     public Terrain() {

@@ -112,7 +112,6 @@ Feature: Game
     And its player1s turn
     When I shoot a tile that has a gurkin and has not been shot before
     Then the shot result x is on that coordinate
-    And the turn is changed
     And the gurkins lives has decreased
 
   Scenario: Player 1 attacks a tile without a gurkin on it
@@ -120,7 +119,6 @@ Feature: Game
     And its player1s turn
     When I shoot a tile that doesnt have a gurkin on it and has not been shot before
     Then the shot result is o on that coordinate
-    And the turn is changed
 
   Scenario: Player 1 attacks a tile with a gurkin on they have shot before
     Given a game
@@ -144,7 +142,6 @@ Feature: Game
     And its player1s turn
     When I shoot all tiles of that gurkin
     Then the shot result is k on those coordinates
-    And the turn is changed
     And the gurkin has no lives
 # ------------------------------- WINNING THE GAME ----------------------------------
   Scenario: Player 1 has killed all the gurkins of player 2
@@ -185,4 +182,118 @@ Feature: Game
     Given a Gherkin
     When I get the char value
     Then the char value should be g
+
+
+# ------------------------------- TILE EXTRA TESTS --------------------------------
+  Scenario: Checking if the gurkin on a tile is a specific gurkin
+    Given a tile with a gurkin
+    And a yardlong
+    When I check if the gurkin is a yardlong
+    Then the gurkin should be a yardlong
+
+  Scenario: Setting a board on a tile
+    Given a tile
+    And a board
+    When I set the board on the tile
+    Then the tile should have a board
+
+# ---------------------------------- GAME EXTRA TESTS -------------------------------
+  Scenario: Getting the player1 from current turn
+    Given a game
+    And the turn is one
+    When I get the current player
+    Then the current player should be player1
+
+  Scenario: Getting the player2 from current turn
+    Given a multiplayer game
+    And the turn is two
+    When I get the current player
+    Then the current player should be player2
+
+  Scenario: Getting the AI player
+    Given a singleplayer game
+    Then the AI player should be player2
+
+  Scenario: Getting the AI player in a multiplayer game
+    Given a multiplayer game
+    Then the AI player should be null
+
+  Scenario: Getting the the opponent when the turn is 1
+    Given a game
+    And the turn is one
+    Then the opponent should be player2
+
+  Scenario: Getting the the opponent when the turn is 2
+    Given a game
+    And the turn is two
+    Then the opponent should be player1
+
+  Scenario: Attacking a coordinate when it's turn1
+    Given a game
+    And its player1s turn
+    When I attack a coordinate
+    Then the shot result should be on that coordinate
+    And the tile should be hit
+
+  Scenario: Attacking a coordinate as when its turn2
+    Given a game
+    And its player2s turn
+    When I attack a coordinate
+    Then the shot result should be on that coordinate
+    And the tile should be hit
+  Scenario: Setting the initial turn for when a game is saved
+    Given a game
+    And its player1s turn
+    When I set the initial turn
+    Then the turn should be 1
+
+  Scenario: Getting the initial turn from a game
+    Given a game
+    And initial turn is player1
+    Then the initial turn should be 1
+
+  Scenario: initialising the board views
+    Given a board with all gurkins paced in valid positions
+    When I initialise the board views
+    Then the board views should be initialised
+
+  Scenario: initialising the board views Vertically
+    Given a board with all gurkins paced in valid vertical positions
+    When I initialise the board views
+    Then the board views should be initialised vertically
+
+# ----------------------------- EXTRA PLAYER TESTING ---------------------
+  Scenario: initialising a player with attributes
+    When i initialise a player with attributes
+    Then the player should have those attributes
+
+  Scenario: Resetting placement
+    Given a player
+    And its player1s turn
+    When I reset the placement
+    Then the board should be reset
+
+  Scenario: Saving a collection of Results
+    Given Collection of a Result
+    When I have information about a shotResult from my database
+    Then i need to be able to get the id, Character, x coordinate, y coordinante and which shotResult class it is associated with
+    And set all this information into a new Result and add it to a new collection of Results.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,7 +1,5 @@
-package Base.Gurkins;
+package Base;
 
-import Base.Board;
-import Base.Tile;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;

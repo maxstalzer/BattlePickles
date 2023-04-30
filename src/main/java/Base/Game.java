@@ -1,10 +1,6 @@
 package Base;
 
-import Base.Players.AI;
-import Base.Players.Player;
-import Controller.Controller;
 import Observers.GameObserver;
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -71,22 +67,7 @@ public class Game implements GameObserver {
         return multiplayer;
     } // Getters
 
-    public boolean checkPlacement(Player player) {
-        return (player.getRemaining_gurkins() == 5);
-    } // Check if player has finished placing gurkins
 
-//    public Game deepClone() {   // Deep clone of game
-//        Game copy = new Game(multiplayer, controller);
-//        copy.player1 = player1.deepClone();
-//        copy.player2 = player2.deepClone();
-//        copy.game_Over = game_Over;
-//        copy.initial_turn = Turn.getTurn();
-//        return copy;
-//    }
-
-    public Board getGurkinBoard() {
-        return player1.getGurkinBoard();
-    }
 
     public Player getCurrentPlayer() {
         if (Turn.getTurn().equals("1")) {
@@ -106,7 +87,6 @@ public class Game implements GameObserver {
     }
 
     public Player getOpponent() {
-        System.out.println(Turn.getTurn());
         if (Turn.getTurn().equals("1")) {
             return player2;
         }
@@ -134,9 +114,6 @@ public class Game implements GameObserver {
         gameObserverSet.add(gameObserver);
     }
 
-    public int getId() {
-        return id;
-    }
 
     public Game() {
 
@@ -146,18 +123,14 @@ public class Game implements GameObserver {
         initial_turn = Turn.getTurn();
     }
 
-    public void initLoadedGame() {
-        Turn.setTurn(initial_turn);
-        player1.getGurkinBoard().prepareViewGurkin();
-        player2.getGurkinBoard().prepareViewGurkin();
-        player1.getResultBoard().prepareResultsView();
-        player2.getResultBoard().prepareResultsView();
-
-    }
 
     public void initTerrain() {
         player1.getGurkinBoard().initTerrain();
         player2.getGurkinBoard().initTerrain();
     }
 
+
+    public int getId() {
+        return id;
+    }
 }

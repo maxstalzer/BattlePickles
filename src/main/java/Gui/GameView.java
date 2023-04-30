@@ -1,8 +1,7 @@
 package Gui;
 
 import Base.*;
-import Base.Gurkins.*;
-import Base.Players.Player;
+import Base.Player;
 import Controller.Controller;
 import Observers.GameObserver;
 import javafx.application.Application;
@@ -16,17 +15,11 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.*;
 
 public class GameView extends Application implements GameObserver {
 

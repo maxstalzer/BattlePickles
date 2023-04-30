@@ -1,15 +1,10 @@
 package Controller;
 
-import Base.Coordinates;
-import Base.Direction;
-import Base.Game;
-import Base.Gurkins.*;
-import Base.Players.AI;
-import Base.Turn;
+import Base.*;
+import Base.AI;
+import Base.ShotResults;
 import Gui.GameView;
-import Gui.StatsPanel;
-import Online.Database;
-import javafx.stage.Stage;
+import Base.Database;
 
 import java.util.List;
 
@@ -97,8 +92,30 @@ public class Controller {
     }
 
     public void initLoadedGame() {
-        game.initLoadedGame();
+
+        // init Attack views and placement views
+        game.getPlayer1().getGurkinBoard().prepareViewGurkin();
+        game.getPlayer2().getGurkinBoard().prepareViewGurkin();
+        prepareResultsView(game.getPlayer1().getResultBoard());
+        prepareResultsView(game.getPlayer2().getResultBoard());
+        Turn.setTurn(game.getInitial_turn());
         showGameplay();
+    }
+    public void prepareResultsView(ShotResults resultsboard) {
+        Character[][] shotBoard = resultsboard.getShotBoard();
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j< 10; j++) {
+                if (shotBoard[j][i] != null) {
+                    if (shotBoard[j][i] == 'k') {
+                        resultsboard.notifyKill(new Coordinates(j, i));
+                    } else if (shotBoard[j][i] == 'x') {
+                        resultsboard.notifyHit(new Coordinates(j, i));
+                    } else if (shotBoard[j][i] == 'o') {
+                        resultsboard.notifyMiss(new Coordinates(j, i));
+                    }
+                }
+            }
+        }
     }
 
 

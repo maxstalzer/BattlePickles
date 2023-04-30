@@ -1,16 +1,14 @@
 import Base.*;
-import Base.Gurkins.*;
-import Base.Players.AI;
-import Base.Players.Player;
-import Online.Database;
-import Controller.Controller;
-import Gui.GameView;
-import io.cucumber.java.an.E;
+import Base.AI;
+import Base.Player;
+import Base.Database;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
+import static Base.Direction.direction.Horizontal;
+import static Base.Direction.direction.Vertical;
 import static org.junit.Assert.*;
 
 public class StepsDefinition {
@@ -35,6 +33,8 @@ public class StepsDefinition {
     Game loadedGame;
 
     Character c;
+
+    ShotResults shotResults;
 
     @Given("a tile")
     public void a_tile() {
@@ -102,7 +102,7 @@ public class StepsDefinition {
     public void i_try_to_place_another_gurkin() {
         g2 = new Gherkin();
         cords = new Coordinates(0,4);
-        valid = cords.validCoords(Direction.direction.Horizontal, g2, p2b);
+        valid = cords.validCoords(Horizontal, g2, p2b);
     }
     @Then("the coordinates are not valid")
     public void the_coordinates_are_not_valid() {
@@ -208,6 +208,7 @@ public class StepsDefinition {
     @When("I create a singleplayer game")
     public void i_create_a_singleplayer_game() {
        game = new Game(false);
+       game.getAIPlayer().setDifficulty(String.valueOf(AI.Difficulty.Hard));
     }
     @Then("I should create a new Player and AI")
     public void i_should_create_a_new_player_and_ai() {
@@ -348,15 +349,30 @@ public class StepsDefinition {
         game = new Game(true);
     }
 
+    @Given("a game with all gurkins placed")
+    public void a_game_with_all_gurkins_placed() {
+        game = new Game(true);
+        game.getPlayer1().validGurkinSetup(new Gherkin(), Horizontal, new Coordinates(0, 0));
+        game.getPlayer1().validGurkinSetup(new Conichon(), Horizontal, new Coordinates(0, 1));
+        game.getPlayer1().validGurkinSetup(new Yardlong(), Horizontal, new Coordinates(0, 2));
+        game.getPlayer1().validGurkinSetup(new Zuchinni(), Horizontal, new Coordinates(0, 3));
+        game.getPlayer1().validGurkinSetup(new Pickle(), Horizontal, new Coordinates(0, 4));
+
+        game.getPlayer2().validGurkinSetup(new Gherkin(), Horizontal, new Coordinates(0, 0));
+        game.getPlayer2().validGurkinSetup(new Conichon(), Horizontal, new Coordinates(0, 1));
+        game.getPlayer2().validGurkinSetup(new Yardlong(), Horizontal, new Coordinates(0, 2));
+        game.getPlayer2().validGurkinSetup(new Zuchinni(), Horizontal, new Coordinates(0, 3));
+        game.getPlayer2().validGurkinSetup(new Pickle(), Horizontal, new Coordinates(0, 4));
+    }
 
     @Given("all {int} gurkins have been placed")
     public void all_gurkins_have_been_placed(Integer int1) {
 
-        game.getPlayer1().validGurkinSetup(new Gherkin(), Direction.direction.Horizontal, new Coordinates(0, 0));
-        game.getPlayer1().validGurkinSetup(new Conichon(), Direction.direction.Horizontal, new Coordinates(0, 1));
-        game.getPlayer1().validGurkinSetup(new Yardlong(), Direction.direction.Horizontal, new Coordinates(0, 2));
-        game.getPlayer1().validGurkinSetup(new Zuchinni(), Direction.direction.Horizontal, new Coordinates(0, 3));
-        game.getPlayer1().validGurkinSetup(new Pickle(), Direction.direction.Horizontal, new Coordinates(0, 4));
+        game.getPlayer1().validGurkinSetup(new Gherkin(), Horizontal, new Coordinates(0, 0));
+        game.getPlayer1().validGurkinSetup(new Conichon(), Horizontal, new Coordinates(0, 1));
+        game.getPlayer1().validGurkinSetup(new Yardlong(), Horizontal, new Coordinates(0, 2));
+        game.getPlayer1().validGurkinSetup(new Zuchinni(), Horizontal, new Coordinates(0, 3));
+        game.getPlayer1().validGurkinSetup(new Pickle(), Horizontal, new Coordinates(0, 4));
     }
     @Then("The turn changes")
     public void The_turn_changes() {
@@ -369,7 +385,7 @@ public class StepsDefinition {
     @When("I shoot a tile that has a gurkin and has not been shot before")
     public void i_shoot_a_tile_that_has_a_gurkin_and_has_not_been_shot_before() {
         cords = new Coordinates(0,0);
-        game.getPlayer2().validGurkinSetup(new Conichon(), Direction.direction.Horizontal, cords);
+        game.getPlayer2().validGurkinSetup(new Conichon(), Horizontal, cords);
         game.getPlayer1().shoot(game.getPlayer2().getGurkinBoard(), cords);
     }
     @Then("the shot result x is on that coordinate")
@@ -416,7 +432,7 @@ public class StepsDefinition {
     @When("I shoot all tiles of that gurkin")
     public void i_shoot_all_tiles_of_that_gurkin() {
         cords = new Coordinates(0,0);
-        game.getPlayer2().validGurkinSetup(new Conichon(), Direction.direction.Horizontal, cords);
+        game.getPlayer2().validGurkinSetup(new Conichon(), Horizontal, cords);
         game.getPlayer1().shoot(game.getPlayer2().getGurkinBoard(), cords);
         Turn.changeTurn();
         game.getPlayer1().shoot(game.getPlayer2().getGurkinBoard(), new Coordinates(1,0));
@@ -452,6 +468,7 @@ public class StepsDefinition {
     @Given("a singleplayer game")
     public void a_singleplayer_game() {
         game = new Game(false);
+        game.getAIPlayer().setDifficulty(AI.Difficulty.Easy, game.getPlayer1());
     }
     @When("I set the difficulty of the AI to easy")
     public void i_set_the_difficulty_of_the_ai_to_easy() {
@@ -493,7 +510,7 @@ public class StepsDefinition {
     }
     @When("the AI shoots again")
     public void the_ai_shoots_again() {
-        for (int i = 0; i < 101; i++) {
+        for (int i = 0; i < 100; i++) {
             cords = game.getAIPlayer().generateAttack();
             game.getAIPlayer().shoot(p2b, cords);
         }
@@ -521,73 +538,6 @@ public class StepsDefinition {
         assertTrue(game.getAIPlayer().checkWin());
     }
 
-//    Database database;
-//
-//    @When("I create a database")
-//    public void i_create_a_database() throws Exception {
-//         database = new Database("newDatabase");
-//    }
-//
-//    @Then("I should make sure it doesn't exist already")
-//    public void i_should_make_sure_it_doesn_t_exist_already() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I try to create a database that already exists")
-//    public void i_try_to_create_a_database_that_already_exists() {
-//        //write code here that turns blablabla
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("I should receive an error database already exists")
-//    public void i_should_receive_an_error_database_already_exists() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I connect to a database")
-//    public void i_connect_to_a_database() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("I should know that the i have access")
-//    public void i_should_know_that_the_i_have_access() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I try to connect to a non-existent database")
-//    public void i_try_to_connect_to_a_non_existent_database() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("I should receive an error database doesnt exist")
-//    public void i_should_receive_an_error_database_doesnt_exist() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I update my player data to the database")
-//    public void i_update_my_player_data_to_the_database() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("the database should be updated")
-//    public void the_database_should_be_updated() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//
-//    @When("I try to retrieve data from the database")
-//    public void i_try_to_retrieve_data_from_the_database() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-//    @Then("my local data should be updated")
-//    public void my_local_data_should_be_updated() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
     @Given("a database")
     public void a_database() throws Exception {
         database = new Database("tester");
@@ -596,7 +546,6 @@ public class StepsDefinition {
     @When("I save a game")
     public void i_save_a_game() throws Exception {
         game.getPlayer1().setName("testPlayer1");
-        game.getPlayer2().setName("testPlayer2");
         game.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).setGurkin(new Pickle());
         database.saveGame(game);
     }
@@ -632,8 +581,8 @@ public class StepsDefinition {
     public void i_should_be_able_to_upload_my_game_to_the_database() throws Exception {
         Database database1 = new Database("yoyo");
         database1.saveGame(game);
-        Game gametest = database1.loadGame();
-        assertEquals(game.getPlayer1().getName(),gametest.getPlayer1().getName());
+        Game gametest = database1.loadGame("yoyo");
+        assertEquals(game,gametest);
         database1.deleteDatabase("yoyo");
     }
 
@@ -661,4 +610,340 @@ public class StepsDefinition {
     public void the_char_value_should_be_z() {
         assertEquals('z', c.charValue());
     }
+
+    @When("I initialise the terrain")
+    public void i_initialise_the_terrain() {
+        game = new Game(false);
+        game.initTerrain();
+    }
+    @Then("the terrain should be initialised")
+    public void the_terrain_should_be_initialised() {
+        Boolean hasTerrain1 = false;
+        Boolean hasTerrain2 = false;
+
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                Board p1Board = game.getPlayer1().getGurkinBoard();
+                Board p2Board = game.getPlayer2().getGurkinBoard();
+                System.out.println(p1Board.getTile(new Coordinates(x,y)).getGurkin());
+                System.out.println(p2Board.getTile(new Coordinates(x,y)).getGurkin());
+                if (p1Board.getTile(new Coordinates(x,y)).getGurkin() != null && p1Board.getTile(new Coordinates(x,y)).getGurkin() instanceof Terrain) {
+                    hasTerrain1 = true;
+                }
+                if (p2Board.getTile(new Coordinates(x,y)).getGurkin() != null && p2Board.getTile(new Coordinates(x,y)).getGurkin() instanceof Terrain) {
+                    hasTerrain2 = true;
+                }
+
+            }
+        }
+        assertTrue(hasTerrain1);
+        assertTrue(hasTerrain2);
+
+    }
+
+    @Then("I should get the char value t")
+    public void i_should_get_the_char_value_t() {
+        assertEquals('t', c.charValue());
+    }
+
+    @When("i set the turn to {int}")
+    public void i_set_the_turn_to(Integer int1) {
+        Turn.setTurn(int1.toString());
+    }
+    @Then("the turn should be {int}")
+    public void the_turn_should_be(Integer int1) {
+        assertEquals(int1.toString(), Turn.getTurn());
+    }
+
+    @When("I check if the gurkin is a yardlong")
+    public void i_check_if_the_gurkin_is_a_yardlong() {
+        t = new Tile();
+        t.setGurkin(g);
+        valid =t.check(g);
+    }
+    @Then("the gurkin should be a yardlong")
+    public void the_gurkin_should_be_a_yardlong() {
+        assertTrue(valid);
+    }
+
+    @When("I set the board on the tile")
+    public void i_set_the_board_on_the_tile() {
+        t.setBoard(p2b);
+    }
+    @Then("the tile should have a board")
+    public void the_tile_should_have_a_board() {
+        assertEquals(p2b, t.getBoard());
+    }
+    @Given("a multiplayer game")
+    public void a_multiplayer_game() {
+        game = new Game(true);
+    }
+
+    @Given("the turn is two")
+    public void the_turn_is_two() {
+        Turn.setTurn("2");
+        System.out.println(Turn.getTurn());
+    }
+    @When("I get the current player")
+    public void i_get_the_current_player() {
+        p1 = game.getCurrentPlayer();
+    }
+    @Then("the current player should be player2")
+    public void the_current_player_should_be_player2() {
+        assertEquals(game.getPlayer2(), p1);
+    }
+
+    @Given("the turn is one")
+    public void the_turn_is_one() {
+        Turn.setTurn("1");
+    }
+
+    @Then("the current player should be player1")
+    public void the_current_player_should_be_player1() {
+        assertEquals(game.getPlayer1(), p1);
+    }
+
+    @Then("the AI player should be null")
+    public void the_ai_player_should_be_null() {
+        assertNull(game.getAIPlayer());
+    }
+
+    @Then("the AI player should be player2")
+    public void the_ai_player_should_be_player2() {
+        assertEquals(game.getPlayer2(), game.getAIPlayer());
+    }
+
+    @Then("the opponent should be player2")
+    public void the_opponent_should_be_player2() {
+        assertEquals(game.getPlayer2(), game.getOpponent());
+    }
+
+    @Then("the opponent should be player1")
+    public void the_opponent_should_be_player1() {
+        assertEquals(game.getPlayer1(), game.getOpponent());
+    }
+
+    @When("I attack a coordinate")
+    public void i_attack_a_coordinate() {
+        game.attack(new Coordinates(0,0));
+    }
+
+    @Then("the shot result should be on that coordinate")
+    public void the_shot_result_should_be_on_that_coordinate() {
+        Turn.changeTurn();
+        assertNotNull(game.getCurrentPlayer().getShotResults()[0][0]);
+    }
+    @Then("the tile should be hit")
+    public void the_tile_should_be_hit() {
+        assertTrue(game.getOpponent().getGurkinBoard().getTile(new Coordinates(0,0)).isHit());
+    }
+
+    @When("I set the initial turn")
+    public void i_set_the_initial_turn() {
+        game.setInitial_turn();
+    }
+
+
+    @Given("initial turn is player1")
+    public void initial_turn_is_player1() {
+        Turn.setTurn("1");
+        game.setInitial_turn();
+    }
+    @Then("the initial turn should be {int}")
+    public void the_initial_turn_should_be(Integer int1) {
+        assertEquals(int1.toString(), game.getInitial_turn());
+    }
+
+    @Given("a board with all gurkins paced in valid positions")
+    public void a_board_with_all_gurkins_paced_in_valid_positions() {
+        p2b = new Board();
+        p2b.placeGurkin(new Coordinates(0,0), Direction.direction.Horizontal, new Conichon());
+        p2b.placeGurkin(new Coordinates(0,1), Direction.direction.Horizontal, new Gherkin());
+        p2b.placeGurkin(new Coordinates(0,2), Direction.direction.Horizontal, new Pickle());
+        p2b.placeGurkin(new Coordinates(0,3), Direction.direction.Horizontal, new Yardlong());
+        p2b.placeGurkin(new Coordinates(0,4), Horizontal, new Zuchinni());
+    }
+    @When("I initialise the board views")
+    public void i_initialise_the_board_views() {
+        p2b.prepareViewGurkin();
+    }
+    @Then("the board views should be initialised")
+    public void the_board_views_should_be_initialised() {
+        assertTrue(p2b.getplacedGurkins()[0] instanceof Conichon);
+        assertTrue(p2b.getplacedGurkins()[1] instanceof Gherkin);
+        assertTrue(p2b.getplacedGurkins()[2] instanceof Pickle);
+        assertTrue(p2b.getplacedGurkins()[3] instanceof Yardlong);
+        assertTrue(p2b.getplacedGurkins()[4] instanceof Zuchinni);
+
+        for (int i = 0; i < 5; i++) {
+            assertNotNull(p2b.getStartCoors()[i]);
+        }
+
+        assertSame(p2b.getStartDirs()[0], Horizontal);
+        assertSame(p2b.getStartDirs()[1], Horizontal);
+        assertSame(p2b.getStartDirs()[2], Horizontal);
+        assertSame(p2b.getStartDirs()[3], Horizontal);
+        assertSame(p2b.getStartDirs()[4], Horizontal);
+
+    }
+    @Given("a board with all gurkins paced in valid vertical positions")
+    public void a_board_with_all_gurkins_paced_in_valid_vertical_positions() {
+        p2b = new Board();
+        p2b.placeGurkin(new Coordinates(0,0), Vertical, new Conichon());
+        p2b.placeGurkin(new Coordinates(1,0), Vertical, new Gherkin());
+        p2b.placeGurkin(new Coordinates(2,0), Vertical, new Pickle());
+        p2b.placeGurkin(new Coordinates(3,0), Vertical, new Yardlong());
+        p2b.placeGurkin(new Coordinates(4,0), Vertical, new Zuchinni());
+    }
+
+    @Then("the board views should be initialised vertically")
+    public void the_board_views_should_be_initialised_vertically() {
+        assertTrue(p2b.getplacedGurkins()[0] instanceof Conichon);
+        assertTrue(p2b.getplacedGurkins()[1] instanceof Gherkin);
+        assertTrue(p2b.getplacedGurkins()[2] instanceof Pickle);
+        assertTrue(p2b.getplacedGurkins()[3] instanceof Yardlong);
+        assertTrue(p2b.getplacedGurkins()[4] instanceof Zuchinni);
+
+        for (int i = 0; i < 5; i++) {
+            assertNotNull(p2b.getStartCoors()[i]);
+            assertSame(Vertical, p2b.getStartDirs()[i]);
+        }
+
+    }
+
+    @When("i initialise a player with attributes")
+    public void i_initialise_a_player_with_attributes() {
+        p1 = new Player(1, "red", true);
+    }
+    @Then("the player should have those attributes")
+    public void the_player_should_have_those_attributes() {
+        assertEquals(1, p1.getId());
+        assertEquals("red", p1.getName());
+        assertTrue(p1.getCurrent());
+    }
+
+    @When("I reset the placement")
+    public void i_reset_the_placement() {
+        p1.resetPlacement();
+    }
+
+    @Then("the board should be reset")
+    public void the_board_should_be_reset() {
+        Boolean empty = true;
+        for(Tile t : p1.getGurkinBoard().getTiles()){
+            if (t.hasGurkin()) {
+                empty = false;
+            }
+        }
+
+        assertTrue(empty);
+        assertEquals(0, p1.getRemaining_gurkins());
+        assertEquals(5, p1.getUnplacedGurks().size());
+    }
+
+
+
+    @When("I delete the database {string}")
+    public void i_delete_the_database(String string) throws Exception {
+        database.deleteDatabase("tester");
+    }
+
+    @Then("the database {string} should not exist")
+    public void the_database_should_not_exist(String string) throws Exception{
+        assertFalse(database.getDatabases().stream().anyMatch(str -> str.equals("tester")));
+        //assertFalse(database.TestConnection("tester"));
+    }
+
+    @Given("Collection of a Result")
+    public void collection_of_a_result() {
+        shotResults = new ShotResults();
+        shotResults.setHit(new Coordinates(1,1));
+        shotResults.setHit(new Coordinates(2,2));
+        shotResults.setKill(new Coordinates(3,3));
+        shotResults.setMiss(new Coordinates(4,4));
+        shotResults.toShotCollection();
+        ShotResults shotResults1 = shotResults;
+        shotResults1.transformation();
+        assertEquals(shotResults.getShotBoard(),shotResults1.getShotBoard());
+    }
+
+    @When("I have information about a shotResult from my database")
+    public void i_have_information_about_a_shot_result_from_my_database() {
+        ShotResults shotResults2 = new ShotResults();
+        shotResults2.setHit(new Coordinates(1,1));
+        shotResults2.setHit(new Coordinates(2,2));
+        shotResults2.setKill(new Coordinates(3,3));
+        shotResults2.setMiss(new Coordinates(4,4));
+        shotResults2.toShotCollection();
+    }
+    @Then("i need to be able to get the id, Character, x coordinate, y coordinante and which shotResult class it is associated with")
+    public void i_need_to_be_able_to_get_the_id_character_x_coordinate_y_coordinante_and_which_shot_result_class_it_is_associated_with() {
+        ShotResults shotResults1 = new ShotResults();
+        for (Result result : shotResults.getShotCollection()) {
+            Result result1 = new Result();
+            result1.setId(result.getId());
+            result1.setX(result.getX());
+            result1.setY(result.getY());
+            result1.setCharacter(result.getCharacter());
+            result1.setShotResults(result.getShotResults());
+            shotResults1.addShotBoardCollection(result1);
+            assertEquals(result1.getId(), result.getId());
+            assertEquals(result1.getX(), result.getX());
+            assertEquals(result1.getY(), result.getY());
+            assertEquals(result1.getCharacter(), result.getCharacter());
+            assertEquals(result1.getShotResults(), result.getShotResults());
+
+        }
+    }
+    @Then("set all this information into a new Result and add it to a new collection of Results.")
+    public void set_all_this_information_into_a_new_result_and_add_it_to_a_new_collection_of_results() {
+        ShotResults shotResults1 = new ShotResults();
+        for (Result result : shotResults.getShotCollection()) {
+            Result result1 = new Result();
+            result1.setId(result.getId());
+            result1.setX(result.getX());
+            result1.setY(result.getY());
+            result1.setCharacter(result.getCharacter());
+            result1.setShotResults(result.getShotResults());
+            shotResults1.addShotBoardCollection(result1);
+        }
+        shotResults.transformation();
+        shotResults1.transformation();
+        assertEquals(shotResults.getShotBoard(), shotResults1.getShotBoard());
+    }
+
+    @Given("an existing database")
+    public void an_existing_database() throws Exception{
+        database = new Database("existing_database");
+    }
+    @When("I update a game")
+    public void i_update_a_game() throws Exception {
+        game.getPlayer1().setName("Akira is a beast");
+        database.updateGame(game);
+    }
+    @Then("The game should be the same as the one i save")
+    public void the_game_should_be_the_same_as_the_one_i_save() throws Exception {
+        Game loadedGame = database.loadGame("existing_database");
+        assertEquals(game.getPlayer1().getName(), loadedGame.getPlayer1().getName());
+        database.deleteDatabase("existing_database");
+    }
+
+
+    @Given("a board with terrain")
+    public void a_board_with_terrain() {
+        p2b = new Board();
+        p2b.placeGurkin(new Coordinates(0,0), Horizontal, new Terrain());
+    }
+
+    @When("I hit a terrain")
+    public void i_hit_a_terrain() {
+        p1 = new Player();
+    }
+    @Then("the terrain should be hit")
+    public void the_terrain_should_be_hit() {
+        p1.shoot(p2b, new Coordinates(0,0));
+        assertTrue(p2b.getTile(new Coordinates(0,0)).isHit());
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package Observers;
 
-import Base.Gurkins.Gurkin;
+import Base.Gurkin;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package Base.Gurkins;
+package Base;
 
 import Base.Board;
 import Base.Tile;

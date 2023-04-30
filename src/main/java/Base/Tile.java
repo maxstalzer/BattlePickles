@@ -1,11 +1,7 @@
 package Base;
 
-import Base.Gurkins.*;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 @DatabaseTable(tableName = "Tile")
 public class Tile {
@@ -81,6 +77,10 @@ public class Tile {
     public void setBoard(Board b) {
         this.board = b;
     }
+
+    public Board getBoard() {
+        return this.board;
+    }
     public int getBoardId() {
         return board.getId();
     }
@@ -113,6 +113,9 @@ public class Tile {
             this.gurkin = true;
             this.zuchinni = (Zuchinni) x;
             this.gurkinID = x;
+        } if (x instanceof Terrain) {
+            this.gurkin = true;
+            this.gurkinID = x;
         }
     }
     public void hitTile() {this.isHit = true;} // Hit the tile
@@ -134,26 +137,19 @@ public class Tile {
     public boolean isHit() {
         return this.isHit;
     } // Check if the tile has been hit
-    public void setChar(Gurkin gurkin) {this.gurkinChar = Character.toString(gurkinID.toChar());}
-    public Character toChar() { // Convert tile to char
-        if (hasGurkin()) {
-            return gurkinID.toChar();
-        }
-        return ' ';
-    }
+//    public void setChar(Gurkin gurkin) {this.gurkinChar = Character.toString(gurkinID.toChar());}
+//    public Character toChar() { // Convert tile to char
+//        if (hasGurkin()) {
+//            return gurkinID.toChar();
+//        }
+//        return ' ';
+//    }
 
     public Boolean check(Gurkin gurk) {
         if (!hasGurkin()) return false;
         return gurkinID.equals(gurk);
     }
 
-    public Tile deepClone() {
-        Tile clone = new Tile();
-        clone.gurkin = this.gurkin;
-        clone.gurkinID = this.gurkinID;
-        clone.isHit = this.isHit;
-        return clone;
-    }
     public Conichon getConichon() {return conichon;}
     public Gherkin getGherkin() {return gherkin;}
     public Pickle getPickle() {return pickle;}

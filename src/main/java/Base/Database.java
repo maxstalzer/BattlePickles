@@ -1,14 +1,5 @@
-package Online;
+package Base;
 
-import Base.Board;
-import Base.Coordinates;
-import Base.Game;
-import Base.Gurkins.*;
-import Base.Players.AI;
-import Base.Players.Player;
-import Base.Players.Result;
-import Base.Players.ShotResults;
-import Base.Tile;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -30,9 +21,12 @@ public class Database {
 
     // The constructer takes a string input and creates a database with the input as its name. After that it creates
     // the necessary tables for storing the game
+    //jdbc:mysql://172.20.10.3:3306/
+    String jdbcurl = "jdbc:mysql://172.20.10.2/";
+
     public Database(String databaseName) throws  Exception {
 
-        String databaseUrl = "jdbc:mysql://172.20.10.3:3306/";
+        String databaseUrl = jdbcurl;
 
         Connection connection = DriverManager.getConnection(databaseUrl, username, password);
 
@@ -41,7 +35,7 @@ public class Database {
         createDatabaseStatement.executeUpdate(createDatabaseQuery);
         connection.close();
 
-        databaseURL = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+        databaseURL = String.format(jdbcurl + "%s",databaseName);
         this.databaseName = databaseName;
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
 
@@ -188,7 +182,7 @@ public class Database {
     public Game loadGame(String databaseName) throws Exception {
         this.databaseName = databaseName;
 
-        this.databaseURL =  String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+        this.databaseURL =  String.format(jdbcurl + "%s",databaseName);
 
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
 
@@ -496,316 +490,316 @@ public class Database {
     }
 
     // This method also loads a game from a database, already known to the database object, into a Game object and returns it
-    public Game loadGame() throws Exception {
-
-        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
-
-        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
-
-        // Retrieve the game from the database
-        Game oldgame = gameDao.queryForId(1);
-
-        Game newgame = new Game();
-        newgame.setGameID(oldgame.getGameID());
-        newgame.setId(oldgame.getId());
-        newgame.setGame_Over(oldgame.getGame_Over());
-        newgame.setMultiplayer(oldgame.getMultiplayer());
-        newgame.setterInitial_turn(oldgame.getInitial_turn());
-
-
-        Player player1 = new Player(oldgame.getId(), oldgame.getPlayer1().getName(), oldgame.getPlayer1().getCurrentPlayer());
-        player1.setRemaining_gurkins(oldgame.getPlayer1().getRemaining_gurkins());
-
-        ShotResults shotResults1 = new ShotResults();
-        shotResults1.setId(oldgame.getPlayer1().getShotRes().getId());
-
-        for (Result result : oldgame.getPlayer1().getShotRes().getShotCollection()) {
-            Result result1 = new Result();
-            result1.setId(result.getId());
-            result1.setCharacter(result.getCharacter());
-            result1.setX(result.getX());
-            result1.setY(result.getY());
-            result1.setShotResults(result.getShotResults());
-            shotResults1.addShotBoardCollection(result1);
-        }
-        shotResults1.transformation();
-        player1.setShotRes(shotResults1);
-
-        Board board1 = new Board();
-        board1.setId(oldgame.getPlayer1().getGurkinBoard().getId());
-        board1.setConichon(oldgame.getPlayer1().getGurkinBoard().getConichon());
-        board1.setGherkin(oldgame.getPlayer1().getGurkinBoard().getGherkin());
-        board1.setPickle(oldgame.getPlayer1().getGurkinBoard().getPickle());
-        board1.setYardlong(oldgame.getPlayer1().getGurkinBoard().getYardlong());
-        board1.setZuchinni(oldgame.getPlayer1().getGurkinBoard().getZuchinni());
-
-        for (Coordinates coordinates : oldgame.getPlayer1().getGurkinBoard().getFoundCoords()) {
-            Coordinates coordinates1 = new Coordinates(coordinates.getX(),coordinates.getY());
-            coordinates1.setId(coordinates.getId());
-            coordinates1.setBoard(coordinates.getBoard());
-            board1.addFoundCoords(coordinates1);
-        }
-
-        Gurkin conichon1 = new Conichon();
-        Gurkin gherkin1 = new Gherkin();
-        Gurkin pickle1 = new Pickle();
-        Gurkin yardlong1 = new Yardlong();
-        Gurkin zuchinni1 = new Zuchinni();
-
-        for (int i = 0; i<10;i++) {
-            for (int j = 0; j<10; j++) {
-                board1.getTile(new Coordinates(i,j)).setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getId());
-                board1.getTile(new Coordinates(i,j)).setisGurkin(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getisGurkin());
-                board1.getTile(new Coordinates(i,j)).setisHit(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).isHit());
-                board1.getTile(new Coordinates(i,j)).setBoard(board1);
-                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Conichon) {
-                    conichon1.setBoard(board1);
-                    conichon1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                    conichon1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                    conichon1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                    conichon1.addTile(board1.getTile(new Coordinates(i,j)));
-                    board1.getTile(new Coordinates(i,j)).setGurkin(conichon1);
-                }
-                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Gherkin) {
-                    gherkin1.setBoard(board1);
-                    gherkin1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                    gherkin1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                    gherkin1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                    gherkin1.addTile(board1.getTile(new Coordinates(i,j)));
-                    board1.getTile(new Coordinates(i,j)).setGurkin(gherkin1);
-                }
-                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Pickle) {
-                    pickle1.setBoard(board1);
-                    pickle1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                    pickle1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                    pickle1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                    pickle1.addTile(board1.getTile(new Coordinates(i,j)));
-                    board1.getTile(new Coordinates(i,j)).setGurkin(pickle1);
-
-                }
-                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Yardlong) {
-                    yardlong1.setBoard(board1);
-                    yardlong1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                    yardlong1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                    yardlong1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                    yardlong1.addTile(board1.getTile(new Coordinates(i,j)));
-                    board1.getTile(new Coordinates(i,j)).setGurkin(yardlong1);
-                }
-                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Zuchinni) {
-                    zuchinni1.setBoard(board1);
-                    zuchinni1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                    zuchinni1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                    zuchinni1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                    zuchinni1.addTile(board1.getTile(new Coordinates(i,j)));
-                    board1.getTile(new Coordinates(i,j)).setGurkin(zuchinni1);
-                }
-            }
-        }
-
-        player1.setGurkinBoard(board1);
-
-        newgame.setPlayer1(player1);
-
-
-        // SET PLAYER 2
-        if (oldgame.getPlayer2() instanceof AI) {
-            Player player2 = new AI(1);
-            player2.setId(((AI) oldgame.getPlayer2()).getId());
-            player2.setCurrentPlayer(oldgame.getPlayer2().getCurrentPlayer());
-            player2.setDifficultyString(oldgame.getPlayer2().getDifficultyString());
-            ((AI) player2).setDifficulty(player2.getDifficultyString());
-
-            ShotResults shotResults2 = new ShotResults();
-            shotResults2.setId(oldgame.getPlayer2().getShotRes().getId());
-
-            for (Result result : oldgame.getPlayer1().getShotRes().getShotCollection()) {
-                Result result2 = new Result();
-                result2.setId(result.getId());
-                result2.setCharacter(result.getCharacter());
-                result2.setX(result.getX());
-                result2.setY(result.getY());
-                result2.setShotResults(result.getShotResults());
-                shotResults2.addShotBoardCollection(result2);
-            }
-            shotResults2.transformation();
-            player2.setShotRes(shotResults2);
-
-            Board board2 = new Board();
-            board2.setId(oldgame.getPlayer2().getGurkinBoard().getId());
-            board2.setConichon(oldgame.getPlayer2().getGurkinBoard().getConichon());
-            board2.setGherkin(oldgame.getPlayer2().getGurkinBoard().getGherkin());
-            board2.setPickle(oldgame.getPlayer2().getGurkinBoard().getPickle());
-            board2.setYardlong(oldgame.getPlayer2().getGurkinBoard().getYardlong());
-            board2.setZuchinni(oldgame.getPlayer2().getGurkinBoard().getZuchinni());
-
-            for (Coordinates coordinates : oldgame.getPlayer2().getGurkinBoard().getFoundCoords()) {
-                Coordinates coordinates2 = new Coordinates(coordinates.getX(),coordinates.getY());
-                coordinates2.setId(coordinates.getId());
-                coordinates2.setBoard(coordinates.getBoard());
-                board2.addFoundCoords(coordinates2);
-            }
-
-            Gurkin conichon2 = new Conichon();
-            Gurkin gherkin2 = new Gherkin();
-            Gurkin pickle2 = new Pickle();
-            Gurkin yardlong2 = new Yardlong();
-            Gurkin zuchinni2 = new Zuchinni();
-
-            for (int i = 0; i<10;i++) {
-                for (int j = 0; j<10; j++) {
-                    board2.getTile(new Coordinates(i,j)).setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getId());
-                    board2.getTile(new Coordinates(i,j)).setisGurkin(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getisGurkin());
-                    board2.getTile(new Coordinates(i,j)).setisHit(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).isHit());
-                    board2.getTile(new Coordinates(i,j)).setBoard(board2);
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Conichon) {
-                        conichon2.setBoard(board2);
-                        conichon2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        conichon2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        conichon2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        conichon2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(conichon2);
-                    }
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Gherkin) {
-                        gherkin2.setBoard(board2);
-                        gherkin2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        gherkin2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        gherkin2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        gherkin2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(gherkin2);
-                    }
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Pickle) {
-                        pickle2.setBoard(board2);
-                        pickle2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        pickle2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        pickle2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        pickle2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(pickle2);
-                    }
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Yardlong) {
-                        yardlong2.setBoard(board2);
-                        yardlong2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        yardlong2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        yardlong2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        yardlong2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(yardlong2);
-                    }
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Zuchinni) {
-                        zuchinni2.setBoard(board2);
-                        zuchinni2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        zuchinni2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        zuchinni2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        zuchinni2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(zuchinni2);
-                    }
-                }
-            }
-
-            player2.setGurkinBoard(board2);
-
-            newgame.setPlayer2(player2);
-        } else {
-            Player player2 = new Player(oldgame.getId(),oldgame.getPlayer2().getName(), oldgame.getPlayer1().getCurrentPlayer());
-            player2.setRemaining_gurkins(oldgame.getPlayer2().getRemaining_gurkins());
-
-            ShotResults shotResults2 = new ShotResults();
-            shotResults2.setId(oldgame.getPlayer2().getShotRes().getId());
-
-            for (Result result : oldgame.getPlayer1().getShotRes().getShotCollection()) {
-                Result result2 = new Result();
-                result2.setId(result.getId());
-                result2.setCharacter(result.getCharacter());
-                result2.setX(result.getX());
-                result2.setY(result.getY());
-                result2.setShotResults(result.getShotResults());
-                shotResults2.addShotBoardCollection(result2);
-            }
-            shotResults2.transformation();
-            player2.setShotRes(shotResults2);
-
-            Board board2 = new Board();
-            board2.setId(oldgame.getPlayer2().getGurkinBoard().getId());
-            board2.setConichon(oldgame.getPlayer2().getGurkinBoard().getConichon());
-            board2.setGherkin(oldgame.getPlayer2().getGurkinBoard().getGherkin());
-            board2.setPickle(oldgame.getPlayer2().getGurkinBoard().getPickle());
-            board2.setYardlong(oldgame.getPlayer2().getGurkinBoard().getYardlong());
-            board2.setZuchinni(oldgame.getPlayer2().getGurkinBoard().getZuchinni());
-
-            for (Coordinates coordinates : oldgame.getPlayer2().getGurkinBoard().getFoundCoords()) {
-                Coordinates coordinates2 = new Coordinates(coordinates.getX(),coordinates.getY());
-                coordinates2.setId(coordinates.getId());
-                coordinates2.setBoard(coordinates.getBoard());
-                board2.addFoundCoords(coordinates2);
-            }
-
-            Gurkin conichon2 = new Conichon();
-            Gurkin gherkin2 = new Gherkin();
-            Gurkin pickle2 = new Pickle();
-            Gurkin yardlong2 = new Yardlong();
-            Gurkin zuchinni2 = new Zuchinni();
-
-            for (int i = 0; i<10;i++) {
-                for (int j = 0; j<10; j++) {
-                    board2.getTile(new Coordinates(i,j)).setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getId());
-                    board2.getTile(new Coordinates(i,j)).setisGurkin(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getisGurkin());
-                    board2.getTile(new Coordinates(i,j)).setisHit(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).isHit());
-                    board2.getTile(new Coordinates(i,j)).setBoard(board2);
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Conichon) {
-                        conichon2.setBoard(board2);
-                        conichon2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        conichon2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        conichon2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        conichon2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(conichon2);
-                    }
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Gherkin) {
-                        gherkin2.setBoard(board2);
-                        gherkin2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        gherkin2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        gherkin2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        gherkin2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(gherkin2);
-                    }
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Pickle) {
-                        pickle2.setBoard(board2);
-                        pickle2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        pickle2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        pickle2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        pickle2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(pickle2);
-                    }
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Yardlong) {
-                        yardlong2.setBoard(board2);
-                        yardlong2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        yardlong2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        yardlong2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        yardlong2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(yardlong2);
-                    }
-                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Zuchinni) {
-                        zuchinni2.setBoard(board2);
-                        zuchinni2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
-                        zuchinni2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
-                        zuchinni2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
-                        zuchinni2.addTile(board2.getTile(new Coordinates(i,j)));
-                        board2.getTile(new Coordinates(i,j)).setGurkin(zuchinni2);
-                    }
-                }
-            }
-
-            player2.setGurkinBoard(board2);
-
-            newgame.setPlayer2(player2);
-        }
-
-        connectionSource.close();
-        return newgame;
-    }
+//    public Game loadGame() throws Exception {
+//
+//        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+//
+//        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+//
+//        // Retrieve the game from the database
+//        Game oldgame = gameDao.queryForId(1);
+//
+//        Game newgame = new Game();
+//        newgame.setGameID(oldgame.getGameID());
+//        newgame.setId(oldgame.getId());
+//        newgame.setGame_Over(oldgame.getGame_Over());
+//        newgame.setMultiplayer(oldgame.getMultiplayer());
+//        newgame.setterInitial_turn(oldgame.getInitial_turn());
+//
+//
+//        Player player1 = new Player(oldgame.getId(), oldgame.getPlayer1().getName(), oldgame.getPlayer1().getCurrentPlayer());
+//        player1.setRemaining_gurkins(oldgame.getPlayer1().getRemaining_gurkins());
+//
+//        ShotResults shotResults1 = new ShotResults();
+//        shotResults1.setId(oldgame.getPlayer1().getShotRes().getId());
+//
+//        for (Result result : oldgame.getPlayer1().getShotRes().getShotCollection()) {
+//            Result result1 = new Result();
+//            result1.setId(result.getId());
+//            result1.setCharacter(result.getCharacter());
+//            result1.setX(result.getX());
+//            result1.setY(result.getY());
+//            result1.setShotResults(result.getShotResults());
+//            shotResults1.addShotBoardCollection(result1);
+//        }
+//        shotResults1.transformation();
+//        player1.setShotRes(shotResults1);
+//
+//        Board board1 = new Board();
+//        board1.setId(oldgame.getPlayer1().getGurkinBoard().getId());
+//        board1.setConichon(oldgame.getPlayer1().getGurkinBoard().getConichon());
+//        board1.setGherkin(oldgame.getPlayer1().getGurkinBoard().getGherkin());
+//        board1.setPickle(oldgame.getPlayer1().getGurkinBoard().getPickle());
+//        board1.setYardlong(oldgame.getPlayer1().getGurkinBoard().getYardlong());
+//        board1.setZuchinni(oldgame.getPlayer1().getGurkinBoard().getZuchinni());
+//
+//        for (Coordinates coordinates : oldgame.getPlayer1().getGurkinBoard().getFoundCoords()) {
+//            Coordinates coordinates1 = new Coordinates(coordinates.getX(),coordinates.getY());
+//            coordinates1.setId(coordinates.getId());
+//            coordinates1.setBoard(coordinates.getBoard());
+//            board1.addFoundCoords(coordinates1);
+//        }
+//
+//        Gurkin conichon1 = new Conichon();
+//        Gurkin gherkin1 = new Gherkin();
+//        Gurkin pickle1 = new Pickle();
+//        Gurkin yardlong1 = new Yardlong();
+//        Gurkin zuchinni1 = new Zuchinni();
+//
+//        for (int i = 0; i<10;i++) {
+//            for (int j = 0; j<10; j++) {
+//                board1.getTile(new Coordinates(i,j)).setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getId());
+//                board1.getTile(new Coordinates(i,j)).setisGurkin(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getisGurkin());
+//                board1.getTile(new Coordinates(i,j)).setisHit(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).isHit());
+//                board1.getTile(new Coordinates(i,j)).setBoard(board1);
+//                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Conichon) {
+//                    conichon1.setBoard(board1);
+//                    conichon1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                    conichon1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                    conichon1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                    conichon1.addTile(board1.getTile(new Coordinates(i,j)));
+//                    board1.getTile(new Coordinates(i,j)).setGurkin(conichon1);
+//                }
+//                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Gherkin) {
+//                    gherkin1.setBoard(board1);
+//                    gherkin1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                    gherkin1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                    gherkin1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                    gherkin1.addTile(board1.getTile(new Coordinates(i,j)));
+//                    board1.getTile(new Coordinates(i,j)).setGurkin(gherkin1);
+//                }
+//                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Pickle) {
+//                    pickle1.setBoard(board1);
+//                    pickle1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                    pickle1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                    pickle1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                    pickle1.addTile(board1.getTile(new Coordinates(i,j)));
+//                    board1.getTile(new Coordinates(i,j)).setGurkin(pickle1);
+//
+//                }
+//                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Yardlong) {
+//                    yardlong1.setBoard(board1);
+//                    yardlong1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                    yardlong1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                    yardlong1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                    yardlong1.addTile(board1.getTile(new Coordinates(i,j)));
+//                    board1.getTile(new Coordinates(i,j)).setGurkin(yardlong1);
+//                }
+//                if (oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Zuchinni) {
+//                    zuchinni1.setBoard(board1);
+//                    zuchinni1.setLives(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                    zuchinni1.setId(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                    zuchinni1.setSize(oldgame.getPlayer1().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                    zuchinni1.addTile(board1.getTile(new Coordinates(i,j)));
+//                    board1.getTile(new Coordinates(i,j)).setGurkin(zuchinni1);
+//                }
+//            }
+//        }
+//
+//        player1.setGurkinBoard(board1);
+//
+//        newgame.setPlayer1(player1);
+//
+//
+//        // SET PLAYER 2
+//        if (oldgame.getPlayer2() instanceof AI) {
+//            Player player2 = new AI(1);
+//            player2.setId(((AI) oldgame.getPlayer2()).getId());
+//            player2.setCurrentPlayer(oldgame.getPlayer2().getCurrentPlayer());
+//            player2.setDifficultyString(oldgame.getPlayer2().getDifficultyString());
+//            ((AI) player2).setDifficulty(player2.getDifficultyString());
+//
+//            ShotResults shotResults2 = new ShotResults();
+//            shotResults2.setId(oldgame.getPlayer2().getShotRes().getId());
+//
+//            for (Result result : oldgame.getPlayer1().getShotRes().getShotCollection()) {
+//                Result result2 = new Result();
+//                result2.setId(result.getId());
+//                result2.setCharacter(result.getCharacter());
+//                result2.setX(result.getX());
+//                result2.setY(result.getY());
+//                result2.setShotResults(result.getShotResults());
+//                shotResults2.addShotBoardCollection(result2);
+//            }
+//            shotResults2.transformation();
+//            player2.setShotRes(shotResults2);
+//
+//            Board board2 = new Board();
+//            board2.setId(oldgame.getPlayer2().getGurkinBoard().getId());
+//            board2.setConichon(oldgame.getPlayer2().getGurkinBoard().getConichon());
+//            board2.setGherkin(oldgame.getPlayer2().getGurkinBoard().getGherkin());
+//            board2.setPickle(oldgame.getPlayer2().getGurkinBoard().getPickle());
+//            board2.setYardlong(oldgame.getPlayer2().getGurkinBoard().getYardlong());
+//            board2.setZuchinni(oldgame.getPlayer2().getGurkinBoard().getZuchinni());
+//
+//            for (Coordinates coordinates : oldgame.getPlayer2().getGurkinBoard().getFoundCoords()) {
+//                Coordinates coordinates2 = new Coordinates(coordinates.getX(),coordinates.getY());
+//                coordinates2.setId(coordinates.getId());
+//                coordinates2.setBoard(coordinates.getBoard());
+//                board2.addFoundCoords(coordinates2);
+//            }
+//
+//            Gurkin conichon2 = new Conichon();
+//            Gurkin gherkin2 = new Gherkin();
+//            Gurkin pickle2 = new Pickle();
+//            Gurkin yardlong2 = new Yardlong();
+//            Gurkin zuchinni2 = new Zuchinni();
+//
+//            for (int i = 0; i<10;i++) {
+//                for (int j = 0; j<10; j++) {
+//                    board2.getTile(new Coordinates(i,j)).setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getId());
+//                    board2.getTile(new Coordinates(i,j)).setisGurkin(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getisGurkin());
+//                    board2.getTile(new Coordinates(i,j)).setisHit(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).isHit());
+//                    board2.getTile(new Coordinates(i,j)).setBoard(board2);
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Conichon) {
+//                        conichon2.setBoard(board2);
+//                        conichon2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        conichon2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        conichon2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        conichon2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(conichon2);
+//                    }
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Gherkin) {
+//                        gherkin2.setBoard(board2);
+//                        gherkin2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        gherkin2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        gherkin2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        gherkin2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(gherkin2);
+//                    }
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Pickle) {
+//                        pickle2.setBoard(board2);
+//                        pickle2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        pickle2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        pickle2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        pickle2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(pickle2);
+//                    }
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Yardlong) {
+//                        yardlong2.setBoard(board2);
+//                        yardlong2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        yardlong2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        yardlong2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        yardlong2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(yardlong2);
+//                    }
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Zuchinni) {
+//                        zuchinni2.setBoard(board2);
+//                        zuchinni2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        zuchinni2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        zuchinni2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        zuchinni2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(zuchinni2);
+//                    }
+//                }
+//            }
+//
+//            player2.setGurkinBoard(board2);
+//
+//            newgame.setPlayer2(player2);
+//        } else {
+//            Player player2 = new Player(oldgame.getId(),oldgame.getPlayer2().getName(), oldgame.getPlayer1().getCurrentPlayer());
+//            player2.setRemaining_gurkins(oldgame.getPlayer2().getRemaining_gurkins());
+//
+//            ShotResults shotResults2 = new ShotResults();
+//            shotResults2.setId(oldgame.getPlayer2().getShotRes().getId());
+//
+//            for (Result result : oldgame.getPlayer1().getShotRes().getShotCollection()) {
+//                Result result2 = new Result();
+//                result2.setId(result.getId());
+//                result2.setCharacter(result.getCharacter());
+//                result2.setX(result.getX());
+//                result2.setY(result.getY());
+//                result2.setShotResults(result.getShotResults());
+//                shotResults2.addShotBoardCollection(result2);
+//            }
+//            shotResults2.transformation();
+//            player2.setShotRes(shotResults2);
+//
+//            Board board2 = new Board();
+//            board2.setId(oldgame.getPlayer2().getGurkinBoard().getId());
+//            board2.setConichon(oldgame.getPlayer2().getGurkinBoard().getConichon());
+//            board2.setGherkin(oldgame.getPlayer2().getGurkinBoard().getGherkin());
+//            board2.setPickle(oldgame.getPlayer2().getGurkinBoard().getPickle());
+//            board2.setYardlong(oldgame.getPlayer2().getGurkinBoard().getYardlong());
+//            board2.setZuchinni(oldgame.getPlayer2().getGurkinBoard().getZuchinni());
+//
+//            for (Coordinates coordinates : oldgame.getPlayer2().getGurkinBoard().getFoundCoords()) {
+//                Coordinates coordinates2 = new Coordinates(coordinates.getX(),coordinates.getY());
+//                coordinates2.setId(coordinates.getId());
+//                coordinates2.setBoard(coordinates.getBoard());
+//                board2.addFoundCoords(coordinates2);
+//            }
+//
+//            Gurkin conichon2 = new Conichon();
+//            Gurkin gherkin2 = new Gherkin();
+//            Gurkin pickle2 = new Pickle();
+//            Gurkin yardlong2 = new Yardlong();
+//            Gurkin zuchinni2 = new Zuchinni();
+//
+//            for (int i = 0; i<10;i++) {
+//                for (int j = 0; j<10; j++) {
+//                    board2.getTile(new Coordinates(i,j)).setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getId());
+//                    board2.getTile(new Coordinates(i,j)).setisGurkin(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getisGurkin());
+//                    board2.getTile(new Coordinates(i,j)).setisHit(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).isHit());
+//                    board2.getTile(new Coordinates(i,j)).setBoard(board2);
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Conichon) {
+//                        conichon2.setBoard(board2);
+//                        conichon2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        conichon2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        conichon2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        conichon2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(conichon2);
+//                    }
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Gherkin) {
+//                        gherkin2.setBoard(board2);
+//                        gherkin2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        gherkin2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        gherkin2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        gherkin2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(gherkin2);
+//                    }
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Pickle) {
+//                        pickle2.setBoard(board2);
+//                        pickle2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        pickle2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        pickle2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        pickle2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(pickle2);
+//                    }
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Yardlong) {
+//                        yardlong2.setBoard(board2);
+//                        yardlong2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        yardlong2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        yardlong2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        yardlong2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(yardlong2);
+//                    }
+//                    if (oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin() instanceof Zuchinni) {
+//                        zuchinni2.setBoard(board2);
+//                        zuchinni2.setLives(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getLives());
+//                        zuchinni2.setId(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getId());
+//                        zuchinni2.setSize(oldgame.getPlayer2().getGurkinBoard().getTile(new Coordinates(i,j)).getGurkin().getSize());
+//                        zuchinni2.addTile(board2.getTile(new Coordinates(i,j)));
+//                        board2.getTile(new Coordinates(i,j)).setGurkin(zuchinni2);
+//                    }
+//                }
+//            }
+//
+//            player2.setGurkinBoard(board2);
+//
+//            newgame.setPlayer2(player2);
+//        }
+//
+//        connectionSource.close();
+//        return newgame;
+//    }
 
     // This method tests if there is a connection to the database
-    public void TestConnection() {
+     /*public void TestConnection() {
 
         // The URL of the database on your friend's computer
-        String databaseUrl = "jdbc:mysql://172.20.10.3:3306/";
+        String databaseUrl = "jdbcurl";
 
         // Create a connection source with the specified URL, username, and password
         JdbcConnectionSource connectionSource = null;
@@ -842,11 +836,11 @@ public class Database {
                 // Ignore any errors that occur while closing the connection source
             }
         }
-    }
-    public void TestConnection(String databaseName) {
+    }*/
+    public Boolean TestConnection(String databaseName) {
 
         // The URL of the database on your friend's computer
-        String databaseUrl = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
+        String databaseUrl = String.format(jdbcurl + "%s",databaseName);
 
         // The username and password for the database
         String username = "sigurd";
@@ -858,7 +852,6 @@ public class Database {
             connectionSource = new JdbcConnectionSource(databaseUrl, username, password);
         } catch (SQLException e) {
             System.out.println("Failed to create connection source: " + e.getMessage());
-            return;
         }
 
         // Check the connection to the database
@@ -868,6 +861,7 @@ public class Database {
             System.out.println("Connection established.");
         } catch (SQLException e) {
             System.out.println("Failed to establish connection: " + e.getMessage());
+
         } finally {
             // Release the connection resources
             if (connection != null) {
@@ -875,6 +869,7 @@ public class Database {
                     connection.close();
                 } catch (Exception e) {
                     // Ignore any errors that occur while closing the connection
+                    return false;
                 }
             }
         }
@@ -887,11 +882,12 @@ public class Database {
                 // Ignore any errors that occur while closing the connection source
             }
         }
+        return true;
     }
 
     // This method returns a list of all the databases that has been created on the server
     public List<String> getDatabases() throws Exception {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://172.20.10.3:3306/", username, password);
+        Connection connection = DriverManager.getConnection(jdbcurl, username, password);
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SHOW DATABASES");
 
@@ -909,7 +905,7 @@ public class Database {
 
     // This method deletes a database from the server that matches the input string
     public void deleteDatabase (String databaseName) throws Exception {
-        String databaseUrl = "jdbc:mysql://172.20.10.3:3306/";
+        String databaseUrl = jdbcurl;
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, username, password);
 
         try {

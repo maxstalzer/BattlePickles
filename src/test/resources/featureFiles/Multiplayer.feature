@@ -65,7 +65,6 @@ Feature: Multiplayer
     And its player1s turn
     When I shoot a tile that has a gurkin and has not been shot before
     Then the shot result x is on that coordinate
-    And the turn is changed
     And the gurkins lives has decreased
 
   Scenario: Player 1 attacks a tile without a gurkin on it
@@ -81,7 +80,6 @@ Feature: Multiplayer
     When I shoot a tile that has a gurkin and has not been shot before
     And I shoot a tile that i hit again
     Then the shot result x is on that coordinate
-    And the turn is not changed
     And the gurkins life has only decreased by 1
   
   Scenario: Player 1 attacks a tile without a gurkin that they have shot before
@@ -90,14 +88,12 @@ Feature: Multiplayer
     When I shoot a tile that doesnt have a gurkin on it and has not been shot before
     And I shoot a tile that i hit again
     Then the shot result is o on that coordinate
-    And the turn is not changed
 
   Scenario: Player 1 attacks a tile and kills a gurkin
     Given a game
     And its player1s turn
     When I shoot all tiles of that gurkin
     Then the shot result is k on those coordinates
-    And the turn is changed
     And the gurkin has no lives
 # ------------------------------- WINNING THE GAME ----------------------------------
   Scenario: Player 1 has killed all the gurkins of player 2

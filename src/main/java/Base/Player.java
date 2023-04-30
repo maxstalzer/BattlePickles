@@ -1,8 +1,6 @@
-package Base.Players;
+package Base;
 
 
-import Base.*;
-import Base.Gurkins.*;
 import Observers.PlayerAttackObserver;
 import Observers.PlayerObserver;
 import com.j256.ormlite.field.DatabaseField;
@@ -127,13 +125,10 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
 
     public void notifyTurnObservers() {
         for (PlayerAttackObserver observer : attackObservers) {
-            observer.changeTurn();
-        }
-    }
+            observer.changeTurn();}}
 
     public boolean checkWin() { // checks if the player has won
         if (this.remaining_gurkins == 0) {
-
             return true;
         }
         return false;
@@ -141,9 +136,7 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
     @Override
     public void displayKillGIF(Gurkin gurk) {
         for (PlayerAttackObserver observer : attackObservers) {
-            observer.displayKillGIF(gurk);
-        }
-    }
+            observer.displayKillGIF(gurk);}}
 
 
     // checks if the gurkin can be placed at the given coordinates
@@ -167,15 +160,6 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
         return valid;
     }
 
-//    public Player deepClone() { // deep clones the player
-//        Player copy = new Player();
-//        copy.name = name;
-//        copy.remaining_gurkins = remaining_gurkins;
-//        copy.gurkinBoard = gurkinBoard.deepClone();
-//        copy.shotResults = shotResults;
-//        copy.turnID = turnID;
-//        return copy;
-//    }
 
     @Override
     public void updateSidePanel(ArrayList<Gurkin> gurks) {
@@ -184,9 +168,7 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
 
     public void notifyPlacement(ArrayList<Gurkin> gurks) {
         for (PlayerObserver observer : playerObservers) {
-            observer.updateSidePanel(gurks);
-        }
-    }
+            observer.updateSidePanel(gurks);}}
 
     public void registerObserver(PlayerObserver observer) {
         playerObservers.add(observer);
@@ -198,9 +180,7 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
 
     public void finalisePlacement() {
         for (PlayerObserver observer : playerObservers) {
-            observer.finalisePlacement();
-        }
-    }
+            observer.finalisePlacement();}}
 
     public void resetPlacement() {
         this.remaining_gurkins = 0;
@@ -228,6 +208,13 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
         this.difficultyString = difficultyString;
     }
     public String getDifficultyString() {return this.difficultyString;}
+
+    public Boolean getCurrent() {
+        return this.CurrentPlayer;
+    }
+    public ArrayList<Gurkin> getUnplacedGurks() {
+        return unplacedGurks;
+    }
 
 }
 

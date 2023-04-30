@@ -1,12 +1,6 @@
-package Base.Players;
-
-import Base.Board;
-import Base.Coordinates;
-import Base.Direction;
-import Base.Gurkins.*;
+package Base;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class AI extends Player {
@@ -101,7 +95,6 @@ public class AI extends Player {
     }
     // Generates an attack based on the weights of the attackWeights array
     private Coordinates generateMediumAttack() {
-        System.out.println(Arrays.deepToString(attackWeights));
         // Create a list of candidate attack coordinates
         ArrayList<Coordinates> candidates = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -227,8 +220,6 @@ public class AI extends Player {
                 }
             }
         }
-        System.out.println(maxVal);
-        System.out.println(minVal);
 
         // normalise the weights to between 0 and 1
         for (int i = 0; i < 10; i++) {

@@ -1,10 +1,9 @@
 package Gui;
 
 import Base.Coordinates;
-import Base.Gurkins.Terrain;
+import Base.Terrain;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import Controller.Controller;
 
 public class Hit extends Canvas {
