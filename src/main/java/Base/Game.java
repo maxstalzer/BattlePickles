@@ -4,6 +4,7 @@ import Base.Players.AI;
 import Base.Players.Player;
 import Controller.Controller;
 import Observers.GameObserver;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -14,20 +15,14 @@ import java.util.Set;
 public class Game implements GameObserver {
     @DatabaseField(columnName = "id", generatedId = true)
     private int id;
-
     @DatabaseField(columnName = "multiplayer")
     Boolean multiplayer; // true if multiplayer, false if singleplayer
-
-    /* @ForeignCollectionField(columnName = "Players", eager = true)
-    private Collection<Player> players = new ArrayList<>(); */
-
     @DatabaseField(columnName = "player1_id", foreign = true,foreignAutoRefresh = true)
     Player player1; // Player 1
     @DatabaseField(columnName = "player2_id", foreign = true,foreignAutoRefresh = true)
     Player player2; // Player 2
     @DatabaseField(columnName = "game_over")
     Boolean game_Over; // true if game is over
-
     @DatabaseField(columnName = "game_id")
     private String gameID; // Game ID
     @DatabaseField(columnName = "initial_turn")
@@ -53,15 +48,22 @@ public class Game implements GameObserver {
         int gameID = (int) (Math.random() * 1000000); // Generate random game ID
         this.gameID = Integer.toString(gameID);
     }
-
+    public void setId(int id) {this.id = id;}
+    public void setMultiplayer(Boolean b) {this.multiplayer = b;}
+    public void setGame_Over(Boolean b) {this.game_Over = b;}
+    public Boolean getGame_Over() {return game_Over;}
+    public void setGameID(String num) {this.gameID = num;}
+    public String getGameID() {return gameID;}
+    public String getInitial_turn() {return initial_turn;}
+    public void setterInitial_turn(String s) {initial_turn = s;}
     public Player getPlayer1() {
         return player1;
     } // Getters
-
+    public void setPlayer1(Player p1) {this.player1 = p1;}
     public Player getPlayer2() {
         return player2;
     } // Getters
-
+    public void setPlayer2(Player p2) {this.player2 = p2;}
     public AI getAIPlayer() { // Returns AI player if singleplayer, null if multiplayer
         if (!multiplayer) {
             return (AI) player2;

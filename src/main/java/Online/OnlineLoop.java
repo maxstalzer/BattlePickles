@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 
 //this is basically the controller, will be transferred to the controller once we know what the fuck we're supposed to do
+/*
 public class OnlineLoop {
     private OnlineGame game;
     private Scanner scanner;
@@ -51,5 +52,5 @@ public class OnlineLoop {
         Player otherPlayer = game.getOtherPlayer();
         System.out.println(otherPlayer.getName() + ", it's your turn now!");
     }
-}
+}*/
 

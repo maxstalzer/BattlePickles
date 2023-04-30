@@ -15,8 +15,61 @@ import java.util.*;
 public class Board implements BoardObserver, BoardStatsObserver { // Board class
     @DatabaseField(generatedId = true)
     private int id;
-    @ForeignCollectionField(columnName = "Tiles", eager = true)
+    @ForeignCollectionField(columnName = "Tiles")
     private Collection<Tile> tiles = new ArrayList<>(); // 10x10 array of tiles
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    private Conichon conichon;
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    private Gherkin gherkin;
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    private Pickle pickle;
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    private Yardlong yardlong;
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    private Zuchinni zuchinni;
+
+    public void setUpSaveDatabase() {
+        for (Tile tile : tiles) {
+            if (tile.hasGurkin() && (tile.getGurkin() instanceof Conichon)) {
+                this.conichon = (Conichon) tile.getGurkin();
+                ((Conichon) tile.getGurkin()).setBoard(this);
+                //((Conichon) tile.getGurkin()).addTile(tile);
+                tile.setConichon((Conichon) tile.getGurkin());
+
+            }
+            if (tile.hasGurkin() && (tile.getGurkin() instanceof Gherkin)) {
+                this.gherkin = (Gherkin) tile.getGurkin();
+                ((Gherkin) tile.getGurkin()).setBoard(this);
+                //((Gherkin) tile.getGurkin()).addTile(tile);
+                tile.setGherkin((Gherkin) tile.getGurkin());
+            }
+            if (tile.hasGurkin() && (tile.getGurkin() instanceof Pickle)) {
+                this.pickle = (Pickle) tile.getGurkin();
+                ((Pickle) tile.getGurkin()).setBoard(this);
+                //((Pickle) tile.getGurkin()).addTile(tile);
+                tile.setPickle((Pickle) tile.getGurkin());
+            }
+            if (tile.hasGurkin() && (tile.getGurkin() instanceof Yardlong)) {
+                this.yardlong = (Yardlong) tile.getGurkin();
+                ((Yardlong) tile.getGurkin()).setBoard(this);
+                //((Yardlong) tile.getGurkin()).addTile(tile);
+                tile.setYardlong((Yardlong) tile.getGurkin());
+            }
+            if (tile.hasGurkin() && (tile.getGurkin() instanceof Zuchinni)) {
+                this.zuchinni = (Zuchinni) tile.getGurkin();
+                ((Zuchinni) tile.getGurkin()).setBoard(this);
+                //((Zuchinni) tile.getGurkin()).addTile(tile);
+                tile.setZuchinni((Zuchinni) tile.getGurkin());
+            }
+        }
+    }
+
+    public Conichon getConichon() {return conichon;}
+    public Gherkin getGherkin() {return gherkin;}
+    public Pickle getPickle() {return pickle;}
+    public Yardlong getYardlong() {return yardlong;}
+    public Zuchinni getZuchinni() {return zuchinni;}
+
 
     private Set<BoardObserver> observers = new HashSet<BoardObserver>(); // List of observers of the board
     private Set<BoardStatsObserver> statsObservers = new HashSet<BoardStatsObserver>(); // List of observers of the board's stats
@@ -37,6 +90,7 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
                 Tile tile = new Tile();
+                tile.setBoard(this);
                 tile.setX(x);
                 tile.setY(y);
                 tiles.add(tile);
@@ -51,10 +105,10 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
 
 
-    public void setId(int Id){
+    public void setId(int id){
         this.id = id;
     }
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
@@ -320,6 +374,23 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     public Gurkin[] getplacedGurkins() {
         return gurkins;
     }
+
+    public void setConichon(Conichon conichon1) {
+    }
+
+    public void setGherkin(Gherkin gherkin1) {
+    }
+
+    public void setPickle(Pickle pickle1) {
+    }
+
+    public void setYardlong(Yardlong yardlong1) {
+    }
+
+    public void setZuchinni(Zuchinni zuchinni1) {
+    }
+
+}
 
     public Coordinates[] getStartCoors() {
         return startCoors;

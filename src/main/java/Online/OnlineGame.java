@@ -24,7 +24,7 @@ public class OnlineGame {
         return this.otherPlayer;
     }
 
-    public OnlineGame(String databaseName) throws SQLException {
+    /*public OnlineGame(String databaseName) throws SQLException {
         String databaseUrl = String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
         String databaseUsername = "sigurd";
         String databasePassword = "12345678";
@@ -66,7 +66,7 @@ public class OnlineGame {
                 break;
             }
         }
-    }
+    }*/
     // Needs to be implemented further
     public void updateGameState() {}
     // Needs to be implemented further

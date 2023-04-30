@@ -13,19 +13,19 @@ import java.util.Set;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "Player")
-public class  Player implements PlayerObserver, PlayerAttackObserver {
+public class  Player implements PlayerObserver, PlayerAttackObserver{
+    @DatabaseField(generatedId = true)
+    private int id;
+
     @DatabaseField
     String name; // The name of the player
     @DatabaseField
     int remaining_gurkins; //   The number of gurkins remaining to be shot
-    @DatabaseField(foreign = true,foreignAutoRefresh = true)
-    Board gurkinBoard; // The board that the player uses to place their gurkins
     String turnID; // stores if it's player 1 or 2 (unknown)
     @DatabaseField
     private Boolean CurrentPlayer;
-
-    @DatabaseField(generatedId = true)
-    private int id;
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    Board gurkinBoard; // The board that the player uses to place their gurkins
 
     private Set<PlayerObserver> playerObservers = new HashSet<PlayerObserver>();
 
@@ -199,6 +199,9 @@ public class  Player implements PlayerObserver, PlayerAttackObserver {
     public int getId () {
         return this.id;
     }
+    public void setId(int id) {this.id = id;}
+
+    public Boolean getCurrentPlayer() {return CurrentPlayer;}
 
     public Boolean getCurrent() {
         return this.CurrentPlayer;
