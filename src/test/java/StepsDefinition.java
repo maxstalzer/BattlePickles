@@ -349,6 +349,21 @@ public class StepsDefinition {
         game = new Game(true);
     }
 
+    @Given("a game with all gurkins placed")
+    public void a_game_with_all_gurkins_placed() {
+        game = new Game(true);
+        game.getPlayer1().validGurkinSetup(new Gherkin(), Horizontal, new Coordinates(0, 0));
+        game.getPlayer1().validGurkinSetup(new Conichon(), Horizontal, new Coordinates(0, 1));
+        game.getPlayer1().validGurkinSetup(new Yardlong(), Horizontal, new Coordinates(0, 2));
+        game.getPlayer1().validGurkinSetup(new Zuchinni(), Horizontal, new Coordinates(0, 3));
+        game.getPlayer1().validGurkinSetup(new Pickle(), Horizontal, new Coordinates(0, 4));
+
+        game.getPlayer2().validGurkinSetup(new Gherkin(), Horizontal, new Coordinates(0, 0));
+        game.getPlayer2().validGurkinSetup(new Conichon(), Horizontal, new Coordinates(0, 1));
+        game.getPlayer2().validGurkinSetup(new Yardlong(), Horizontal, new Coordinates(0, 2));
+        game.getPlayer2().validGurkinSetup(new Zuchinni(), Horizontal, new Coordinates(0, 3));
+        game.getPlayer2().validGurkinSetup(new Pickle(), Horizontal, new Coordinates(0, 4));
+    }
 
     @Given("all {int} gurkins have been placed")
     public void all_gurkins_have_been_placed(Integer int1) {
