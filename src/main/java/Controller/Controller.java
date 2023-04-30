@@ -65,6 +65,10 @@ public class Controller {
             gameView.showLoadSavedGame(database.getDatabases());
     }
 
+
+
+
+
     public void loadGame(String gameName) throws Exception {
         System.out.println("loaded");
         game = database.loadGame(gameName);
@@ -295,6 +299,7 @@ public class Controller {
             gameView.showSaveGame("Enter name for game save");
         } else {
             database.updateGame(game);
+            showMainMenu();
         }
     }
 

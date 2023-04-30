@@ -26,6 +26,7 @@ public class Database {
     private String databaseURL;
     private final String username = "sigurd";
     private final String password = "12345678";
+    private String databaseName;
 
     // The constructer takes a string input and creates a database with the input as its name. After that it creates
     // the necessary tables for storing the game
@@ -175,8 +176,102 @@ public class Database {
         connectionSource.close();
     }
 
+    public void updateGame(Game game) throws Exception {
+        JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
+
+        Dao<Player, Integer> playerDao = DaoManager.createDao(connectionSource, Player.class);
+        Dao<Board, Integer> boardDao = DaoManager.createDao(connectionSource, Board.class);
+        Dao<Tile, Integer> tileDao = DaoManager.createDao(connectionSource, Tile.class);
+        Dao<Conichon, Integer> conichonDao = DaoManager.createDao(connectionSource, Conichon.class);
+        Dao<Gherkin, Integer> gherkinDao = DaoManager.createDao(connectionSource, Gherkin.class);
+        Dao<Pickle, Integer> pickleDao = DaoManager.createDao(connectionSource, Pickle.class);
+        Dao<Yardlong, Integer> yardlongDao = DaoManager.createDao(connectionSource, Yardlong.class);
+        Dao<Zuchinni, Integer> zuchinniDao = DaoManager.createDao(connectionSource, Zuchinni.class);
+        Dao<Game, Integer> gameDao = DaoManager.createDao(connectionSource, Game.class);
+        Dao<ShotResults, Integer> shotResultsDao = DaoManager.createDao(connectionSource, ShotResults.class);
+        Dao<Result, Integer> resultDao = DaoManager.createDao(connectionSource, Result.class);
+        Dao<Coordinates, Integer> coordinatesDao = DaoManager.createDao(connectionSource, Coordinates.class);
+
+
+        game.setInitial_turn();
+        gameDao.update(game);
+
+        Player pl1 = game.getPlayer1();
+        Player pl2 = game.getPlayer2();
+        playerDao.update(pl1);
+        playerDao.update(pl2);
+
+        ShotResults shotResults1 = pl1.getShotRes();
+        shotResults1.toShotCollection();
+        shotResultsDao.update(shotResults1);
+
+        for (Result result : shotResults1.getShotCollection()) {
+            resultDao.createIfNotExists(result);
+            resultDao.update(result);
+        }
+
+        Board board1 = pl1.getGurkinBoard();
+        board1.setUpSaveDatabase();
+        boardDao.update(board1);
+
+        for (Coordinates coordinates: board1.getFoundCoords()) {
+            coordinatesDao.update(coordinates);
+        }
+
+        conichonDao.update(board1.getConichon());
+        gherkinDao.update(board1.getGherkin());
+        pickleDao.update(board1.getPickle());
+        yardlongDao.update(board1.getYardlong());
+        zuchinniDao.update(board1.getZuchinni());
+
+        for (Tile tile : board1.getTiles()) {
+            tileDao.update(tile);
+        }
+
+        ShotResults shotResults2 = pl2.getShotRes();
+        shotResults2.toShotCollection();
+        shotResultsDao.update(shotResults2);
+
+        for (Result result : shotResults2.getShotCollection()) {
+            resultDao.createIfNotExists(result);
+            resultDao.update(result);
+        }
+
+        Board board2 = pl2.getGurkinBoard();
+        board2.setUpSaveDatabase();
+        boardDao.update(board2);
+
+        for (Coordinates coordinates: board2.getFoundCoords()) {
+            coordinatesDao.update(coordinates);
+        }
+
+        conichonDao.update(board2.getConichon());
+        gherkinDao.update(board2.getGherkin());
+        pickleDao.update(board2.getPickle());
+        yardlongDao.update(board2.getYardlong());
+        zuchinniDao.update(board2.getZuchinni());
+
+        for (Tile tile : board2.getTiles()) {
+            tileDao.update(tile);
+        }
+
+        shotResultsDao.update(shotResults1);
+        shotResultsDao.update(shotResults2);
+        boardDao.update(board1);
+        boardDao.update(board2);
+        playerDao.update(pl1);
+        playerDao.update(pl2);
+        gameDao.update(game);
+
+        connectionSource.close();
+
+
+    }
+
     // The method loadGame takes a database name and loads a game from that database into a new object Game and returns it.
     public Game loadGame(String databaseName) throws Exception {
+        this.databaseName = databaseName;
+
         this.databaseURL =  String.format("jdbc:mysql://172.20.10.3:3306/%s",databaseName);
 
         JdbcConnectionSource connectionSource = new JdbcConnectionSource(databaseURL, username, password);
@@ -301,7 +396,7 @@ public class Database {
             ShotResults shotResults2 = new ShotResults();
             shotResults2.setId(oldgame.getPlayer2().getShotRes().getId());
 
-            for (Result result : oldgame.getPlayer1().getShotRes().getShotCollection()) {
+            for (Result result : oldgame.getPlayer2().getShotRes().getShotCollection()) {
                 Result result2 = new Result();
                 result2.setId(result.getId());
                 result2.setCharacter(result.getCharacter());
@@ -393,7 +488,7 @@ public class Database {
             ShotResults shotResults2 = new ShotResults();
             shotResults2.setId(oldgame.getPlayer2().getShotRes().getId());
 
-            for (Result result : oldgame.getPlayer1().getShotRes().getShotCollection()) {
+            for (Result result : oldgame.getPlayer2().getShotRes().getShotCollection()) {
                 Result result2 = new Result();
                 result2.setId(result.getId());
                 result2.setCharacter(result.getCharacter());
@@ -791,6 +886,47 @@ public class Database {
     }
 
     // This method tests if there is a connection to the database
+    public void TestConnection() {
+
+        // The URL of the database on your friend's computer
+        String databaseUrl = "jdbc:mysql://172.20.10.3:3306/";
+
+        // Create a connection source with the specified URL, username, and password
+        JdbcConnectionSource connectionSource = null;
+        try {
+            connectionSource = new JdbcConnectionSource(databaseUrl, username, password);
+        } catch (SQLException e) {
+            System.out.println("Failed to create connection source: " + e.getMessage());
+            return;
+        }
+
+        // Check the connection to the database
+        DatabaseConnection connection = null;
+        try {
+            connection = connectionSource.getReadOnlyConnection("*");
+            System.out.println("Connection established.");
+        } catch (SQLException e) {
+            System.out.println("Failed to establish connection: " + e.getMessage());
+        } finally {
+            // Release the connection resources
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    // Ignore any errors that occur while closing the connection
+                }
+            }
+        }
+
+        // Release the connection source resources
+        if (connectionSource != null) {
+            try {
+                connectionSource.close();
+            } catch (Exception e) {
+                // Ignore any errors that occur while closing the connection source
+            }
+        }
+    }
     public void TestConnection(String databaseName) {
 
         // The URL of the database on your friend's computer

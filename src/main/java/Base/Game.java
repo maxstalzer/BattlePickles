@@ -84,11 +84,6 @@ public class Game implements GameObserver {
 //        return copy;
 //    }
 
-    public void loadGame(String gameID) { // Load game from file
-//        functionality to come
-
-    }
-
     public Board getGurkinBoard() {
         return player1.getGurkinBoard();
     }
