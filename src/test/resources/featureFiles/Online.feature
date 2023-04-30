@@ -1,7 +1,7 @@
 Feature: online Multiplayer
 
   Scenario: Saving a game to a database
-    Given a game
+    Given a game with all gurkins placed
     And a database
     When I save a game
     Then I should be able to see it in the list of available saves
