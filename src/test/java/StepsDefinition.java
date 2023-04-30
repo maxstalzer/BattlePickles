@@ -910,6 +910,7 @@ public class StepsDefinition {
     public void the_game_should_be_the_same_as_the_one_i_save() throws Exception {
         Game loadedGame = database.loadGame("existing_database");
         assertEquals(game.getPlayer1().getName(), loadedGame.getPlayer1().getName());
+        database.deleteDatabase("existing_database");
     }
 
 
