@@ -27,6 +27,8 @@ public abstract class Gurkin {
     }
 
     public Gurkin() {}
+<<<<<<< HEAD
+=======
 
     public int getId() {
         return id;
@@ -34,6 +36,7 @@ public abstract class Gurkin {
     public void setId(int id) {
         this.id = id;
     }
+>>>>>>> DatabaseFix
 
     public int getSize() {
         return this.size;

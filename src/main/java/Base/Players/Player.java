@@ -41,7 +41,6 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
 
 
 
-
     private ArrayList<Gurkin> unplacedGurks;
     public Board getGurkinBoard() {
         return gurkinBoard;
