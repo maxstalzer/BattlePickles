@@ -174,20 +174,14 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     }
 
     private void notifyPlacedGurkin(Gurkin g, Direction.direction dir, Coordinates startCoor) {
-        for (BoardObserver observer : observers) {
-
-            observer.placeGurkin(startCoor, dir, g);
-        }
-    }
+        for (BoardObserver observer : observers) {observer.placeGurkin(startCoor, dir, g);}}
 
     public void tileHit(Coordinates a) {
         notifyTileHit(a);
     }
     private void notifyTileHit(Coordinates a) {
         for (BoardObserver observer : observers) {
-            observer.tileHit(a);
-        }
-    }
+            observer.tileHit(a);}}
 
     public void registerBoardObserver(BoardObserver observer) {
         observers.add(observer);
@@ -339,10 +333,7 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
     @Override
     public void increaseMissTiles(int miss) {
-        for (BoardStatsObserver o : statsObservers) {
-            o.increaseMissTiles(miss);
-        }
-    }
+        for (BoardStatsObserver o : statsObservers) {o.increaseMissTiles(miss);}}
 
     @Override
     public void increaseTotalShots(int shots) {
@@ -354,15 +345,13 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
     public void sendCoords(Coordinates coors) {
         foundCoords.add(coors);
-        for (BoardStatsObserver observer : statsObservers) {
-            observer.sendCoords(coors);}}
+        for (BoardStatsObserver observer : statsObservers) {observer.sendCoords(coors);}}
 
     @Override
     public void removeCoords(Coordinates coords) {
         for (Coordinates coordinates : foundCoords) {
             if( coordinates.getX() == coords.getX() && coordinates.getY() == coords.getY()) {
-                for (BoardStatsObserver observer : statsObservers) {
-                    observer.removeCoords(coords);}}}}
+                for (BoardStatsObserver observer : statsObservers) {observer.removeCoords(coords);}}}}
 
     public Gurkin[] getplacedGurkins() {
         return gurkins;
