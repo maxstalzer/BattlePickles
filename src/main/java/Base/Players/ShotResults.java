@@ -13,6 +13,14 @@ import java.util.Collection;
 
 @DatabaseTable(tableName = "ShotResults")
 public class ShotResults implements ResultObserver {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @DatabaseField(generatedId = true)
     private int id;
     @ForeignCollectionField(columnName = "Results")

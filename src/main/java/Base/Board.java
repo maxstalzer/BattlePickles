@@ -82,8 +82,6 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     private Coordinates[] startCoors;
     private Direction.direction[] startDirs;
 
-    private ArrayList<Coordinates> foundCoords;
-
 
     // Initialize board
     public Board() {
@@ -317,7 +315,8 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
         for (int i = 0; i < 5; i++) {
             for (BoardObserver observer : observers) {
-                observer.placeGurkin(startCoors[i], startDirs[i], gurkins[i]);}}}
+                observer.placeGurkin(startCoors[i], startDirs[i], gurkins[i]);}}
+
         for (Tile tile: tiles) {
             if (tile.isHit()) {
                 notifyTileHit(new Coordinates(tile.getX(), tile.getY()));
@@ -395,7 +394,7 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     public Collection<Coordinates> getFoundCoords() {return this.foundCoords;}
     public void addFoundCoords(Coordinates foundCoords) {this.foundCoords.add(foundCoords);}
 
-}
+
 
     public Coordinates[] getStartCoors() {
         return startCoors;

@@ -127,16 +127,6 @@ public class Game implements GameObserver {
         initial_turn = Turn.getTurn();
     }
 
-    public void initLoadedGame() {
-        Turn.setTurn(initial_turn);
-        player1.getGurkinBoard().prepareViewGurkin();
-        player2.getGurkinBoard().prepareViewGurkin();
-        player1.getResultBoard().prepareResultsView();
-        player2.getResultBoard().prepareResultsView();
-
-    public String getInitial_turn() {
-        return initial_turn;
-    }
 
     public void initTerrain() {
         player1.getGurkinBoard().initTerrain();
@@ -144,4 +134,7 @@ public class Game implements GameObserver {
     }
 
 
+    public int getId() {
+        return id;
+    }
 }
