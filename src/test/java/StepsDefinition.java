@@ -616,9 +616,6 @@ public class StepsDefinition {
     public void i_should_be_able_to_load_the_game_from_the_database() throws Exception {
         Game loadedGame = database.loadGame("tester");
         loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(1,1)).hitTile();
-        Gurkin tester1 = new Pickle();
-        loadedGame.getPlayer1().getGurkinBoard().getTile(new Coordinates(4,4)).setGurkin(tester1);
-        database.updateGame(loadedGame);
         assertEquals(game.getMultiplayer(), loadedGame.getMultiplayer());
         assertEquals(game.getPlayer1().getName(), loadedGame.getPlayer1().getName());
         assertEquals(game.getPlayer2().getName(), loadedGame.getPlayer2().getName());

@@ -85,8 +85,6 @@ public class Tile {
         return board.getId();
     }
 
-    //until here -V
-
     public boolean hasGurkin() {
         return this.gurkin;
     } // Getters

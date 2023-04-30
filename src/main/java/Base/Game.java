@@ -30,9 +30,6 @@ public class Game implements GameObserver {
 
     private Set<GameObserver> gameObserverSet = new HashSet<GameObserver>();
 
-
-
-
     public Game(Boolean multiplayer) { // Constructor
         this.multiplayer = multiplayer;
         Turn.init_turn();
@@ -122,6 +119,8 @@ public class Game implements GameObserver {
     }
 
     public void checkWin() {
+        System.out.println("----- game: " + player1.getRemaining_gurkins());
+        System.out.println("----- game: " + player2.getRemaining_gurkins());
         if (player1.checkWin()) {
             showWinner(player1);
         } else if (player2.checkWin()) {
@@ -153,12 +152,11 @@ public class Game implements GameObserver {
     }
 
     public void initLoadedGame() {
+        Turn.setTurn(initial_turn);
         player1.getGurkinBoard().prepareViewGurkin();
         player2.getGurkinBoard().prepareViewGurkin();
         player1.getResultBoard().prepareResultsView();
         player2.getResultBoard().prepareResultsView();
-
-        Turn.setTurn(initial_turn);
 
     }
 

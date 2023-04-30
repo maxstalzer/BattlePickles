@@ -89,7 +89,6 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
     }
 
     private void updateShipCounts() {
-        System.out.println("updating ship counts");
         gurkinsLeft = controller.getGurkinCount(player)[0];
         gurkinsKilled = controller.getGurkinCount(player)[1];
         playerGurks.setText("Gurkins left:  " +  gurkinsLeft);
@@ -98,7 +97,6 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
     }
 
     private void updatePercentage() {
-        System.out.println("updating percentages");
         hitPercentage = (int) ((hitTiles / (double) totalShots) * 100);
         missPercentage = (int) ((missTiles / (double) totalShots) * 100);
         playerHitPercentage.setText("Hit percentage:  " + hitPercentage + "%");
@@ -106,17 +104,13 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
     }
 
     private void updateTiles() {
-        System.out.println("updating tiles");
+
         playerHit.setText("Hit tiles:  " + hitTiles);
-        System.out.println("updating hits" + hitTiles);
         playerMiss.setText("Miss tiles:  " + missTiles);
-        System.out.println("updating misses" + missTiles);
         playerTotal.setText("Total shots:  " + totalShots);
-        System.out.println("updating shots" + totalShots);
     }
 
     public void updateStats() {
-        System.out.println("updating stats");
         updateShipCounts();
         updateTiles();
         updatePercentage();
@@ -132,27 +126,23 @@ public class StatsPanel extends VBox implements BoardStatsObserver {
 
     @Override
     public void sendCoords(Coordinates coords) {
-        System.out.println("Coords received");
         knownLocations.add(coords);
     }
 
     @Override
     public void increaseHitTiles(int hits) {
-        System.out.println("hits increased");
         this.hitTiles += hits;
         updateStats();
     }
 
     @Override
     public void increaseMissTiles(int misses) {
-        System.out.println("Misses increased");
         this.missTiles += misses;
         updateStats();
     }
 
     @Override
     public void increaseTotalShots(int shots) {
-        System.out.println("Shots increased");
         this.totalShots += shots;
         updateStats();
     }

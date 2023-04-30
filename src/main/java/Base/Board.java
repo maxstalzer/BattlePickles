@@ -8,6 +8,7 @@ import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 import Observers.BoardStatsObserver;
 
+import java.nio.charset.CoderResult;
 import java.util.*;
 
 
@@ -27,6 +28,8 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     private Yardlong yardlong;
     @DatabaseField(foreign = true,foreignAutoRefresh = true)
     private Zuchinni zuchinni;
+    @ForeignCollectionField(columnName = "FoundCoords")
+    private Collection<Coordinates> foundCoords;
 
     public void setUpSaveDatabase() {
         for (Tile tile : tiles) {
@@ -74,12 +77,6 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     private Set<BoardObserver> observers = new HashSet<BoardObserver>(); // List of observers of the board
     private Set<BoardStatsObserver> statsObservers = new HashSet<BoardStatsObserver>(); // List of observers of the board's stats
 
-    private int hitTiles; // Number of hit tiles on board
-    private int missedTiles; // Number of missed tiles on board
-    private int totalShots; // Total number of shots taken at this board
-
-    private ArrayList<Coordinates> foundCoords;
-
 
     // Initialize board
     public Board() {
@@ -92,9 +89,6 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
                 tiles.add(tile);
             }
         }
-        this.hitTiles = 0;
-        this.missedTiles = 0;
-        this.totalShots = 0;
         this.foundCoords = new ArrayList<>();
 
     }
@@ -224,11 +218,26 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
         List<Tile> zuchinniList = new ArrayList<>();
 
         for (Tile tile : tiles) {
-            if (tile.hasGurkin() && (tile.getGurkin() instanceof Conichon)) {conichonList.add(tile);}
-            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Gherkin)) {gherkinList.add(tile);}
-            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Pickle)) {pickleList.add(tile);}
-            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Yardlong)) {yardlongList.add(tile);}
-            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Zuchinni)) {zuchinniList.add(tile);}
+            if (tile.hasGurkin() && (tile.getGurkin() instanceof Conichon)) {
+                conichonList.add(tile);
+                gurkins[0] = tile.getGurkin();
+            }
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Gherkin)) {
+                gherkinList.add(tile);
+                gurkins[1] = tile.getGurkin();
+            }
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Pickle)) {
+                pickleList.add(tile);
+                gurkins[2] = tile.getGurkin();
+            }
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Yardlong)) {
+                yardlongList.add(tile);
+                gurkins[3] = tile.getGurkin();
+            }
+            else if (tile.hasGurkin() && (tile.getGurkin() instanceof Zuchinni)) {
+                zuchinniList.add(tile);
+                gurkins[4] = tile.getGurkin();
+            }
         }
         Tile lowest;
 
@@ -328,11 +337,23 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
             }
             startCoors[4] = new Coordinates(lowest.getX(), lowest.getY());
         }
+
+
         for (int i = 0; i < 5; i++) {
             for (BoardObserver observer : observers) {
+                System.out.println(startCoors[i].getX() + ", " + startCoors[i].getY());
+                System.out.println(startDirs[i]);
+                System.out.println(gurkins[i]);
                 observer.placeGurkin(startCoors[i], startDirs[i], gurkins[i]);
             }
         }
+
+        for (Tile tile: tiles) {
+            if (tile.isHit()) {
+                notifyTileHit(new Coordinates(tile.getX(), tile.getY()));
+            }
+        }
+
     }
     public void initTerrain() {
         // randomly place terrain object on board tiles
@@ -357,7 +378,6 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
     @Override
     public void increaseHitTiles(int hit) {
-        hitTiles += hit;
         for (BoardStatsObserver o : statsObservers) {
             o.increaseHitTiles(hit);
         }
@@ -365,7 +385,6 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
     @Override
     public void increaseMissTiles(int miss) {
-        missedTiles += miss;
         for (BoardStatsObserver o : statsObservers) {
             o.increaseMissTiles(miss);
         }
@@ -373,7 +392,6 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
     @Override
     public void increaseTotalShots(int shots) {
-        totalShots += shots;
         for (BoardStatsObserver o : statsObservers) {
             o.increaseTotalShots(shots);
         }
@@ -393,13 +411,12 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
     @Override
     public void removeCoords(Coordinates coords) {
-        for (int i = 0; i < foundCoords.size(); i++) {
-            if (foundCoords.get(i).getX() == coords.getX() && foundCoords.get(i).getY() == coords.getY()) {
+        for (Coordinates coordinates : foundCoords) {
+            if( coordinates.getX() == coords.getX() && coordinates.getY() == coords.getY()) {
                 for (BoardStatsObserver observer : statsObservers) {
                     observer.removeCoords(coords);
                 }
             }
-
         }
     }
 
@@ -417,6 +434,9 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
 
     public void setZuchinni(Zuchinni zuchinni1) {
     }
+
+    public Collection<Coordinates> getFoundCoords() {return this.foundCoords;}
+    public void addFoundCoords(Coordinates foundCoords) {this.foundCoords.add(foundCoords);}
 
 }
 

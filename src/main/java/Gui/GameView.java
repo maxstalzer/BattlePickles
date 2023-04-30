@@ -213,6 +213,7 @@ public class GameView extends Application implements GameObserver {
         LoadSaved.setOnAction(e -> {
             buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
             buttonClick.play();
+            /*
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<?> future = executor.submit(() -> {
                 try {
@@ -223,7 +224,7 @@ public class GameView extends Application implements GameObserver {
             });
             executor.shutdown();
             try {
-                future.get(5, TimeUnit.SECONDS); // wait for 5 seconds
+                future.get(10, TimeUnit.SECONDS); // wait for 5 seconds
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 future.cancel(true); // interrupt the task if it takes longer than 5 seconds
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -231,7 +232,13 @@ public class GameView extends Application implements GameObserver {
                 alert.setHeaderText("Can not load saved game");
                 alert.setContentText("The operation took too long to complete.");
                 alert.showAndWait();
+            }*/
+            try {
+                controller.showLoadSavedGame();
+            } catch (Exception ex) {
+                throw new RuntimeException();
             }
+
         });
          LoadSaved.setFont(joystix);
 
@@ -426,6 +433,7 @@ public class GameView extends Application implements GameObserver {
         saveButton.setOnAction(e -> { // Save and quit button action, throws exception if it takes too long
             buttonClick = new MediaPlayer(new Media(new File("src/main/resources/ButtonClick.mp3").toURI().toString()));
             buttonClick.play();
+            /*
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<?> future = executor.submit(() -> {
                 try {
@@ -434,11 +442,12 @@ public class GameView extends Application implements GameObserver {
                     throw new RuntimeException(ex);
                 }
             });
+
             executor.shutdown();
             try {
-                future.get(5, TimeUnit.SECONDS); // wait for 5 seconds
+                future.get(15, TimeUnit.SECONDS); // wait for 5 seconds
                 // the task completed successfully
-                Platform.exit(); // exit the application
+                controller.saveGame(); // exit the application
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 future.cancel(true); // interrupt the task if it takes longer than 5 seconds
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -446,6 +455,14 @@ public class GameView extends Application implements GameObserver {
                 alert.setHeaderText("Can not save game");
                 alert.setContentText("The operation took too long to complete.");
                 alert.showAndWait();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            } */
+
+            try {
+                controller.saveGame();
+            } catch (Exception ex) {
+                throw new RuntimeException();
             }
         });
         saveButton.setFont(joystixSave); // setting font of the saveButton

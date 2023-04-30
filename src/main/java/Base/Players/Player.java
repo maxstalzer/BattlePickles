@@ -8,6 +8,7 @@ import Observers.PlayerObserver;
 import com.j256.ormlite.field.DatabaseField;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import com.j256.ormlite.table.DatabaseTable;
@@ -16,17 +17,18 @@ import com.j256.ormlite.table.DatabaseTable;
 public class  Player implements PlayerObserver, PlayerAttackObserver{
     @DatabaseField(generatedId = true)
     private int id;
-
     @DatabaseField
-    String name; // The name of the player
+    private String name; // The name of the player
     @DatabaseField
-    int remaining_gurkins; //   The number of gurkins remaining to be shot
-    String turnID; // stores if it's player 1 or 2 (unknown)
+    private String difficultyString;
+    @DatabaseField
+    private int remaining_gurkins; //   The number of gurkins remaining to be shot
     @DatabaseField
     private Boolean CurrentPlayer;
     @DatabaseField(foreign = true,foreignAutoRefresh = true)
-    Board gurkinBoard; // The board that the player uses to place their gurkins
-
+    private Board gurkinBoard; // The board that the player uses to place their gurkins
+    @DatabaseField(foreign = true,foreignAutoRefresh = true)
+    private ShotResults shotResults;// Stores results of shots
     private Set<PlayerObserver> playerObservers = new HashSet<PlayerObserver>();
 
     private Set<PlayerAttackObserver> attackObservers = new HashSet<PlayerAttackObserver>();
@@ -37,7 +39,7 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
         this.CurrentPlayer = CurrentPlayer;
     }
 
-    private ShotResults shotResults;// Stores results of shots
+
 
     private ArrayList<Gurkin> unplacedGurks;
     public Board getGurkinBoard() {
@@ -49,7 +51,7 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
 //      Setup the gurkin board
         this.gurkinBoard = new Board();
         this.remaining_gurkins = 0;
-        turnID = Turn.getTurn();
+        //turnID = Turn.getTurn();
         this.shotResults = new ShotResults();
         this.unplacedGurks = new ArrayList<Gurkin>();
         unplacedGurks.add(new Pickle());
@@ -68,7 +70,9 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
     public Character[][] getShotResults() {
         return shotResults.getShotBoard();
     } // Returns shot results
-
+    public Collection<Result> getShotResultsCollection() {return shotResults.getShotCollection();}
+    public ShotResults getShotRes() {return this.shotResults;}
+    public void setShotRes(ShotResults shotResults) {this.shotResults = shotResults;}
     public void setName(String name) {
         this.name = name;
     } // Sets the name
@@ -219,6 +223,11 @@ public class  Player implements PlayerObserver, PlayerAttackObserver{
     public void setId(int id) {this.id = id;}
 
     public Boolean getCurrentPlayer() {return CurrentPlayer;}
+
+    public void setDifficultyString(String difficultyString) {
+        this.difficultyString = difficultyString;
+    }
+    public String getDifficultyString() {return this.difficultyString;}
 
 }
 

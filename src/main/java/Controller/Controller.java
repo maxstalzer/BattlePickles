@@ -69,29 +69,30 @@ public class Controller {
         System.out.println("loaded");
         game = database.loadGame(gameName);
         // init views
-        gameView.initAttackViews();
-        gameView.initPlacementViews();
+        gameView.initPlacementViews(); //Initialising the placement views of the players
+        gameView.initAttackViews(); // initialising the attack views of the players
+        // Setting player names
 
         // Adding observers
-        game.addGameObserver(gameView);
-
+        game.addGameObserver(gameView); // add game observer to game
         // register placement observers
-        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer1());
-        game.getPlayer2().getGurkinBoard().registerBoardObserver(gameView.getContainer2());
-        game.getPlayer1().registerObserver(gameView.getContainer1().getSidepanel());
-        game.getPlayer2().registerObserver(gameView.getContainer2().getSidepanel());
+        game.getPlayer1().getGurkinBoard().registerBoardObserver(gameView.getContainer1()); // register the placement container1 as an observer to player 1s board
+        game.getPlayer2().getGurkinBoard().registerBoardObserver(gameView.getContainer2()); // register the placement container2 as an observer to player 2s board
+        game.getPlayer1().registerObserver(gameView.getContainer1().getSidepanel()); // register the sidepanel as an observer to player 1
+        game.getPlayer2().registerObserver(gameView.getContainer2().getSidepanel()); // register the sidepanel as an observer to player 2
 
         // register attack observers
-        game.getPlayer1().registerAttackObserver(gameView.getP1AttackView());
-        game.getPlayer2().registerAttackObserver(gameView.getP2AttackView());
+        game.getPlayer1().getResultBoard().registerObserver(gameView.getP1AttackView()); // register shot board ovserver
+        game.getPlayer1().registerAttackObserver(gameView.getP1AttackView()); // regiseter attackview observers
+        game.getPlayer2().getResultBoard().registerObserver(gameView.getP2AttackView()); // register shot board ovserver
+        game.getPlayer2().registerAttackObserver(gameView.getP2AttackView()); // regiseter attackview observers
         game.getPlayer1().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel2());
         game.getPlayer2().getGurkinBoard().registerStatsObserver(gameView.getStatsPanel1());
+
         initLoadedGame();
     }
 
     public void initLoadedGame() {
-
-        // init placement views
         game.initLoadedGame();
         showGameplay();
     }

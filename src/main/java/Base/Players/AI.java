@@ -18,8 +18,20 @@ public class AI extends Player {
 
     private Player opponent; // The opponent of the AI
 
+    public void setDifficulty(String difficulty) {
+        if (difficulty.equals("Easy")) {
+            this.difficulty = Difficulty.Easy;
+        } else if (difficulty.equals("Medium")) {
+            this.difficulty = Difficulty.Medium;
+        } else {
+            this.difficulty = Difficulty.Hard;
+        }
+    }
+
+    public AI(int id) {}
+
     public AI() { // Constructor
-        this.name = ("AI Player");
+        setName("AI Player");
         attackWeights = new double[10][10];
         generateBoard();
     }
@@ -27,6 +39,12 @@ public class AI extends Player {
     public void setDifficulty(Difficulty difficulty, Player opponent) { // Sets the difficulty of the AI
         this.opponent = opponent;
         this.difficulty = difficulty;
+        if (difficulty == Difficulty.Easy) {
+            setDifficultyString("Easy");
+        } else if (difficulty == Difficulty.Medium) {
+            setDifficultyString("Medium");
+        } else {setDifficultyString("Hard");}
+
     }
 
     public Difficulty getDifficulty() { // Returns the difficulty of the AI
@@ -229,7 +247,7 @@ public class AI extends Player {
                 knownGurkinLocations = new ArrayList<>();
                 for (int y = 0; y < 10; y++) {
                     for (int x = 0; x < 10; x++) {
-                        if (opponent.getGurkinBoard().getTile(new Coordinates(x, y)).hasGurkin()) {
+                        if (opponent.getGurkinBoard().getTile(new Coordinates(x, y)).hasGurkin() && !opponent.getGurkinBoard().getTile(new Coordinates(x,y)).isHit()) {
                             knownGurkinLocations.add(new Coordinates(x, y));
                         }
                     }
