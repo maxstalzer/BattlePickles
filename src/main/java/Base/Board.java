@@ -82,7 +82,6 @@ public class Board implements BoardObserver, BoardStatsObserver { // Board class
     private Coordinates[] startCoors;
     private Direction.direction[] startDirs;
 
-    private ArrayList<Coordinates> foundCoords;
 
 
     // Initialize board
