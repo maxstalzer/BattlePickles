@@ -914,4 +914,21 @@ public class StepsDefinition {
     }
 
 
+    @Given("a board with terrain")
+    public void a_board_with_terrain() {
+        p2b = new Board();
+        p2b.placeGurkin(new Coordinates(0,0), Horizontal, new Terrain());
+    }
+
+    @When("I hit a terrain")
+    public void i_hit_a_terrain() {
+        p1 = new Player();
+    }
+    @Then("the terrain should be hit")
+    public void the_terrain_should_be_hit() {
+        p1.shoot(p2b, new Coordinates(0,0));
+        assertTrue(p2b.getTile(new Coordinates(0,0)).isHit());
+    }
+
+
 }
